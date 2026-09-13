@@ -1,6 +1,7 @@
 import { COMPANY_INFO, WORKING_PRINCIPLES, DELIVERY_PROCESS } from './companyData.js';
 import { SOFTWARE_CAPABILITIES, SOFTWARE_FAQS } from './softwareData.js';
 import { HARDWARE_CATEGORIES, HARDWARE_FAQS } from './hardwareData.js';
+import { TRACK_HERO, TRACK_PILLARS, TRACK_FAQS, TRACK_PRICING, TRACK_CURRENCIES } from './trackData.js';
 
 const renderCompanySection = () => {
   const principles = WORKING_PRINCIPLES.map((p) => `- ${p.title}: ${p.description}`).join('\n');
@@ -48,7 +49,31 @@ Hardware FAQs:
 ${faqs}`;
 };
 
-const GROUNDING_CONTEXT = [renderCompanySection(), renderSoftwareSection(), renderHardwareSection()].join('\n\n');
+const renderTrackSection = () => {
+  const pillars = TRACK_PILLARS.map(
+    (p) => `- ${p.title} (${p.tag}): ${p.summary} Key Metric: ${p.metric}`
+  ).join('\n');
+  const faqs = TRACK_FAQS.map((f) => `Q: ${f.q}\nA: ${f.a}`).join('\n\n');
+
+  return `FLAGSHIP PRODUCT: SAURIK TRACK (FIELD & FLEET ERP)
+Description: ${TRACK_HERO.headlineStart} ${TRACK_HERO.headlineEnd} ${TRACK_HERO.subheadline}
+Route: /track
+Pricing: $${TRACK_PRICING.USD.perUserMonth}/user/month (USD) or ₹${TRACK_PRICING.INR.perUserMonth}/user/month (INR)
+Founding Partner Program: 14-day free pilot, 30 days unlimited access for early enterprise adopters.
+
+Core Architectural Pillars:
+${pillars}
+
+Saurik Track FAQs:
+${faqs}`;
+};
+
+const GROUNDING_CONTEXT = [
+  renderCompanySection(),
+  renderSoftwareSection(),
+  renderHardwareSection(),
+  renderTrackSection(),
+].join('\n\n');
 
 const SAFETY_RULES = `RULES
 - Answer only using the information given above. If something isn't covered here, say you don't have that information and point the visitor to /contact or the WhatsApp link instead of guessing.

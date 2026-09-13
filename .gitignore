@@ -6,6 +6,7 @@ dist/
 build/
 .vite/
 .cache/
+.vercel/
 
 # Environment files and local secrets
 .env

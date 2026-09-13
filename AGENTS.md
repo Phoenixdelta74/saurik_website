@@ -21,6 +21,7 @@ There is currently no lint or test script. At minimum, run `npm.cmd run build` a
 - `src/pages/` contains the route-level pages: Home, Software, Hardware, About, Contact, Privacy, and NotFound.
 - `src/components/` contains shared navigation, footer, calls to action, process and FAQ components, plus interactive software and hardware illustrations.
 - `src/data/` contains company details and service copy. Prefer updating these sources instead of duplicating content in components.
+- `api/` contains the Vercel serverless chat endpoint and server-side LLM provider adapters; never move provider credentials into client-side code.
 - `src/index.css` contains Tailwind layers and shared component classes.
 - `tailwind.config.js` defines the design tokens.
 - `public/` contains the logo and favicon.
@@ -36,6 +37,7 @@ Routes are `/`, `/software`, `/hardware`, `/about`, `/contact`, and `/privacy`; 
 - Use Lucide icons consistently. Do not introduce emoji as interface icons.
 - Keep software and hardware understandable through text labels as well as color.
 - Preserve query-string topic selection when linking a service to `/contact`.
+- Keep the AI assistant grounded in `src/data/chatContext.js`; update the shared data sources when published service information changes.
 - Keep animation brief and respect reduced-motion preferences.
 
 ## Product and content constraints

@@ -1,5 +1,5 @@
-import Anthropic from '@anthropic-ai/sdk';
 import { CHAT_SYSTEM_PROMPT } from '../src/data/chatContext.js';
+import { getChatReply, ProviderConfigError } from './_lib/llmProviders.js';
 
 const MAX_HISTORY_MESSAGES = 20;
 
@@ -22,28 +22,23 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Invalid request.' });
   }
 
-  if (!process.env.ANTHROPIC_API_KEY) {
-    return res.status(503).json({ error: 'Chat assistant is not configured.' });
-  }
-
   try {
-    const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+    const reply = await getChatReply(
+      CHAT_SYSTEM_PROMPT,
+      messages.slice(-MAX_HISTORY_MESSAGES).map((m) => ({ role: m.role, content: m.content }))
+    );
 
-    const response = await client.messages.create({
-      model: 'claude-haiku-4-5',
-      max_tokens: 1024,
-      system: CHAT_SYSTEM_PROMPT,
-      messages: messages.slice(-MAX_HISTORY_MESSAGES).map((m) => ({ role: m.role, content: m.content })),
-    });
-
-    const textBlock = response.content.find((block) => block.type === 'text');
-
-    if (!textBlock) {
+    if (!reply) {
       return res.status(502).json({ error: 'Chat assistant did not return a response.' });
     }
 
-    return res.status(200).json({ reply: textBlock.text });
+    return res.status(200).json({ reply });
   } catch (error) {
+    if (error instanceof ProviderConfigError) {
+      console.error('Chat assistant configuration error:', error.message);
+      return res.status(503).json({ error: 'Chat assistant is not configured.' });
+    }
+
     console.error('Chat assistant error:', error);
     return res.status(502).json({ error: 'Chat assistant is temporarily unavailable.' });
   }

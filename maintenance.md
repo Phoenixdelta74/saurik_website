@@ -82,6 +82,25 @@ npm run preview
 # Serves dist/ locally
 ```
 
+### 4.4. Chat Assistant Setup (Vercel deployment)
+
+The floating chat assistant (`src/components/ChatWidget.jsx`) calls a serverless function (`api/chat.js`) that proxies to an LLM provider. The provider is chosen server-side via `api/_lib/llmProviders.js` and never touches client-side code. `npm run dev`/`npm run preview` do **not** execute this function — only a Vercel deployment (or `vercel dev` locally) does.
+
+**Choosing a provider** - set `LLM_PROVIDER` to one of `anthropic` (default), `openai`, `openrouter`, or `ollama`, then set that provider's environment variables in the Vercel project (Settings -> Environment Variables, Production and Preview). Never prefix any of these `VITE_` - that would bundle secrets into client-side JS.
+
+| `LLM_PROVIDER` | Required env vars | Notes |
+|---|---|---|
+| `anthropic` | `ANTHROPIC_API_KEY` (get from console.anthropic.com). Optional `ANTHROPIC_MODEL` (defaults to `claude-haiku-4-5`). | Uses the official `@anthropic-ai/sdk`. |
+| `openai` | `OPENAI_API_KEY`, `OPENAI_MODEL` (both required - no default, since model availability/naming changes over time; check platform.openai.com for the current model id). | Uses the `openai` SDK's Chat Completions API. |
+| `openrouter` | `OPENROUTER_API_KEY`, `OPENROUTER_MODEL` (both required, e.g. a slug from openrouter.ai/models). Optional `SITE_URL` (sent as the `HTTP-Referer` header OpenRouter requests). | Uses the `openai` SDK pointed at OpenRouter's OpenAI-compatible endpoint. |
+| `ollama` | None required. Optional `OLLAMA_BASE_URL` (defaults to `http://localhost:11434`), `OLLAMA_MODEL` (defaults to `llama3.1`, must already be pulled locally). | **Only reachable when the function can reach that URL** - works with `vercel dev` against a local Ollama install, but a Vercel cloud deployment cannot reach `localhost` on your machine. Use this provider for local development/testing only, or point `OLLAMA_BASE_URL` at a network-reachable Ollama instance. |
+
+Without a working provider configured, the widget still renders but shows its "temporarily unavailable" fallback message and links to WhatsApp/Contact instead - it never shows a raw error.
+
+To test the function locally: `vercel link`, then `vercel env pull`, then `vercel dev` (this also serves the Vite app).
+
+The bot only answers from `src/data/chatContext.js`, which is assembled from `companyData.js`, `softwareData.js`, and `hardwareData.js` - update those data files as usual and the bot's knowledge updates automatically regardless of which provider is active; no separate bot content to maintain.
+
 ---
 
 ## 5. Troubleshooting Common Issues

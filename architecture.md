@@ -1,6 +1,6 @@
 ﻿# SAURIK IT Website Architecture & Technical Design Principles
 
-**Version:** 1.1  
+**Version:** 1.2  
 **Last Updated:** 13 September 2026  
 **Status:** Living Technical Architecture Document  
 
@@ -8,7 +8,7 @@
 
 ## 1. Executive Architectural Overview
 
-The **SAURIK IT Private Limited** corporate website (saurik-it-website) is a client-rendered, high-performance Single Page Application (SPA) designed to communicate the company's two primary lines of business: **Software & IT** and **IT Hardware & Infrastructure**, along with its flagship mobile ERP product **Saurik Track**.
+The **SAURIK IT Private Limited** corporate website (saurik-it-website) is a client-rendered, high-performance Single Page Application (SPA) designed to communicate the company's two primary lines of business: **Software & IT** and **IT Hardware & Infrastructure**, along with its flagship mobile ERP product **Saurik Track**. A floating AI website assistant provides answers grounded in the same published content through a separate serverless API boundary.
 
 The system is constructed with a strict philosophy: **"Technology, Deliberately."** Every architectural decision prioritizes clarity of information, verifiable claims, lightning-fast Core Web Vitals, accessible interaction patterns (WCAG 2.2 AA), and complete separation between content datasets and presentation components.
 
@@ -22,6 +22,7 @@ graph TD
         AppShell --> Header[src/components/Header.jsx]
         AppShell --> RouterView[React Router v6 Routes]
         AppShell --> WhatsApp[src/components/WhatsAppCTA.jsx]
+        AppShell --> ChatWidget[src/components/ChatWidget.jsx]
         AppShell --> Footer[src/components/Footer.jsx]
     end
     
@@ -49,6 +50,9 @@ graph TD
     Contact -.-> CompanyData
     Track -.-> TrackData
     Footer -.-> CompanyData
+    ChatWidget --> ChatAPI[api/chat.js - POST /api/chat]
+    ChatAPI --> ChatContext[src/data/chatContext.js]
+    ChatAPI --> Providers[api/_lib/llmProviders.js]
 `
 
 ---
@@ -63,6 +67,7 @@ graph TD
 | **Styling & Design Tokens** | Tailwind CSS 3 + PostCSS + Autoprefixer | Utility-first architecture bound to precise custom design tokens (canvas, surface, ink, ccent). Zero runtime CSS overhead. |
 | **Iconography** | Lucide React (lucide-react) | Consistent, accessible SVG stroke icon family. Emojis are strictly banned as interface icons. |
 | **Branding & Assets** | PNG + SVG | Dual asset strategy: logo.png for official lockups, logo-mark.png for icon badges & favicons. |
+| **AI Assistant API** | Vercel serverless function + provider SDKs | Keeps LLM credentials server-side, limits request history, and supports provider selection without bundling secrets into the browser. |
 
 ---
 
@@ -153,7 +158,17 @@ Per design specification, the enquiry system provides truthful, accurate user fe
 
 ---
 
-## 7. Accessibility & Performance Benchmarks
+## 7. AI Website Assistant
+
+The global `ChatWidget` is a client-side conversation UI. It sends the latest conversation messages to `POST /api/chat`; the browser never receives an LLM API key.
+
+- `api/chat.js` validates the request method and message shape, limits the forwarded history to the most recent 20 messages, and returns neutral configuration/service errors.
+- `src/data/chatContext.js` assembles the system prompt from the company, software, and hardware data modules. This is the assistant's single content source and includes rules against invented claims, unsupported pricing, forecast guarantees, and unsupervised consequential actions.
+- `api/_lib/llmProviders.js` selects Anthropic, OpenAI, OpenRouter, or Ollama using server-side environment variables.
+- The widget provides keyboard focus handling, Escape-to-close behavior, live status updates, reduced-motion support, and a truthful fallback linking visitors to Contact and WhatsApp.
+- Local Vite development renders the widget, but the API requires Vercel or `vercel dev` with a configured provider.
+
+## 8. Accessibility & Performance Benchmarks
 
 - **Target Standard:** WCAG 2.2 AA Conformance.
 - **Minimum Touch Target:** 44px to 48px on all interactive controls.

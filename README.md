@@ -23,6 +23,7 @@ Official corporate marketing website for **SAURIK IT Private Limited**. Engineer
   - Form validation with query parameter topic pre-selection (`?topic=...`).
   - Transparent email draft generation (`mailto:`) with accurate status feedback.
   - Direct WhatsApp chat integration (`+91 98620 87157`).
+- **AI Website Assistant:** A floating, accessible chat widget grounded in the published company, software, and hardware content, with a server-side provider proxy and safe fallback messaging.
 - **Official Brand Integration:** Scalable display of the official SAURIK geometric constellation logo and browser favicon.
 - **Accessibility & Performance:** Built to target **WCAG 2.2 AA** contrast and keyboard navigation, with fast Core Web Vitals.
 
@@ -35,6 +36,7 @@ Official corporate marketing website for **SAURIK IT Private Limited**. Engineer
 - **Routing:** React Router v6
 - **Styling:** Tailwind CSS 3 + PostCSS + Autoprefixer
 - **Icons:** Lucide React
+- **AI Chat Backend:** Vercel serverless function with Anthropic, OpenAI-compatible, OpenRouter, and Ollama provider support
 - **Typography:** Outfit (Headings) + Inter (Body)
 
 ---
@@ -60,6 +62,12 @@ npm install
 npm run dev
 ```
 Visit [http://localhost:3000](http://localhost:3000) in your browser.
+
+The chat widget is visible in the Vite app, but `/api/chat` requires a Vercel
+runtime (or `vercel dev`) and a server-side LLM provider configuration. See
+[`maintenance.md`](maintenance.md#44-chat-assistant-setup-vercel-deployment)
+for provider setup. Never expose provider keys through `VITE_` environment
+variables.
 
 ### Building for Production
 ```bash

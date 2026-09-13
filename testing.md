@@ -1,6 +1,6 @@
 # SAURIK IT Website Testing & Quality Assurance Guide
 
-**Version:** 1.0  
+**Version:** 1.1  
 **Scope:** Automated testing, manual quality assurance checklists, and verification procedures for developers and AI agents.
 
 ---
@@ -65,6 +65,14 @@ async function checkRoute(url) {
 
 ---
 
+### 2.3. Chat API Contract Test
+
+When running through Vercel or `vercel dev`, verify `POST /api/chat` with a valid
+provider configuration. The endpoint should return a JSON `reply` for valid
+messages, `405` for non-POST requests, and `400` for an empty, malformed, or
+overlong message history. Confirm that provider keys are never present in the
+browser bundle or client-side environment variables.
+
 ## 3. Manual Testing Checklist
 
 ### 3.1. Navigation & Routing
@@ -95,7 +103,14 @@ async function checkRoute(url) {
   - Clicking "X" or pressing Escape closes popover.
   - Position does not obscure submit button or footer links.
 
-### 3.4. Responsive Design & Mobile Reflow
+### 3.4. AI Website Assistant
+- [ ] Opening `ChatWidget.jsx` focuses the input and exposes the accessible assistant name.
+- [ ] Submitting a question shows a thinking state, preserves the conversation, and renders the server reply when `/api/chat` is available.
+- [ ] API failure shows the truthful fallback message with Contact and WhatsApp links; it does not claim an enquiry was received.
+- [ ] Pressing Escape closes the panel and returns focus to the toggle button.
+- [ ] Reduced-motion preferences disable the panel entrance animation.
+
+### 3.5. Responsive Design & Mobile Reflow
 Test in developer tools responsive mode at:
 - **360px:** Small mobile (ensure no horizontal scrollbar or element overflow).
 - **390px:** Standard iPhone/Android viewport.

@@ -9,6 +9,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [Unreleased]
 
 ### Added
+- **AI Website Assistant:**
+  - Added the global `ChatWidget` with keyboard-accessible open/close behavior, reduced-motion support, conversation history, thinking state, and truthful service-unavailable fallback.
+  - Added the `POST /api/chat` serverless endpoint with request validation and bounded message history.
+  - Added server-side provider selection for Anthropic, OpenAI, OpenRouter, and Ollama through `api/_lib/llmProviders.js`.
+  - Added grounded assistant context in `src/data/chatContext.js`, assembled from the shared company, software, and hardware data sources.
 - **Saurik Track Landing Page (`/track`):**
   - Dedicated, high-converting product marketing page for the Saurik Track mobile ERP application targeting field sales directors, operations managers, and distribution owners.
   - Cyber-slate dark theme (`#0F172A` canvas, `#06B6D4` cyber cyan, `#10B981` emerald indicators) with glassmorphism telemetry cards.
