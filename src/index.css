@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    color-scheme: light;
+  }
+  body {
+    background-color: #F7F9F8;
+    color: #102A43;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    line-height: 1.6;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+    color: #102A43;
+    letter-spacing: -0.02em;
+  }
+}
+
+/* Custom interactive button styles */
+.btn-primary {
+  @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-control font-medium text-white bg-accent-teal hover:bg-accent-teal-dark transition-all duration-200 shadow-sm hover:shadow active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-accent-teal focus:ring-offset-2;
+}
+
+.btn-secondary {
+  @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-control font-medium text-ink-primary bg-white hover:bg-slate-50 border border-border-subtle hover:border-border-hover transition-all duration-200 shadow-subtle hover:shadow active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-ink-primary focus:ring-offset-2;
+}
+
+.btn-hardware {
+  @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-control font-medium text-white bg-accent-blue hover:bg-accent-blue-dark transition-all duration-200 shadow-sm hover:shadow active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-accent-blue focus:ring-offset-2;
+}
+
+.badge-software {
+  @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-accent-teal-light text-accent-teal uppercase tracking-wider;
+}
+
+.badge-hardware {
+  @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-accent-blue-light text-accent-blue uppercase tracking-wider;
+}
+
+/* Card standard */
+.content-card {
+  @apply bg-surface rounded-panel border border-border-subtle p-6 md:p-8 transition-all duration-200;
+}
+
+:where(a, button, input, select, textarea, summary):focus-visible {
+  outline: 2px solid #076E63;
+  outline-offset: 4px;
+}
+:where(section[id], [tabindex='-1'], input, textarea, select) { scroll-margin-top: 7rem; }
+.btn-primary, .btn-secondary, .btn-hardware { min-height: 48px; }
+input:not([type='radio']), select, textarea { font-size: 16px !important; }
+input::placeholder, textarea::placeholder { color: #526B7E; opacity: 1; }
+.animate-in { animation: reveal 180ms ease-out; }
+@keyframes reveal { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
