@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { MessageCircle, Send, X } from 'lucide-react';
+import { MessageCircle, Send, X, Sparkles, Zap } from 'lucide-react';
 import { COMPANY_INFO } from '../data/companyData';
 
 const FALLBACK_MESSAGE =
   "This assistant is temporarily unavailable. Please reach us directly on WhatsApp or the contact page.";
 
 const WELCOME_MESSAGE =
-  "Hi, I'm the SAURIK IT website assistant. Ask me about our software or hardware services, and I'll answer from what's published on this site.";
+  "Hi! I'm your SAURIK IT AI advisor. Looking to eliminate field time-theft with Saurik Track, explore custom software, or upgrade IT infrastructure? Tell me your challenge!";
 
 const prefersReducedMotion = () =>
   typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -92,16 +92,26 @@ const ChatWidget = () => {
     <aside aria-label="SAURIK IT chat assistant" className="fixed bottom-6 left-6 z-40 flex flex-col items-start print:hidden">
       {isOpen && (
         <div
-          className={`mb-3 w-80 max-w-[calc(100vw-3rem)] bg-surface rounded-panel shadow-card-hover border border-border-subtle flex flex-col overflow-hidden ${panelAnimationClass}`}
+          className={`mb-3 w-84 max-w-[calc(100vw-3rem)] bg-surface rounded-panel shadow-2xl border border-cyan-500/40 flex flex-col overflow-hidden ${panelAnimationClass}`}
           role="dialog"
           aria-label="Chat with SAURIK IT assistant"
         >
-          <div className="flex items-center justify-between gap-2 px-4 py-3 border-b border-border-subtle">
-            <span className="text-xs font-bold text-ink-primary">SAURIK IT Assistant</span>
+          {/* Header */}
+          <div className="flex items-center justify-between gap-2 px-4 py-3 bg-slate-900 text-white border-b border-slate-800">
+            <div className="flex items-center gap-2">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-500"></span>
+              </span>
+              <span className="text-xs font-bold font-heading">SAURIK IT AI Advisor</span>
+              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800/60 font-semibold">
+                ⚡ Flash
+              </span>
+            </div>
             <button
               type="button"
               onClick={handleClose}
-              className="text-ink-muted hover:text-ink-primary p-1.5 rounded focus:outline-none focus:ring-4 focus:ring-teal-200"
+              className="text-slate-400 hover:text-white p-1 rounded hover:bg-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-cyan-400"
               aria-label="Close chat assistant"
             >
               <X className="w-4 h-4" />
@@ -117,25 +127,26 @@ const ChatWidget = () => {
             {messages.map((message, index) => (
               <div
                 key={index}
-                className={`text-sm rounded-control px-3 py-2 max-w-[90%] ${
+                className={`text-sm rounded-control px-3.5 py-2.5 max-w-[90%] leading-relaxed ${
                   message.role === 'user'
-                    ? 'ml-auto bg-accent-teal-light text-ink-primary'
-                    : 'bg-canvas text-ink-secondary'
+                    ? 'ml-auto bg-cyan-600 text-white shadow-sm'
+                    : 'bg-canvas text-ink-primary border border-border-subtle shadow-subtle'
                 }`}
               >
                 {message.content}
               </div>
             ))}
             {status === 'sending' && (
-              <div className="text-sm rounded-control px-3 py-2 max-w-[90%] bg-canvas text-ink-muted italic">
-                Thinking…
+              <div className="text-xs rounded-control px-3.5 py-2.5 max-w-[90%] bg-canvas text-cyan-700 flex items-center gap-2 border border-cyan-200">
+                <span className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse"></span>
+                <span className="font-mono">Generating response at warp speed…</span>
               </div>
             )}
           </div>
 
           <p className="px-4 text-[11px] text-ink-muted">
-            Automated assistant. For quotes or urgent enquiries, use{' '}
-            <Link to="/contact" className="underline hover:text-accent-teal" onClick={handleClose}>
+            Instant AI consultation. For formal quotes or urgent orders, use{' '}
+            <Link to="/contact" className="underline hover:text-accent-teal font-semibold" onClick={handleClose}>
               Contact
             </Link>{' '}
             or{' '}
@@ -143,7 +154,7 @@ const ChatWidget = () => {
               href={COMPANY_INFO.whatsappLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="underline hover:text-accent-teal"
+              className="underline hover:text-accent-teal font-semibold"
             >
               WhatsApp
             </a>
@@ -161,14 +172,14 @@ const ChatWidget = () => {
               value={input}
               onChange={(event) => setInput(event.target.value)}
               disabled={status === 'sending'}
-              placeholder="Ask about our services..."
-              className="flex-1 min-w-0 text-sm px-3 py-2.5 rounded-control border border-border-subtle focus:outline-none focus:ring-4 focus:ring-teal-200 disabled:opacity-60"
+              placeholder="Ask anything about software or hardware..."
+              className="flex-1 min-w-0 text-sm px-3 py-2.5 rounded-control border border-border-subtle focus:outline-none focus:ring-2 focus:ring-cyan-500 disabled:opacity-60"
             />
             <button
               type="submit"
               disabled={status === 'sending' || !input.trim()}
               aria-label="Send message"
-              className="shrink-0 w-11 h-11 flex items-center justify-center rounded-control bg-accent-teal text-white hover:bg-accent-teal-dark transition-colors focus:outline-none focus:ring-4 focus:ring-teal-200 disabled:opacity-50"
+              className="shrink-0 w-11 h-11 flex items-center justify-center rounded-control bg-cyan-500 text-slate-950 font-bold hover:bg-cyan-400 transition-colors focus:outline-none focus:ring-2 focus:ring-cyan-400 disabled:opacity-50 shadow"
             >
               <Send className="w-4 h-4" />
             </button>
@@ -176,16 +187,52 @@ const ChatWidget = () => {
         </div>
       )}
 
-      <button
-        type="button"
-        ref={toggleButtonRef}
-        onClick={() => setIsOpen((open) => !open)}
-        className="w-13 h-13 p-3 rounded-full bg-accent-teal text-white shadow-card-hover hover:scale-105 active:scale-95 transition-all flex items-center justify-center focus:outline-none focus:ring-4 focus:ring-teal-200"
-        aria-label={isOpen ? 'Close chat assistant' : 'Open chat assistant'}
-        aria-expanded={isOpen}
-      >
-        {isOpen ? <X className="w-6 h-6" /> : <MessageCircle className="w-6 h-6" />}
-      </button>
+      {/* Blazing Fast High-Energy Interactive Button */}
+      <div className="relative flex items-center group">
+        
+        {/* Floating Attention Hook Pill (when closed) */}
+        {!isOpen && (
+          <div 
+            onClick={() => setIsOpen(true)}
+            className="hidden sm:flex items-center gap-1.5 ml-16 absolute left-0 py-1.5 px-3 rounded-full bg-slate-900 text-white border border-cyan-400/50 shadow-xl text-xs font-semibold whitespace-nowrap cursor-pointer hover:border-cyan-300 transition-all hover:scale-105"
+          >
+            <Zap className="w-3.5 h-3.5 text-amber-400 animate-bounce" />
+            <span>AI Advisor • <strong className="text-cyan-300 font-mono">Ask Instant Question</strong></span>
+          </div>
+        )}
+
+        {/* Rapid Pulsing Outer Rings */}
+        {!isOpen && (
+          <>
+            <span className="animate-ping absolute -inset-1 rounded-full bg-cyan-400 opacity-60 duration-700 pointer-events-none"></span>
+            <span className="animate-pulse absolute -inset-2 rounded-full bg-teal-400/30 blur-sm pointer-events-none"></span>
+          </>
+        )}
+
+        {/* Trigger Button */}
+        <button
+          type="button"
+          ref={toggleButtonRef}
+          onClick={() => setIsOpen((open) => !open)}
+          className={`relative z-10 w-14 h-14 rounded-full shadow-2xl transition-all duration-300 flex items-center justify-center focus:outline-none focus:ring-4 focus:ring-cyan-300 active:scale-95 ${
+            isOpen
+              ? 'bg-slate-800 text-white rotate-90'
+              : 'bg-gradient-to-tr from-cyan-500 via-teal-500 to-emerald-400 text-slate-950 hover:scale-110 shadow-cyan-500/50 hover:shadow-cyan-400/80 ring-2 ring-cyan-300/80 ring-offset-2 ring-offset-slate-900'
+          }`}
+          aria-label={isOpen ? 'Close chat assistant' : 'Open AI chat assistant'}
+          aria-expanded={isOpen}
+        >
+          {isOpen ? (
+            <X className="w-6 h-6" />
+          ) : (
+            <div className="relative">
+              <MessageCircle className="w-7 h-7 text-slate-950 fill-slate-950/10" />
+              <Sparkles className="w-3.5 h-3.5 text-amber-300 absolute -top-1.5 -right-1.5 animate-spin duration-1000" />
+            </div>
+          )}
+        </button>
+
+      </div>
     </aside>
   );
 };
