@@ -1,6 +1,6 @@
 # SAURIK IT Website Testing & Quality Assurance Guide
 
-**Version:** 1.1  
+**Version:** 1.2  
 **Scope:** Automated testing, manual quality assurance checklists, and verification procedures for developers and AI agents.
 
 ---
@@ -8,10 +8,11 @@
 ## 1. Automated Testing Strategy
 
 The repository employs a multi-tiered verification pipeline:
-1. **Compilation & Bundle Verification:** Vite production build ensures strict syntax, JSX compliance, CSS compilation, and tree-shaking.
-2. **Route Integrity Crawl:** Automated HTTP status checks verify all defined routes and static assets respond with `HTTP 200 OK`.
-3. **Form & Query Parameter Deep-Link Verification:** Ensures topic preselection query strings correctly map to contact form states.
-4. **Accessibility (a11y) Conformance:** WCAG 2.2 AA contrast and keyboard accessibility audits.
+1. **Compilation & Bundle Verification:** Vite production build ensures strict syntax, JSX compliance, CSS compilation, asset generation, and tree-shaking.
+2. **Saurik Track Landing Spec Verification:** Comprehensive assertions verifying all 13 criteria of `SAURIK-TRACK-LANDING-SPEC.md` (metadata, H1, 10 sections in order, JSON-LD, image dimensions, verbatim snippets, negative constraints, and page weight budget).
+3. **End-to-End Route & SSR Artifacts Check:** Verifies both the static zero-JS HTML distribution (`dist/track/index.html`) and the React SPA routing shell.
+4. **Chatbot & Context Integrity Verification:** Confirms serverless endpoint handlers, LLM provider fallbacks, empathy hooks, and prompt grounding.
+5. **Accessibility (a11y) & Performance Budgets:** WCAG 2.2 AA contrast, keyboard accessibility audits, and page weight limits (≤ 250 KB).
 
 ---
 
@@ -21,65 +22,67 @@ The repository employs a multi-tiered verification pipeline:
 ```bash
 npm run build
 ```
-**Pass Criteria:** Exit code `0`. Zero compilation warnings. Bundles generated in `dist/`.
+**Pass Criteria:** Exit code `0`. Zero compilation warnings. Bundles and static assets generated in `dist/`.
 
-### 2.2. Automated HTTP Status & Asset Crawler
-```javascript
-// scratch/verify_routes.cjs
-const http = require('http');
+### 2.2. Saurik Track v3 Spec Verification Suite
+```bash
+npm test
+# OR
+node test/verify_track_spec_v3.cjs
+```
+**Pass Criteria:**
+- Primary crawlability: H1 `"Know where your field team is. Know what's left in the van."` verbatim.
+- Verbatim title and description metadata (`Saurik Track — GPS Attendance & Van-Stock Tracking for Field Teams`).
+- JSON-LD structured data parses as `SoftwareApplication` with ₹0 free trial offer.
+- `og-image.png` verified at 1200×630.
+- All 10 sections present in exact order with exact IDs.
+- All v3 verbatim copy snippets verified (4 features in 2×2 grid, 5 problem points, 6 industry chips).
+- Negative constraints verified (no fabricated metrics, no fake compliance claims, no surveillance framing).
+- Conversion tracking attributes (`data-conversion="trial-start"` and `data-placement`) and verified `TRIAL_URL` (`/contact?topic=saurik_track`).
+- Transferred size (HTML + CSS) ≤ 300 KB (Achieved: **39.1 KB** total).
 
-const routes = [
-  '/',
-  '/software',
-  '/hardware',
-  '/about',
-  '/contact',
-  '/contact?topic=custom_apps',
-  '/contact?topic=cctv_residential',
-  '/privacy',
-  '/logo.png',
-  '/logo-mark.png'
-];
+### 2.3. Saurik Track End-to-End & Integration Suite
+```bash
+node test/verify_track_e2e.cjs
+```
+**Pass Criteria:**
+- Verifies existence of all static landing page assets (`public/track/index.html`, `styles.css`, `og-image.png`, `apple-touch-icon.png`, `favicon.ico`, `robots.txt`, `sitemap.xml`).
+- Verifies cross-links from `Header.jsx`, `Footer.jsx`, and route registration in `App.jsx`.
+- Confirms production build output in `dist/track/index.html`.
 
-async function checkRoute(url) {
-  return new Promise((resolve) => {
-    http.get('http://localhost:4173' + url, (res) => {
-      console.log(`[${res.statusCode === 200 ? 'PASS' : 'FAIL'}] ${url} -> HTTP ${res.statusCode}`);
-      resolve(res.statusCode === 200);
-    }).on('error', (err) => {
-      console.error(`[ERROR] ${url} -> ${err.message}`);
-      resolve(false);
-    });
-  });
-}
+### 2.4. Data Integrity & Formula Verification
+```bash
+node test/track_data_test.cjs
+```
+**Pass Criteria:**
+- Multi-currency ROI formula accuracy (USD & INR).
+- 4 pillars, 5 problem-solution rows, and security spec exports.
 
-(async () => {
-  let allPass = true;
-  for (const r of routes) {
-    const ok = await checkRoute(r);
-    if (!ok) allPass = false;
-  }
-  process.exit(allPass ? 0 : 1);
-})();
+### 2.5. Chatbot & Provider Verification
+```bash
+node test/verify_chatbot.cjs
+```
+**Pass Criteria:**
+- `api/chat.js` endpoint validation.
+- Multi-provider fallback engine (Anthropic, OpenAI, OpenRouter, Ollama).
+- Grounded context and system prompt structure.
+
+### 2.6. Full Automated Test Suite Execution
+Run all test suites sequentially:
+```bash
+node test/verify_track_spec.cjs ; node test/verify_track_e2e.cjs ; node test/track_data_test.cjs ; node test/verify_chatbot.cjs
 ```
 
 ---
-
-### 2.3. Chat API Contract Test
-
-When running through Vercel or `vercel dev`, verify `POST /api/chat` with a valid
-provider configuration. The endpoint should return a JSON `reply` for valid
-messages, `405` for non-POST requests, and `400` for an empty, malformed, or
-overlong message history. Confirm that provider keys are never present in the
-browser bundle or client-side environment variables.
 
 ## 3. Manual Testing Checklist
 
 ### 3.1. Navigation & Routing
 - [ ] Clicking logo in Header navigates to `/`.
-- [ ] Navigation links (`Software & IT`, `Hardware & IT Support`, `About`) indicate current active state.
+- [ ] Navigation links (`Software`, `Hardware`, `Saurik Track`, `About`, `Contact`) indicate current active state.
 - [ ] Clicking "Discuss your requirement" in Header navigates to `/contact`.
-- [ ] Clicking capability anchors (`/software#agentic-ai`, `/hardware#cctv`) smooth-scrolls to the exact target section.
+- [ ] Clicking capability anchors (`/software#agentic-ai`, `/hardware#cctv`, `/track#features`) smooth-scrolls to the exact target section.
+- [ ] Direct browser request to `/track` serves static HTML instantly with zero JavaScript.
 - [ ] Typing an unmapped URL (e.g. `/unknown-page`) renders the custom 404 `NotFound` component.
 
 ### 3.2. Contact Form & Enquiry Validation
@@ -102,6 +105,7 @@ browser bundle or client-side environment variables.
   - Clicking the WhatsApp bubble opens assistance popover showing verified phone `+91 98620 87157`.
   - Clicking "X" or pressing Escape closes popover.
   - Position does not obscure submit button or footer links.
+  - Hidden on `/track` route per spec.
 
 ### 3.4. AI Website Assistant
 - [ ] Opening `ChatWidget.jsx` focuses the input and exposes the accessible assistant name.
@@ -109,11 +113,25 @@ browser bundle or client-side environment variables.
 - [ ] API failure shows the truthful fallback message with Contact and WhatsApp links; it does not claim an enquiry was received.
 - [ ] Pressing Escape closes the panel and returns focus to the toggle button.
 - [ ] Reduced-motion preferences disable the panel entrance animation.
+- [ ] Hidden on `/track` route per spec.
 
-### 3.5. Responsive Design & Mobile Reflow
+### 3.5. Saurik Track Dedicated Landing Page (`/track`)
+- [ ] H1 renders: `"Know where your field team is. Know what's left in the van."`
+- [ ] Shift manifest visual card renders Rahul Sharma with 4 checkpoint rows and color status dots.
+- [ ] Problem band renders 4 numbered items (`01` to `04`) on dark `#212F45` background.
+- [ ] 2 feature cards (GPS and Inventory) render with amber bullet dots.
+- [ ] 4-step shift walkthrough renders with mono step labels.
+- [ ] 5 industry pill chips render in horizontal row.
+- [ ] 3 privacy columns render with transparent tracking commitments.
+- [ ] 5 FAQ items expand and collapse using pure HTML `<details><summary>` with CSS `+`/`–` toggle.
+- [ ] Primary CTA and Repeat CTA buttons link to `#cta`.
+- [ ] Footer displays `support@sauriktrack.com` and copyright.
+
+### 3.6. Responsive Design & Mobile Reflow
 Test in developer tools responsive mode at:
-- **360px:** Small mobile (ensure no horizontal scrollbar or element overflow).
+- **320px:** Extra-small mobile (ensure zero horizontal overflow on `/track`).
+- **360px:** Small mobile.
 - **390px:** Standard iPhone/Android viewport.
 - **768px:** iPad/Tablet portrait (grid transitions to single column).
 - **1024px:** Tablet landscape / small laptop.
-- **1440px:** Desktop (content bounded to max 1280px / `max-w-7xl`).
+- **1440px:** Desktop (content bounded to max width).

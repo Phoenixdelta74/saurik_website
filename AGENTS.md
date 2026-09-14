@@ -63,3 +63,9 @@ Routes are `/`, `/software`, `/hardware`, `/about`, `/contact`, and `/privacy`; 
 - Keep changes scoped to the requested task and preserve unrelated local work.
 - Review the complete diff before handing off a change.
 - This folder may be provided without Git metadata. Confirm repository state before relying on Git-based workflows.
+- **Always update documentation**: Whenever modifying architecture, routes, services, or workflows:
+  - Update `architecture.md` if components, data flow, routing (e.g. static SSR vs. SPA), or design tokens change.
+  - Update `change_log.md` with every deliverable under a structured version entry (`Added`, `Changed`, `Fixed`).
+  - Update `testing.md` and `masterdeveloper.md` whenever test suites or developer patterns are introduced or modified.
+- **Always verify builds and test suites**: Run `npm.cmd run build` and relevant verification scripts (`test/verify_track_spec.cjs`, `test/verify_track_e2e.cjs`, etc.) before concluding work.
+

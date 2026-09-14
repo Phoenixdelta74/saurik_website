@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Allow: /track/
+
+Sitemap: https://www.wwwsaurikit.com/sitemap.xml

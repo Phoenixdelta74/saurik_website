@@ -1,0 +1,7 @@
+interface:
+  display_name: "Web Release Tester"
+  short_description: "Test websites and web apps for release readiness"
+  default_prompt: "Use $web-release-tester to test this web application, collect evidence, report failures by severity, and do not modify it unless I explicitly request fixes."
+
+policy:
+  allow_implicit_invocation: true

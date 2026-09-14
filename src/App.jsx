@@ -36,13 +36,14 @@ const ScrollToTop = () => {
 
 const AppContent = () => {
   const { pathname } = useLocation();
-  const isTrackPage = pathname === '/track';
+  const isTrackPage = pathname === '/track' || pathname === '/track/';
 
   if (isTrackPage) {
     return (
       <main id="main-content" tabIndex={-1} className="focus:outline-none">
         <Routes>
           <Route path="/track" element={<Track />} />
+          <Route path="/track/" element={<Track />} />
         </Routes>
       </main>
     );

@@ -7,7 +7,7 @@ const FALLBACK_MESSAGE =
   "This assistant is temporarily unavailable. Please reach us directly on WhatsApp or the contact page.";
 
 const WELCOME_MESSAGE =
-  "Hi! I'm your SAURIK IT AI advisor. Looking to eliminate field time-theft with Saurik Track, explore custom software, or upgrade IT infrastructure? Tell me your challenge!";
+  "Hi! I'm your SAURIK IT AI advisor. Looking for transparent field visibility with Saurik Track, custom software, or IT infrastructure? Tell me your challenge!";
 
 const prefersReducedMotion = () =>
   typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;

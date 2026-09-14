@@ -4,9 +4,34 @@ All notable changes to the SAURIK IT Private Limited website codebase will be do
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
----
-
 ## [Unreleased]
+
+## [1.3.0] - 2026-09-14
+
+### Added
+- **Saurik Track v3 Landing Page (`/track`):**
+  - Rebuilt `/track` strictly adhering to `SAURIK-TRACK-LANDING-SPEC-v3.md` with zero-JS static HTML/CSS pre-rendering (`public/track/index.html` and synchronized `src/pages/Track.jsx` component).
+  - Two-tier sticky navigation inside `<nav id="site-nav">`: SAURIK IT corporate tier + Saurik Track product navigation tier.
+  - 4-card 2×2 responsive desktop feature grid: GPS Attendance & Field Visibility, Live Van-Stock & In-Transit Orders, Tamper-Resistant Audit Trail, One-Click Field Reports & CSV Export.
+  - 5-item structured problem breakdown including "Opaque tracking damages trust".
+  - Hero shift manifest preview with "Illustrative shift example" badge and verified accuracy metadata.
+  - 6 interactive industry chips (`#industries`): FMCG & Beverages, Pharmaceuticals, Consumer Durables, Building Materials, Dairy & Fresh Foods, Industrial Supplies.
+  - 5 native `<details><summary>` FAQ accordions with pure CSS toggles.
+  - Structured data: Embedded JSON-LD `SoftwareApplication` declaring operating systems (`Android, Web`) and ₹0 free trial offer.
+  - OpenGraph card (`public/track/og-image.png`): Generated at exact 1200×630 dimensions with verified metadata.
+  - Conversion tracking attributes (`data-conversion="trial-start"` and `data-placement`) routing to `/contact?topic=saurik_track`.
+  - Comprehensive automated test suites: `test/verify_track_spec_v3.cjs` asserting all 17 criteria of v3 specification, plus `npm test` script in `package.json`.
+
+### Changed
+- **Previous Work Isolation:** Archived prior v1 exploration artifacts safely into `archive/track-v1/`.
+- **Design Tokens & Accessibility:** Introduced `--amber-strong: #8E4D14`, `--amber-hover: #733C0E`, and `--amber-on-dark: #E4AE70` ensuring WCAG 2.2 AA contrast on both paper (`#EEF0E7`) and dark navy (`#212F45`) backgrounds.
+- **Font Stack Optimization:** Switched to system font stack (`-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif`) guaranteeing zero network font latency and page weight under 40 KB (HTML: 22.7 KB, CSS: 16.4 KB).
+- **Canonical Domain:** Standardized to `https://www.wwwsaurikit.com/track/` across `index.html`, metadata, robots.txt, and sitemap.xml.
+- **Support & Routing:** Updated public support contact to `contact@wwwsaurikit.com`.
+
+### Fixed
+- Fixed literal copyright symbol rendering in `public/track/index.html` and `src/pages/Track.jsx`.
+
 
 ### Added
 - **AI Website Assistant:**
@@ -83,6 +108,34 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - **Official Brand Logo Integration:**
   - Integrated official high-resolution logo (`/logo.png`) in Header, Footer, Homepage Hero, and About page.
   - Generated cropped S-constellation mark (`/logo-mark.png`) as browser favicon and Apple touch icon in `index.html`.
+
+### Added
+- **Complete Project Scaffolding:** Initialized React 18, Vite 6, Tailwind CSS 3, PostCSS, and React Router v6 in `c:/Saurik/saurik_website`.
+- **Design System ("Light and Precise"):** Configured custom design tokens in `tailwind.config.js` and `src/index.css` (`#F7F9F8` canvas, `#102A43` navy ink, `#087F72` software teal, `#2456A6` hardware blue).
+- **Centralized Data Layer (`src/data/`):**
+  - `companyData.js`: Legal entity details, verified email (`contact@wwwsaurikit.com`), verified phone (`98620 87157`), working principles, 4-stage delivery process.
+  - `softwareData.js`: 5 confirmed software capabilities, Agentic AI workflow steps, software FAQs.
+  - `hardwareData.js`: 3 confirmed hardware categories, CCTV Home vs Business specs, buying process, hardware FAQs.
+- **Full Route Suite (`src/pages/`):**
+  - `Home.jsx`: Dual-division hero, 4-step delivery pipeline, scope statement, closing CTA.
+  - `Software.jsx`: 5 capabilities, interactive Agentic AI visualizer, forecasting chart, FAQs.
+  - `Hardware.jsx`: 3 hardware offerings, interactive CCTV premise selector, buying steps, FAQs.
+  - `About.jsx`: "Technology, Deliberately." ethos, working principles, direct accountability.
+  - `Contact.jsx`: Dual-column smart enquiry form with dynamic topic preselection (`?topic=...`), validation, email draft generator, and direct WhatsApp option.
+  - `Privacy.jsx`: Plain-English enquiry handling and data protection policy.
+  - `NotFound.jsx`: Friendly 404 page with navigation recovery links.
+- **Interactive UI Components (`src/components/`):**
+  - `Header.jsx`: Sticky responsive navbar with active link indicator and mobile drawer.
+  - `Footer.jsx`: Dual-division sitemap, verified contact details, copyright notice.
+  - `WhatsAppCTA.jsx`: Floating WhatsApp assistance widget with verified number (`98620 87157`).
+  - `AgenticWorkflow.jsx`: Step-by-step interactive workflow visualizer with live simulation mode.
+  - `CCTVSelector.jsx`: Dual-tab comparison switching between Home and Business surveillance.
+  - `AnalyticsChart.jsx`: Interactive predictive forecasting simulation with historical actuals vs projections.
+  - `FAQAccordion.jsx`: Accessible disclosure accordion component.
+  - `ProcessTimeline.jsx`: 4-step delivery pipeline cards.
+- **Official Brand Logo Integration:**
+  - Integrated official high-resolution logo (`/logo.png`) in Header, Footer, Homepage Hero, and About page.
+  - Generated cropped S-constellation mark (`/logo-mark.png`) as browser favicon and Apple touch icon in `index.html`.
 - **Engineering Documentation Suite:**
   - `architecture.md`: Architectural overview, design principles, component hierarchy.
   - `maintenance.md`: Maintenance procedures, contact updates, troubleshooting.
@@ -96,6 +149,36 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Transitioned visual aesthetic from dark technology to warm, high-contrast "Light and Precise" theme per `design.md` v0.2.
 - Replaced mock contact form feedback with truthful email draft notification (*"Your email draft is ready. Send it from your email app."*).
 - Formatted contact topics to automatically pre-select from service CTA deep links.
+
+---
+
+## [1.2.0] - 2026-09-14
+
+### Added - Saurik Track Dedicated SSR/Static Landing Page (`SAURIK-TRACK-LANDING-SPEC.md`)
+- **Static SSR-Ready Landing Page (`public/track/index.html`):**
+  - Zero-JS, crawler-indexable static HTML page output directly at `/track`.
+  - Verbatim headline: `"Know where your field team is. Know what's left in the van."`
+  - Verbatim subhead, CTA buttons (`"Start free 30-day trial"`), micro-text, and semantic Shift Manifest HTML/CSS visual.
+  - Complete 10 sections in exact order with exact IDs: `#site-nav`, `#hero`, `#problem`, `#features`, `#how-it-works`, `#industries`, `#privacy`, `#faq`, `#cta`, `#site-footer`.
+  - Pure CSS `<details><summary>` zero-JS FAQ accordions with CSS `+`/`–` toggles.
+- **Dedicated SEO & Social Sharing Assets:**
+  - `public/og-image.png`: 1200×630 high-contrast brand card with `--navy` background, `--amber` accent, and product typography.
+  - `public/apple-touch-icon.png`: 180×180 high-resolution touch icon.
+  - `public/favicon.ico`: Crisp 32×32 favicon.
+  - `public/robots.txt` & `public/sitemap.xml`: Full crawler indexing rules and sitemap integration.
+- **Design Tokens & Typography (`public/track/styles.css` & `src/pages/Track.css`):**
+  - Space Grotesk, Inter, and IBM Plex Mono fonts.
+  - Design tokens: `--paper: #EEF0E7`, `--paper-dim: #E5E7DB`, `--white: #FDFDFB`, `--ink: #1C2620`, `--navy: #212F45`, `--amber: #C57A2E`, `--moss: #3E7C4C`, `--line: #CDD0C2`.
+  - Fluid clamp typography, 80ch max body length, WCAG AA compliance, and `prefers-reduced-motion` support.
+- **Test Automation Suite (`test/verify_track_spec.cjs` & `test/verify_track_e2e.cjs`):**
+  - Automated assertions validating all 13 criteria from Section 11 of the spec, including grep check, metadata tags, JSON-LD schema parsing, image dimensions, verbatim snippets, and strict negative constraint enforcement (no fabricated metrics, no fake compliance claims, no surveillance framing).
+
+### Changed
+- Refactored `src/pages/Track.jsx` to render the exact unified 10-section structure for client-side navigation.
+- Updated `src/components/PageMetadata.jsx` to declare the verbatim product title and meta description.
+- Updated `vercel.json` with `cleanUrls: true` and explicit routing for `/track` to `/track/index.html`.
+- Updated `ChatWidget.jsx` welcome prompt to eliminate surveillance framing.
+- Updated repository root rule file `AGENTS.md` to mandate continuous synchronization of `architecture.md`, `change_log.md`, and test suite execution.
 
 ---
 

@@ -8,14 +8,21 @@ const pages = {
   '/about': ['About SAURIK IT', 'Learn about the software and hardware services offered by SAURIK IT Private Limited.'],
   '/contact': ['Discuss your requirement', 'Prepare an email enquiry or open WhatsApp to discuss your software project or hardware requirement.'],
   '/privacy': ['Privacy & enquiry information', 'Understand how email and WhatsApp enquiry drafts work and where to ask about information handling.'],
-  '/track': ['Saurik Track | Field Force & Van Inventory Mobile ERP', 'Eliminate fake GPS visits, automate attendance with anti-tampering verification, and audit mobile van stock in real-time.'],
+  '/track': [
+    'Saurik Track | GPS attendance and van-stock for field teams',
+    'Privacy-transparent GPS attendance, field visits, reports, and van-stock management for sales, distribution, and service teams. Free 30-day trial.'
+  ],
+  '/track/': [
+    'Saurik Track | GPS attendance and van-stock for field teams',
+    'Privacy-transparent GPS attendance, field visits, reports, and van-stock management for sales, distribution, and service teams. Free 30-day trial.'
+  ],
 };
 
 export default function PageMetadata() {
   const { pathname } = useLocation();
   useEffect(() => {
     const [title, description] = pages[pathname] || ['Page not found', 'Find your way back to SAURIK IT services and contact information.'];
-    document.title = pathname === '/track' ? `${title}` : `${title} | SAURIK IT`;
+    document.title = (pathname === '/track' || pathname === '/track/') ? `${title}` : `${title} | SAURIK IT`;
     const meta = (key, value, attribute = 'name') => {
       let node = document.head.querySelector(`meta[${attribute}="${key}"]`);
       if (!node) { node = document.createElement('meta'); node.setAttribute(attribute, key); document.head.append(node); }

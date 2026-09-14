@@ -1,457 +1,407 @@
-import React, { useState } from 'react';
-import { 
-  ShieldCheck, 
-  BatteryCharging, 
-  AlertOctagon, 
-  PackageCheck, 
-  ArrowRight, 
-  Play, 
-  CheckCircle2, 
-  MapPin, 
-  Smartphone, 
-  Layers, 
-  Zap, 
-  Server, 
-  Lock, 
-  FileCheck, 
-  ShieldAlert, 
-  HelpCircle,
-  Clock,
-  Sparkles
-} from 'lucide-react';
-import TrackRibbon from '../components/track/TrackRibbon';
-import TrackHeader from '../components/track/TrackHeader';
-import ROICalculator from '../components/track/ROICalculator';
-import ProblemSolutionMatrix from '../components/track/ProblemSolutionMatrix';
-import PilotModal from '../components/track/PilotModal';
-import DemoModal from '../components/track/DemoModal';
-import TrackFooter from '../components/track/TrackFooter';
-import FAQAccordion from '../components/FAQAccordion';
-import { 
-  TRACK_HERO, 
-  TRACK_PILLARS, 
-  TRACK_SECURITY, 
-  TRACK_FAQS, 
-  TRACK_PRICING 
-} from '../data/trackData';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import './Track.css';
 
 const Track = () => {
-  const [pilotOpen, setPilotOpen] = useState(false);
-  const [demoOpen, setDemoOpen] = useState(false);
-  const [currency, setCurrency] = useState('USD');
-
-  const trustIcons = {
-    ShieldCheck: ShieldCheck,
-    BatteryCharging: BatteryCharging,
-    AlertOctagon: AlertOctagon,
-    PackageCheck: PackageCheck,
-  };
-
-  const securityIcons = {
-    ShieldAlert: ShieldAlert,
-    Lock: Lock,
-    FileCheck: FileCheck,
-    Server: Server,
-  };
-
-  const activePricing = TRACK_PRICING[currency] || TRACK_PRICING.USD;
-
   return (
-    <div className="bg-slate-950 text-slate-100 min-h-screen font-sans selection:bg-cyan-500 selection:text-slate-950">
-      
-      {/* ── 1. Top Announcement Ribbon ───────────────────────── */}
-      <TrackRibbon onOpenPilot={() => setPilotOpen(true)} />
+    <div className="track-page">
+      <a href="#main-content" className="skip-link">Skip to main content</a>
 
-      {/* ── 2. Global Navigation Header ─────────────────────── */}
-      <TrackHeader 
-        onOpenPilot={() => setPilotOpen(true)} 
-        onOpenDemo={() => setDemoOpen(true)} 
-        currency={currency}
-        onCurrencyChange={setCurrency}
-      />
-
-      <main className="space-y-24 sm:space-y-32">
-        
-        {/* ── 3. Hero Section (Above the Fold) ────────────────── */}
-        <section className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-20 pb-10 overflow-hidden">
-          
-          {/* Subtle Ambient Background Gradients */}
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute top-1/3 right-10 w-[400px] h-[400px] bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
-
-          <div className="relative z-10 max-w-4xl mx-auto text-center space-y-8">
-            
-            {/* Eyebrow Badge */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900 border border-cyan-500/30 text-xs font-mono text-cyan-300 shadow-md">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              <span>{TRACK_HERO.eyebrow}</span>
-            </div>
-
-            {/* Main Headline H1 */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold font-heading tracking-tight leading-[1.12] text-white">
-              <span>{TRACK_HERO.headlineStart}</span>{' '}
-              <span className="bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400 bg-clip-text text-transparent block sm:inline">
-                {TRACK_HERO.headlineEnd}
-              </span>
-            </h1>
-
-            {/* Sub-headline */}
-            <p className="text-base sm:text-xl text-slate-300 leading-relaxed max-w-3xl mx-auto font-normal">
-              {TRACK_HERO.subheadline}
-            </p>
-
-            {/* Dual Action CTAs */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
-              <div className="w-full sm:w-auto">
-                <button
-                  type="button"
-                  onClick={() => setPilotOpen(true)}
-                  className="w-full sm:w-auto py-4 px-8 rounded-control text-sm font-bold text-slate-950 bg-gradient-to-r from-cyan-400 to-teal-400 hover:from-cyan-300 hover:to-teal-300 shadow-xl shadow-cyan-950/60 transition-all flex items-center justify-center gap-2 active:scale-[0.98]"
-                >
-                  <span>{TRACK_HERO.primaryCTA}</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-                <div className="text-[11px] text-slate-400 mt-1.5 font-mono text-center">
-                  {TRACK_HERO.primaryCTASubtext}
-                </div>
-              </div>
-
-              <div className="w-full sm:w-auto self-start sm:self-auto">
-                <button
-                  type="button"
-                  onClick={() => setDemoOpen(true)}
-                  className="w-full sm:w-auto py-4 px-7 rounded-control text-sm font-semibold text-slate-200 bg-slate-900/90 hover:bg-slate-800 border border-slate-700 hover:border-cyan-500/50 transition-all flex items-center justify-center gap-2.5 active:scale-[0.98]"
-                >
-                  <Play className="w-4 h-4 text-cyan-400" />
-                  <span>{TRACK_HERO.secondaryCTA}</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Micro-Trust Proof Ribbon */}
-            <div className="pt-8 border-t border-slate-800/80">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                {TRACK_HERO.microTrust.map((item, idx) => {
-                  const Icon = trustIcons[item.icon] || ShieldCheck;
-                  return (
-                    <div 
-                      key={idx} 
-                      className="p-3 rounded-control bg-slate-900/60 border border-slate-800/80 flex items-center justify-center gap-2 text-xs font-mono text-slate-300"
-                    >
-                      <Icon className="w-4 h-4 text-cyan-400 flex-shrink-0" />
-                      <span className="truncate">{item.label}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
+      {/* 1. Sticky Navigation (Two-Tier) */}
+      <nav id="site-nav" aria-label="Main Navigation">
+        {/* Corporate Tier */}
+        <div className="nav-corporate-tier">
+          <div className="container nav-corporate-inner">
+            <Link to="/" className="nav-corporate-brand">
+              <span>SAURIK IT</span>
+              <span style={{ color: 'var(--slate)', fontWeight: 'normal' }}>/ Corporate Services</span>
+            </Link>
+            <ul className="nav-corporate-links">
+              <li><Link to="/software">Software &amp; AI</Link></li>
+              <li><Link to="/hardware">Hardware &amp; Infrastructure</Link></li>
+              <li><Link to="/about">About</Link></li>
+              <li><Link to="/contact">Contact</Link></li>
+            </ul>
           </div>
+        </div>
 
-          {/* Telemetry Mockup Preview Card */}
-          <div className="max-w-5xl mx-auto mt-14 p-2 sm:p-3 rounded-panel bg-gradient-to-b from-cyan-500/20 via-slate-800/40 to-slate-900/60 border border-cyan-500/30 shadow-2xl">
-            <div className="bg-slate-950 rounded-control p-4 sm:p-6 border border-slate-800 space-y-4">
-              <div className="flex items-center justify-between pb-3 border-b border-slate-800/80">
-                <div className="flex items-center gap-2">
-                  <span className="w-3 h-3 rounded-full bg-rose-500"></span>
-                  <span className="w-3 h-3 rounded-full bg-amber-500"></span>
-                  <span className="w-3 h-3 rounded-full bg-emerald-500"></span>
-                  <span className="text-xs font-mono text-slate-400 ml-2">saurik-track-command-center // v2.4</span>
-                </div>
-                <div className="flex items-center gap-2 text-xs font-mono text-emerald-400">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                  <span>100% HARDWARE VERIFIED</span>
-                </div>
-              </div>
+        {/* Product Subnav Tier */}
+        <div className="nav-product-tier">
+          <div className="container nav-product-inner">
+            <a href="#hero" className="nav-brand-group">
+              <span className="nav-product-title">Saurik Track</span>
+              <span className="nav-brand-parent">by SAURIK IT</span>
+            </a>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 font-mono text-xs">
-                <div className="p-3 bg-slate-900/70 rounded border border-slate-800">
-                  <div className="text-slate-400 mb-1">REAL-TIME GPS TELEMETRY</div>
-                  <div className="text-sm font-bold text-cyan-300">24 Active Vans En-Route</div>
-                  <div className="text-[11px] text-slate-400 mt-1">Average Visit Proximity: 12 meters</div>
-                </div>
+            <ul className="nav-product-links">
+              <li><a href="#features">Product</a></li>
+              <li><a href="#how-it-works">How it works</a></li>
+              <li><a href="#industries">Industries</a></li>
+              <li><a href="#privacy">Privacy</a></li>
+              <li><a href="#faq">FAQ</a></li>
+            </ul>
 
-                <div className="p-3 bg-slate-900/70 rounded border border-slate-800">
-                  <div className="text-slate-400 mb-1">MOCK LOCATION FILTER</div>
-                  <div className="text-sm font-bold text-emerald-400">0 Spoofed Check-ins</div>
-                  <div className="text-[11px] text-slate-400 mt-1">All hardware root checks passing</div>
-                </div>
-
-                <div className="p-3 bg-slate-900/70 rounded border border-slate-800">
-                  <div className="text-slate-400 mb-1">VAN INVENTORY SYNC</div>
-                  <div className="text-sm font-bold text-cyan-300">1,420 SKUs In Transit</div>
-                  <div className="text-[11px] text-slate-400 mt-1">Zero transfer discrepancies</div>
-                </div>
-              </div>
+            <div className="nav-cta-wrap">
+              <Link to="/contact?topic=saurik_track" className="btn-primary" data-conversion="trial-start" data-placement="nav">Start free trial</Link>
             </div>
           </div>
+        </div>
+      </nav>
 
-        </section>
+      <main id="main-content">
+        {/* 2. Hero Section */}
+        <section id="hero" aria-labelledby="hero-heading">
+          <div className="container">
+            <div className="hero-grid">
+              <div className="hero-copy">
+                <h1 id="hero-heading">Know where your field team is. Know what's left in the van.</h1>
+                <p className="hero-subhead">A privacy-transparent field-work platform for sales, distribution, and service teams. GPS attendance, structured visits, and live van-stock—with an audit trail your reps can see and corrections they can request.</p>
+                <div className="hero-cta-group">
+                  <Link to="/contact?topic=saurik_track" className="btn-primary" data-conversion="trial-start" data-placement="hero">Start free 30-day trial</Link>
+                  <span className="micro-text">No credit card required</span>
+                </div>
+              </div>
 
-        {/* ── 4. Problem vs. Solution Matrix ──────────────────── */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <ProblemSolutionMatrix />
-        </section>
-
-        {/* ── 5. Four Core Pillars (Feature Deep Dives) ────────── */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16" id="features">
-          <div className="text-center max-w-3xl mx-auto">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold bg-cyan-950 text-cyan-400 border border-cyan-800/40 uppercase tracking-wider mb-2">
-              Architecture & Capabilities
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold font-heading text-white tracking-tight">
-              Four Unbreakable Pillars of Field Control
-            </h2>
-            <p className="text-sm sm:text-base text-slate-400 mt-2">
-              Engineered from the operating system level up to ensure bulletproof field attendance, mobile inventory accuracy, and instant dispatching.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {TRACK_PILLARS.map((pillar, idx) => (
-              <div 
-                key={pillar.id}
-                id={pillar.id}
-                className="bg-slate-900/80 rounded-panel border border-slate-800 p-6 sm:p-8 hover:border-cyan-500/40 transition-all flex flex-col justify-between shadow-xl backdrop-blur-sm group"
-              >
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono font-bold text-cyan-400 bg-cyan-950/60 px-2.5 py-1 rounded border border-cyan-800/40">
-                      {pillar.tag}
-                    </span>
-                    <span className="text-xs font-mono font-semibold text-emerald-400 bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-800/40">
-                      {pillar.metric}
-                    </span>
+              <div className="hero-visual" aria-label="Shift manifest example">
+                <div className="manifest-card">
+                  <span className="manifest-label-badge">Illustrative shift example</span>
+                  <div className="manifest-header">
+                    <span className="manifest-agent">Rahul Sharma — North Zone</span>
+                    <span className="manifest-date">Today</span>
                   </div>
-
-                  <h3 className="text-xl sm:text-2xl font-bold font-heading text-white group-hover:text-cyan-300 transition-colors">
-                    {pillar.title}
-                  </h3>
-
-                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                    {pillar.summary}
-                  </p>
-
-                  <div className="space-y-3 pt-2">
-                    {pillar.bullets.map((b, i) => (
-                      <div key={i} className="flex items-start gap-2.5 text-xs text-slate-300">
-                        <CheckCircle2 className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" />
-                        <div>
-                          <strong className="text-white">{b.head}: </strong>
-                          <span>{b.text}</span>
+                  <ol className="manifest-checkpoints">
+                    <li className="checkpoint-row">
+                      <div className="dot-col" aria-hidden="true">
+                        <span className="status-dot moss"></span>
+                      </div>
+                      <div className="checkpoint-content">
+                        <div className="checkpoint-title-row">
+                          <strong className="checkpoint-title">Checked in</strong>
+                          <span className="checkpoint-time">· 9:04 AM</span>
+                        </div>
+                        <div className="checkpoint-details">
+                          <span>Location captured · reported accuracy 8 m</span>
                         </div>
                       </div>
-                    ))}
-                  </div>
+                    </li>
+                    <li className="checkpoint-row">
+                      <div className="dot-col" aria-hidden="true">
+                        <span className="status-dot navy"></span>
+                      </div>
+                      <div className="checkpoint-content">
+                        <div className="checkpoint-title-row">
+                          <strong className="checkpoint-title">Visit logged — Apex Healthcare</strong>
+                          <span className="checkpoint-time">· 10:22 AM</span>
+                        </div>
+                        <div className="checkpoint-details">
+                          <span>Order taken · ₹1,250.00</span>
+                          <span className="tag-stock">Van stock auto-adjusted</span>
+                        </div>
+                      </div>
+                    </li>
+                    <li className="checkpoint-row">
+                      <div className="dot-col" aria-hidden="true">
+                        <span className="status-dot amber"></span>
+                      </div>
+                      <div className="checkpoint-content">
+                        <div className="checkpoint-title-row">
+                          <strong className="checkpoint-title">Session paused — Lunch break</strong>
+                          <span className="checkpoint-time">· 1:00 PM</span>
+                        </div>
+                        <div className="checkpoint-details">
+                          <span>Tracking suspended until resume</span>
+                        </div>
+                      </div>
+                    </li>
+                    <li className="checkpoint-row">
+                      <div className="dot-col" aria-hidden="true">
+                        <span className="status-dot moss"></span>
+                      </div>
+                      <div className="checkpoint-content">
+                        <div className="checkpoint-title-row">
+                          <strong className="checkpoint-title">Checked out</strong>
+                          <span className="checkpoint-time">· 6:02 PM</span>
+                        </div>
+                        <div className="checkpoint-details">
+                          <span>7h 58m logged · 4 visits · 1 order</span>
+                        </div>
+                      </div>
+                    </li>
+                  </ol>
                 </div>
+              </div>
+            </div>
+          </div>
+        </section>
 
-                <div className="pt-6 mt-6 border-t border-slate-800/80 flex items-center justify-between">
-                  <button
-                    type="button"
-                    onClick={() => setPilotOpen(true)}
-                    className="text-xs font-bold text-cyan-400 hover:text-cyan-300 flex items-center gap-1 group-hover:translate-x-0.5 transition-all"
-                  >
-                    <span>Deploy in 14-Day Pilot</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
-                  <span className="text-[11px] font-mono text-slate-400">Pillar 0{idx + 1}</span>
+        {/* 3. Problem Section */}
+        <section id="problem" aria-labelledby="problem-heading">
+          <div className="container">
+            <div className="problem-grid">
+              <div className="problem-intro">
+                <h2 id="problem-heading">Field work should not depend on group chats and guesswork.</h2>
+              </div>
+              <ol className="problem-list">
+                <li className="problem-item">
+                  <span className="problem-eyebrow">01</span>
+                  <h3>Nobody knows who's active or stuck</h3>
+                  <p>Reps report in when it's convenient, not when a manager needs an update.</p>
+                </li>
+                <li className="problem-item">
+                  <span className="problem-eyebrow">02</span>
+                  <h3>Attendance disputes have no shared evidence</h3>
+                  <p>&ldquo;I was there&rdquo; and &ldquo;the sheet says otherwise&rdquo; leave both sides without a fair way to settle the record.</p>
+                </li>
+                <li className="problem-item">
+                  <span className="problem-eyebrow">03</span>
+                  <h3>Van stock and warehouse counts drift apart</h3>
+                  <p>Orders get booked in the field faster than paper records can be reconciled.</p>
+                </li>
+                <li className="problem-item">
+                  <span className="problem-eyebrow">04</span>
+                  <h3>Weekly reports consume someone's evening</h3>
+                  <p>Attendance, visits, and orders should not require hours of manual spreadsheet work.</p>
+                </li>
+                <li className="problem-item">
+                  <span className="problem-eyebrow">05</span>
+                  <h3>Opaque tracking damages trust</h3>
+                  <p>When employees cannot see when tracking starts, stops, or how records are corrected, adoption suffers.</p>
+                </li>
+              </ol>
+            </div>
+          </div>
+        </section>
+
+        {/* 4. Features Section (2x2 Grid) */}
+        <section id="features" aria-labelledby="features-heading">
+          <div className="container">
+            <div className="features-header">
+              <h2 id="features-heading">Four things a field team actually needs</h2>
+              <p>Attendance shows who's working. Inventory shows what is moving. The audit trail helps settle what happened. Reports show where the week went. Saurik Track brings all four into one platform.</p>
+            </div>
+            <div className="features-grid-2x2">
+              {/* Feature 1 */}
+              <article className="feature-card">
+                <span className="feature-eyebrow mono-label">GPS attendance and field visibility</span>
+                <h3>See the field, not just a spreadsheet of it</h3>
+                <p className="feature-body">Reps check in with a captured location and remain visible on a live map during an active shift. Tracking has clear start, pause, resume, and stop states, with nothing recorded outside the defined work session.</p>
+                <ul className="feature-bullets">
+                  <li>Live map of on-duty representatives, including pause and travel status</li>
+                  <li>Structured visit outcomes: order taken, follow-up, or no sale</li>
+                  <li>Exceptions queue for missed checkouts and stale locations</li>
+                  <li>Native background location support on Android and iOS</li>
+                  <li>Android foreground service and platform-appropriate permission disclosures</li>
+                </ul>
+              </article>
+
+              {/* Feature 2 */}
+              <article className="feature-card">
+                <span className="feature-eyebrow mono-label">Inventory and van-stock tracking</span>
+                <h3>Stock that updates when an order closes</h3>
+                <p className="feature-body">Each van operates as a mobile extension of the warehouse. When a representative books an order, the stock ledger moves with it—without a second reconciliation entry.</p>
+                <ul className="feature-bullets">
+                  <li>Industry templates for FMCG, pharma, electronics, and apparel</li>
+                  <li>Price and stock revision history with a reason attached to every change</li>
+                  <li>Warehouse-to-van transfer manifests tracked by vehicle</li>
+                  <li>Keyboard entry, spreadsheet paste, and barcode-scanner support</li>
+                  <li>Responsive handling of large product catalogues</li>
+                </ul>
+              </article>
+
+              {/* Feature 3 */}
+              <article className="feature-card">
+                <span className="feature-eyebrow mono-label">Audit trail and corrections</span>
+                <h3>Attendance your team can dispute—and settle</h3>
+                <p className="feature-body">Check-ins, visits, pauses, and checkouts create append-only business events. When a representative needs to correct a mistake, they provide a reason and an administrator records the decision while preserving the original event.</p>
+                <ul className="feature-bullets">
+                  <li>Append-only audit history for attendance and visit actions</li>
+                  <li>Employee-submitted correction requests with required reasons</li>
+                  <li>Administrator approval or rejection with a decision note</li>
+                  <li>Approved corrections reflected in reports without overwriting source events</li>
+                </ul>
+              </article>
+
+              {/* Feature 4 */}
+              <article className="feature-card">
+                <span className="feature-eyebrow mono-label">Reports and exports</span>
+                <h3>The Monday report writes itself</h3>
+                <p className="feature-body">Attendance hours, visit outcomes, and order value are brought together automatically, ready to review on the web or export as CSV.</p>
+                <ul className="feature-bullets">
+                  <li>Historical attendance reporting for a selected date range</li>
+                  <li>Filters for employee, outcome, and team</li>
+                  <li>CSV exports for payroll and accounting workflows</li>
+                  <li>Web Command Center for real-time team visibility</li>
+                </ul>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        {/* 5. How It Works Section */}
+        <section id="how-it-works" aria-labelledby="how-it-works-heading">
+          <div className="container">
+            <h2 id="how-it-works-heading">How a shift moves through the system</h2>
+            <div className="steps-grid">
+              <div className="step-card">
+                <span className="step-label mono-label">STEP 1 — Check in</span>
+                <h3>Check in</h3>
+                <p>A representative opens the app at their first stop and checks in. The location and its reported accuracy are recorded.</p>
+              </div>
+              <div className="step-card">
+                <span className="step-label mono-label">STEP 2 — Log the visit</span>
+                <h3>Log the visit</h3>
+                <p>The client, outcome, and order value are recorded. Stock adjusts automatically when an order closes.</p>
+              </div>
+              <div className="step-card">
+                <span className="step-label mono-label">STEP 3 — Pause when needed</span>
+                <h3>Pause when needed</h3>
+                <p>A lunch or approved break pauses tracking, with the reason and tracking state clearly shown.</p>
+              </div>
+              <div className="step-card">
+                <span className="step-label mono-label">STEP 4 — Check out</span>
+                <h3>Check out</h3>
+                <p>The shift closes with a summary of hours worked, visits made, and orders booked.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 6. Industries Section */}
+        <section id="industries" aria-labelledby="industries-heading">
+          <div className="container industries-inner">
+            <h2 id="industries-heading" className="industries-lead">Built for teams that sell, deliver, install, and service in person:</h2>
+            <div className="chips-row">
+              <span className="industry-chip">FMCG and beverages</span>
+              <span className="industry-chip">Pharma and healthcare</span>
+              <span className="industry-chip">Electronics and hardware</span>
+              <span className="industry-chip">Fashion and apparel</span>
+              <span className="industry-chip">Logistics and distribution</span>
+              <span className="industry-chip">Installation, field service, and repair</span>
+            </div>
+          </div>
+        </section>
+
+        {/* 7. Privacy Section */}
+        <section id="privacy" aria-labelledby="privacy-heading">
+          <div className="container">
+            <h2 id="privacy-heading">Transparent tracking, by design</h2>
+            <div className="privacy-card">
+              <div className="privacy-col">
+                <h3>Tracking has a visible start and end</h3>
+                <p>Location is recorded only during an active work session between check-in and check-out. Employees can see whether tracking is active, paused, or stopped. Before Android requests background-location permission, a plain-language disclosure explains what is collected and why.</p>
+              </div>
+              <div className="privacy-col">
+                <h3>Company workspaces are isolated</h3>
+                <p>Application access is scoped to each company workspace using authenticated roles, Firebase custom claims, and Firestore security rules. Privileged backend operations are separately restricted and audited.</p>
+              </div>
+              <div className="privacy-col">
+                <h3>Employees can request access, correction, or deletion</h3>
+                <p>Employees can submit requests concerning their personal data from inside the application. Requests follow an administrator-reviewed backend workflow so identity, company obligations, retention requirements, and audit history are handled safely.</p>
+              </div>
+            </div>
+            <div className="privacy-links-row">
+              <Link to="/privacy" className="privacy-link">Read our Privacy Policy</Link>
+              <a href="mailto:contact@wwwsaurikit.com" className="privacy-link">Contact support</a>
+            </div>
+          </div>
+        </section>
+
+        {/* 8. FAQ Section */}
+        <section id="faq" aria-labelledby="faq-heading">
+          <div className="container">
+            <h2 id="faq-heading">Common questions</h2>
+            <div className="faq-list">
+              <details className="faq-item">
+                <summary>
+                  <span>Do you track employees when they're off the clock?</span>
+                  <span className="toggle" aria-hidden="true"></span>
+                </summary>
+                <div className="faq-answer">
+                  <p>No. Location tracking operates only during an active work session. It stops after checkout and is suspended while the session is paused. The application shows employees when tracking is active, paused, or stopped.</p>
                 </div>
-              </div>
-            ))}
-          </div>
-        </section>
+              </details>
 
-        {/* ── 6. Interactive ROI Savings Calculator ───────────── */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" id="roi">
-          <ROICalculator 
-            onOpenPilot={() => setPilotOpen(true)} 
-            currency={currency}
-            onCurrencyChange={setCurrency}
-          />
-        </section>
+              <details className="faq-item">
+                <summary>
+                  <span>What platforms do you support?</span>
+                  <span className="toggle" aria-hidden="true"></span>
+                </summary>
+                <div className="faq-answer">
+                  <p>Field employees can use Android or iOS, with platform-appropriate background-location support. Administrators and managers use the Web Command Center. All three surfaces synchronize in real time when network connectivity is available.</p>
+                </div>
+              </details>
 
-        {/* ── 7. Security & Enterprise Badges ─────────────────── */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" id="security">
-          <div className="bg-slate-900/60 rounded-panel border border-slate-800 p-8 sm:p-12 space-y-10">
-            <div className="text-center max-w-2xl mx-auto space-y-2">
-              <span className="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider">
-                Enterprise Hardened
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-bold font-heading text-white">
-                Bank-Grade Multi-Tenancy & Data Privacy
-              </h2>
-              <p className="text-xs sm:text-sm text-slate-400">
-                Your client routes, inventory valuations, and personnel logs remain isolated and cryptographically shielded.
-              </p>
-            </div>
+              <details className="faq-item">
+                <summary>
+                  <span>How is my company's data separated from other companies?</span>
+                  <span className="toggle" aria-hidden="true"></span>
+                </summary>
+                <div className="faq-answer">
+                  <p>Each user is authenticated into a company workspace. Application access is scoped using authenticated roles, Firebase custom claims, and Firestore security rules. Privileged backend operations are separately controlled and audited.</p>
+                </div>
+              </details>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {TRACK_SECURITY.map((item, idx) => {
-                const Icon = securityIcons[item.icon] || ShieldCheck;
-                return (
-                  <div key={idx} className="p-5 rounded-control bg-slate-950/80 border border-slate-800 space-y-3">
-                    <div className="p-2 rounded bg-cyan-950 text-cyan-400 inline-block border border-cyan-800/40">
-                      <Icon className="w-5 h-5" />
-                    </div>
-                    <h4 className="text-sm font-bold font-heading text-white">
-                      {item.title}
-                    </h4>
-                    <p className="text-xs text-slate-400 leading-relaxed">
-                      {item.description}
-                    </p>
-                  </div>
-                );
-              })}
+              <details className="faq-item">
+                <summary>
+                  <span>What happens if a representative loses signal or their phone dies?</span>
+                  <span className="toggle" aria-hidden="true"></span>
+                </summary>
+                <div className="faq-answer">
+                  <p>The application flags incomplete or stale records for administrator review. The representative can submit a correction with a reason, and the administrator can approve or reject it. The decision is recorded without overwriting the original event.</p>
+                </div>
+              </details>
+
+              <details className="faq-item">
+                <summary>
+                  <span>How does pricing work after the trial?</span>
+                  <span className="toggle" aria-hidden="true"></span>
+                </summary>
+                <div className="faq-answer">
+                  <p>The 30-day trial provides full access with no credit card required. After the trial, plans are billed per active user per month. Contact us before the trial ends and we'll help select the plan that fits your team size.</p>
+                </div>
+              </details>
             </div>
           </div>
         </section>
 
-        {/* ── 8. Transparent Pricing Section ──────────────────── */}
-        <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8" id="pricing">
-          <div className="bg-gradient-to-b from-slate-900 to-slate-950 rounded-panel border border-cyan-500/40 p-8 sm:p-12 text-center space-y-6 shadow-2xl relative overflow-hidden">
-            
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950 border border-emerald-500/40 text-xs font-mono text-emerald-300">
-              <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Flat, Predictable Enterprise Pricing</span>
+        {/* 9. Final CTA Section */}
+        <section id="cta" aria-labelledby="cta-heading">
+          <div className="container cta-grid">
+            <div className="cta-content">
+              <h2 id="cta-heading">Set up your workspace in a few minutes</h2>
+              <p>Invite your first field representative the same day. No credit card or setup call is required.</p>
             </div>
-
-            <h2 className="text-3xl sm:text-4xl font-extrabold font-heading text-white">
-              One Plan. Unlimited Field Visibility.
-            </h2>
-
-            {/* Currency Switcher in Pricing Section */}
-            <div className="flex justify-center pt-1 pb-1">
-              <div className="inline-flex items-center p-1 bg-slate-950 rounded-control border border-slate-800">
-                <button
-                  type="button"
-                  onClick={() => setCurrency('USD')}
-                  className={`px-3 py-1 rounded text-xs font-mono font-bold transition-all ${
-                    currency === 'USD'
-                      ? 'bg-cyan-500 text-slate-950 shadow'
-                      : 'text-slate-400 hover:text-white'
-                  }`}
-                >
-                  USD ($)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setCurrency('INR')}
-                  className={`px-3 py-1 rounded text-xs font-mono font-bold transition-all ${
-                    currency === 'INR'
-                      ? 'bg-emerald-400 text-slate-950 shadow'
-                      : 'text-slate-400 hover:text-white'
-                  }`}
-                >
-                  INR (₹)
-                </button>
-              </div>
+            <div className="cta-action">
+              <Link to="/contact?topic=saurik_track" className="btn-white" data-conversion="trial-start" data-placement="final-cta">Start free 30-day trial</Link>
             </div>
-
-            <div className="py-2">
-              <span className="text-5xl sm:text-6xl font-extrabold text-cyan-400 font-mono">
-                {activePricing.symbol}{activePricing.perUserMonth}
-              </span>
-              <span className="text-slate-400 text-sm font-mono ml-2">/ user / month</span>
-            </div>
-
-            <p className="text-sm text-slate-300 max-w-lg mx-auto leading-relaxed">
-              Includes full Android & iOS rep tracking, dual-location van inventory, unlimited client check-ins, and 60 FPS desktop command center.
-            </p>
-
-            <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <button
-                type="button"
-                onClick={() => setPilotOpen(true)}
-                className="w-full sm:w-auto py-3.5 px-8 rounded-control text-sm font-bold text-slate-950 bg-gradient-to-r from-cyan-400 to-teal-400 hover:from-cyan-300 hover:to-teal-300 shadow-lg shadow-cyan-950/50 flex items-center justify-center gap-2"
-              >
-                <span>Start 14-Day Free Pilot</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-              <button
-                type="button"
-                onClick={() => setDemoOpen(true)}
-                className="w-full sm:w-auto py-3.5 px-6 rounded-control text-sm font-semibold text-slate-300 bg-slate-900 hover:bg-slate-800 border border-slate-700"
-              >
-                Watch 2-Min Interactive Demo
-              </button>
-            </div>
-
-            <div className="text-xs text-slate-400 pt-2 flex items-center justify-center gap-4 font-mono">
-              <span>✓ No credit card required</span>
-              <span>✓ Free Excel inventory import</span>
-              <span>✓ 15-min team setup</span>
-            </div>
-
           </div>
         </section>
-
-        {/* ── 9. High-Conversion FAQ Accordion ───────────────── */}
-        <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold bg-cyan-950 text-cyan-400 border border-cyan-800/40 uppercase tracking-wider mb-2">
-              Frequently Asked Questions
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-bold font-heading text-white">
-              Overcoming Key Fleet Friction Points
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1">
-              Honest technical facts about battery usage, fake GPS rejection, and offline sync.
-            </p>
-          </div>
-
-          <div className="bg-slate-900/60 rounded-panel border border-slate-800 p-6">
-            <FAQAccordion items={TRACK_FAQS} />
-          </div>
-        </section>
-
-        {/* ── 10. Final Call-to-Action Section ───────────────── */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
-          <div className="bg-gradient-to-r from-cyan-950 via-slate-900 to-emerald-950 rounded-panel border border-cyan-500/40 p-8 sm:p-14 text-center space-y-6 shadow-2xl relative overflow-hidden">
-            
-            <div className="max-w-3xl mx-auto space-y-4">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-heading text-white tracking-tight">
-                Ready to Eliminate Guesswork from Your Field Operations?
-              </h2>
-              <p className="text-base sm:text-lg text-slate-300 leading-relaxed max-w-2xl mx-auto">
-                Join growing distribution, sales, and service teams who run tighter, more profitable routes every single day.
-              </p>
-              
-              <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
-                <button
-                  type="button"
-                  onClick={() => setPilotOpen(true)}
-                  className="w-full sm:w-auto py-4 px-10 rounded-control text-sm font-bold text-slate-950 bg-gradient-to-r from-cyan-400 to-emerald-400 hover:from-cyan-300 hover:to-emerald-300 shadow-xl shadow-cyan-950/60 flex items-center justify-center gap-2"
-                >
-                  <span>Start Your 14-Day Free Pilot</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
-
-              <div className="text-xs text-slate-400 pt-2 font-mono">
-                No credit card required • Free onboarding support • Instant team setup
-              </div>
-            </div>
-
-          </div>
-        </section>
-
       </main>
 
-      {/* ── 11. Dedicated Saurik Track Footer ────────────────── */}
-      <TrackFooter onOpenPilot={() => setPilotOpen(true)} />
-
-      {/* ── 12. Interactive Modals ───────────────────────────── */}
-      <PilotModal 
-        isOpen={pilotOpen} 
-        onClose={() => setPilotOpen(false)} 
-      />
-
-      <DemoModal 
-        isOpen={demoOpen} 
-        onClose={() => setDemoOpen(false)} 
-        onOpenPilot={() => setPilotOpen(true)} 
-      />
-
+      {/* 10. Site Footer */}
+      <footer id="site-footer" aria-label="Site Footer">
+        <div className="container footer-inner">
+          <div className="footer-main-row">
+            <div className="footer-brand-wrap">
+              <a href="#hero" className="footer-brand">Saurik Track</a>
+              <span className="footer-relationship">A product of SAURIK IT Private Limited</span>
+            </div>
+            <ul className="footer-links">
+              <li><a href="#features">Product</a></li>
+              <li><a href="#how-it-works">How it works</a></li>
+              <li><a href="#industries">Industries</a></li>
+              <li><a href="#privacy">Privacy</a></li>
+              <li><a href="#faq">FAQ</a></li>
+              <li><Link to="/">Visit SAURIK IT</Link></li>
+              <li><Link to="/privacy">Privacy Policy</Link></li>
+            </ul>
+            <a href="mailto:contact@wwwsaurikit.com" className="footer-contact">contact@wwwsaurikit.com</a>
+          </div>
+          <div className="footer-copy">
+            <p>© 2026 SAURIK IT Private Limited. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };

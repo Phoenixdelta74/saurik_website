@@ -1,0 +1,7 @@
+---
+description: Agent Requested rule for evidence-backed website release testing
+globs:
+alwaysApply: false
+---
+
+When the user requests website testing, QA, validation, smoke testing, regression testing, release readiness, or browser/responsive/accessibility/SEO/form/API checks, use the platform-neutral `web-release-tester` core and its linked references. Detect available tools first. Testing is read-only unless fixes are explicitly authorized; never submit live forms or mutate production data. Report Pass, Fail, Warning, and Not tested with evidence and coverage limitations.

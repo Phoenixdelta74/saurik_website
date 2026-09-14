@@ -1,0 +1,857 @@
+:root {
+  /* Color tokens */
+  --paper:      #EEF0E7;   /* Page background */
+  --paper-dim:  #E5E7DB;   /* Alt section background */
+  --white:      #FDFDFB;   /* Card surfaces */
+  --ink:        #1C2620;   /* Body text */
+  --ink-soft:   #4B5750;   /* Secondary text */
+  --navy:       #212F45;   /* Dark section (problem band) */
+  --amber:      #C57A2E;   /* Primary CTA */
+  --amber-dark: #A9631F;   /* CTA hover */
+  --moss:       #3E7C4C;   /* "Healthy" status */
+  --slate:      #8C9389;   /* Tertiary text */
+  --line:       #CDD0C2;   /* Borders, dividers */
+
+  /* Type scale */
+  --font-display: 'Space Grotesk', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-body:    'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono:    'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Layout */
+  --max-w: 1120px;
+  --gutter: 32px;
+}
+
+.track-page {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.55;
+  background-color: var(--paper);
+  color: var(--ink);
+  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* Accessible focus ring */
+.track-page a:focus-visible,
+.track-page button:focus-visible,
+.track-page summary:focus-visible,
+.track-page input:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 3px;
+}
+
+/* Container */
+.track-page .container {
+  width: 100%;
+  max-width: var(--max-w);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+}
+
+@media (max-width: 640px) {
+  .track-page {
+    --gutter: 20px;
+  }
+}
+
+/* Typography elements */
+.track-page h1,
+.track-page h2,
+.track-page h3,
+.track-page h4 {
+  font-family: var(--font-display);
+  color: var(--ink);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.track-page h1 {
+  font-size: clamp(2.2rem, 4vw, 3.1rem);
+  line-height: 1.12;
+}
+
+.track-page h2 {
+  font-size: clamp(1.7rem, 2.8vw, 2.3rem);
+  line-height: 1.2;
+}
+
+.track-page h3 {
+  font-size: 1.35rem;
+  line-height: 1.25;
+}
+
+.track-page p {
+  max-width: 80ch;
+}
+
+.track-page .mono-label {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+}
+
+/* Buttons */
+.track-page .btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--amber);
+  color: #FFFFFF;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 150ms ease;
+}
+
+.track-page .btn-primary:hover {
+  background-color: var(--amber-dark);
+}
+
+/* Skip link */
+.track-page .skip-link {
+  position: absolute;
+  top: -60px;
+  left: 16px;
+  background: var(--white);
+  color: var(--ink);
+  padding: 10px 18px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  z-index: 1000;
+  font-size: 0.87rem;
+  text-decoration: none;
+  transition: top 150ms ease;
+}
+
+.track-page .skip-link:focus {
+  top: 16px;
+}
+
+/* 1. Nav (#site-nav) */
+.track-page #site-nav {
+  position: sticky;
+  top: 0;
+  height: 72px;
+  background-color: rgba(238, 240, 231, 0.92);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--line);
+  z-index: 100;
+}
+
+.track-page .nav-inner {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.track-page .nav-brand {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--ink);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+
+.track-page .nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  list-style: none;
+}
+
+.track-page .nav-links a {
+  color: var(--ink-soft);
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 500;
+  transition: color 150ms ease;
+}
+
+.track-page .nav-links a:hover {
+  color: var(--ink);
+}
+
+.track-page .nav-cta {
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 760px) {
+  .track-page .nav-links {
+    display: none;
+  }
+}
+
+/* 2. Hero (#hero) */
+.track-page #hero {
+  padding-top: clamp(48px, 6vw, 76px);
+  padding-bottom: clamp(56px, 7vw, 88px);
+}
+
+.track-page .hero-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 48px;
+  align-items: center;
+}
+
+@media (max-width: 860px) {
+  .track-page .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+
+.track-page .hero-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.track-page .hero-subhead {
+  font-size: clamp(1.05rem, 1.35vw, 1.2rem);
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+.track-page .hero-cta-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.track-page .micro-text {
+  font-size: 0.85rem;
+  color: var(--slate);
+}
+
+/* Hero Shift Manifest Card */
+.track-page .manifest-card {
+  background-color: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 26px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.track-page .manifest-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+.track-page .manifest-agent {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+
+.track-page .manifest-date {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+
+.track-page .manifest-checkpoints {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.track-page .checkpoint-row {
+  display: grid;
+  grid-template-columns: 22px 1fr;
+  gap: 12px;
+  padding: 16px 0;
+  border-top: 1px dashed var(--line);
+  align-items: flex-start;
+}
+
+.track-page .checkpoint-row:first-child {
+  border-top: none;
+}
+
+.track-page .dot-col {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 5px;
+}
+
+.track-page .status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+.track-page .status-dot.moss {
+  background-color: var(--moss);
+}
+
+.track-page .status-dot.navy {
+  background-color: var(--navy);
+}
+
+.track-page .status-dot.amber {
+  background-color: var(--amber);
+}
+
+.track-page .checkpoint-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.track-page .checkpoint-title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.track-page .checkpoint-title {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.track-page .checkpoint-time {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+
+.track-page .checkpoint-details {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.track-page .tag-stock {
+  display: inline-block;
+  background-color: var(--paper);
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+  font-size: 0.75rem;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+/* 3. Problem band (#problem) */
+.track-page #problem {
+  background-color: var(--navy);
+  color: var(--paper);
+  padding-top: clamp(64px, 8vw, 96px);
+  padding-bottom: clamp(64px, 8vw, 96px);
+}
+
+.track-page .problem-grid {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: 48px;
+}
+
+@media (max-width: 860px) {
+  .track-page .problem-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+
+.track-page #problem h2 {
+  color: var(--white);
+  line-height: 1.22;
+}
+
+.track-page .problem-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  list-style: none;
+}
+
+.track-page .problem-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.track-page .problem-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--amber);
+}
+
+.track-page .problem-item h3 {
+  color: #FFFFFF;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.track-page .problem-item p {
+  color: #C4CAD6;
+  font-size: 0.95rem;
+}
+
+/* 4. Features (#features) */
+.track-page #features {
+  padding-top: clamp(64px, 8vw, 96px);
+  padding-bottom: clamp(64px, 8vw, 96px);
+}
+
+.track-page .features-header {
+  margin-bottom: 48px;
+}
+
+.track-page .features-header h2 {
+  margin-bottom: 16px;
+}
+
+.track-page .features-header p {
+  font-size: 1.05rem;
+  color: var(--ink-soft);
+  max-width: 72ch;
+}
+
+.track-page .features-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+
+@media (max-width: 860px) {
+  .track-page .features-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+.track-page .feature-card {
+  background-color: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.track-page .feature-eyebrow {
+  color: var(--amber-dark);
+  font-weight: 600;
+}
+
+.track-page .feature-card h3 {
+  color: var(--ink);
+}
+
+.track-page .feature-body {
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.track-page .feature-bullets {
+  list-style: none;
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.track-page .feature-bullets li {
+  position: relative;
+  padding-left: 18px;
+  color: var(--ink);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.track-page .feature-bullets li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 9px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--amber);
+}
+
+/* 5. How it works (#how-it-works) */
+.track-page #how-it-works {
+  background-color: var(--paper-dim);
+  padding-top: clamp(64px, 8vw, 96px);
+  padding-bottom: clamp(64px, 8vw, 96px);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.track-page #how-it-works h2 {
+  margin-bottom: 48px;
+}
+
+.track-page .steps-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+}
+
+.track-page .step-card {
+  padding: 0 24px;
+  border-left: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.track-page .step-card:first-child {
+  border-left: none;
+  padding-left: 0;
+}
+
+.track-page .step-card:last-child {
+  padding-right: 0;
+}
+
+.track-page .step-label {
+  color: var(--amber-dark);
+  font-weight: 600;
+}
+
+.track-page .step-card h3 {
+  font-size: 1.15rem;
+}
+
+.track-page .step-card p {
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+}
+
+@media (max-width: 860px) {
+  .track-page .steps-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .track-page .step-card {
+    border-left: none;
+    border-top: 1px solid var(--line);
+    padding: 24px 0 0 0;
+  }
+  .track-page .step-card:first-child {
+    border-top: none;
+    padding-top: 0;
+  }
+}
+
+/* 6. Industries (#industries) */
+.track-page #industries {
+  padding-top: clamp(48px, 6vw, 72px);
+  padding-bottom: clamp(48px, 6vw, 72px);
+  border-bottom: 1px solid var(--line);
+}
+
+.track-page .industries-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.track-page .industries-lead {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.track-page .chips-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.track-page .industry-chip {
+  background-color: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 8px 18px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+/* 7. Privacy (#privacy) */
+.track-page #privacy {
+  padding-top: clamp(64px, 8vw, 96px);
+  padding-bottom: clamp(64px, 8vw, 96px);
+}
+
+.track-page #privacy h2 {
+  margin-bottom: 36px;
+}
+
+.track-page .privacy-card {
+  background-color: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 36px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 36px;
+}
+
+@media (max-width: 860px) {
+  .track-page .privacy-card {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding: 28px;
+  }
+}
+
+.track-page .privacy-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.track-page .privacy-col h3 {
+  font-size: 1.15rem;
+  color: var(--ink);
+}
+
+.track-page .privacy-col p {
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+/* 8. FAQ (#faq) */
+.track-page #faq {
+  background-color: var(--paper-dim);
+  padding-top: clamp(64px, 8vw, 96px);
+  padding-bottom: clamp(64px, 8vw, 96px);
+  border-top: 1px solid var(--line);
+}
+
+.track-page #faq h2 {
+  margin-bottom: 36px;
+}
+
+.track-page .faq-list {
+  max-width: 800px;
+  border-bottom: 1px solid var(--line);
+}
+
+.track-page .faq-item {
+  border-top: 1px solid var(--line);
+}
+
+.track-page .faq-item summary {
+  padding: 20px 0;
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-display);
+  font-size: 1.08rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.track-page .faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.track-page .faq-item .toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 1.3rem;
+  color: var(--amber);
+  margin-left: 16px;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.track-page .faq-item .toggle::before {
+  content: "+";
+}
+
+.track-page .faq-item[open] .toggle::before {
+  content: "–";
+}
+
+.track-page .faq-answer {
+  padding-bottom: 20px;
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+
+/* 9. Repeat CTA (#cta) */
+.track-page #cta {
+  background-color: var(--amber);
+  color: #FFFFFF;
+  padding-top: clamp(56px, 7vw, 80px);
+  padding-bottom: clamp(56px, 7vw, 80px);
+}
+
+.track-page .cta-grid {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 36px;
+}
+
+@media (max-width: 860px) {
+  .track-page .cta-grid {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 28px;
+  }
+}
+
+.track-page .cta-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 640px;
+}
+
+.track-page #cta h2 {
+  color: #FFFFFF;
+}
+
+.track-page .cta-content p {
+  font-size: 1.05rem;
+  color: #FFFFFF;
+  line-height: 1.5;
+}
+
+.track-page .btn-white {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--white);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 14px 28px;
+  border-radius: 4px;
+  text-decoration: none;
+  white-space: nowrap;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.track-page .btn-white:hover {
+  background-color: var(--paper);
+  color: var(--ink);
+}
+
+/* 10. Site Footer (#site-footer) */
+.track-page #site-footer {
+  border-top: 1px solid var(--line);
+  padding-top: 44px;
+  padding-bottom: 44px;
+  background-color: var(--paper);
+}
+
+.track-page .footer-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.track-page .footer-main-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.track-page .footer-brand {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.track-page .footer-links {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  list-style: none;
+  flex-wrap: wrap;
+}
+
+.track-page .footer-links a {
+  color: var(--ink-soft);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color 150ms ease;
+}
+
+.track-page .footer-links a:hover {
+  color: var(--ink);
+}
+
+.track-page .footer-contact {
+  color: var(--ink-soft);
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  transition: color 150ms ease;
+}
+
+.track-page .footer-contact:hover {
+  color: var(--ink);
+}
+
+.track-page .footer-copy {
+  font-size: 0.84rem;
+  color: var(--slate);
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .track-page html {
+    scroll-behavior: auto;
+  }
+  .track-page *, .track-page *::before, .track-page *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
