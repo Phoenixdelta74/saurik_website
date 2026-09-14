@@ -116,7 +116,7 @@ const DemoModal = ({ isOpen, onClose, onOpenPilot }) => {
             <div className="space-y-2">
               <div className="flex justify-between text-slate-400 border-b border-slate-900 pb-1.5">
                 <span className="text-amber-400 font-bold">INTEGRITY_AUDIT</span>
-                <span className="text-emerald-400">100% REJECTION RATE</span>
+                <span className="text-emerald-400">SPOOF ATTEMPT FLAGGED</span>
               </div>
               <div className="text-slate-300">Device Clock Delta: 0.12s (Server Synchronized)</div>
               <div className="text-slate-400 text-[11px]">

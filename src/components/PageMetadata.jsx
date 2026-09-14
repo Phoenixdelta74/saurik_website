@@ -2,19 +2,37 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 const pages = {
-  '/': ['Software & IT infrastructure', 'Data analytics, Generative and Agentic AI, custom web and mobile applications, website services, CCTV, computers, and server installation from SAURIK IT.'],
-  '/software': ['Data analytics, AI & app development', 'Explore data analytics, Generative AI, Agentic AI, custom web applications, website design and support, and mobile app development.'],
-  '/hardware': ['CCTV, computers & server services', 'Discuss CCTV for your home or business, computer sales and servicing, or server installation and maintenance.'],
-  '/about': ['About SAURIK IT', 'Learn about the software and hardware services offered by SAURIK IT Private Limited.'],
-  '/contact': ['Discuss your requirement', 'Prepare an email enquiry or open WhatsApp to discuss your software project or hardware requirement.'],
-  '/privacy': ['Privacy & enquiry information', 'Understand how email and WhatsApp enquiry drafts work and where to ask about information handling.'],
+  '/': [
+    'Operational Technology & Field Workflows',
+    'Replace operational guesswork with visible, controlled field workflows. SAURIK IT delivers field operations software (Saurik Track), custom digital systems, and regional IT hardware infrastructure across Tripura and Northeast India.'
+  ],
+  '/software': [
+    'Data analytics, AI & operational software',
+    'Explore custom operational software, predictive data analytics, and carefully bounded agentic AI workflows with mandatory human review.'
+  ],
+  '/hardware': [
+    'CCTV, computers & server infrastructure',
+    'Commercial and residential CCTV surveillance, business computer sales and servicing, and server installations across Tripura and Northeast India.'
+  ],
+  '/about': [
+    'About SAURIK IT',
+    'Learn about the operational technology, software engineering, and regional IT infrastructure services offered by SAURIK IT Private Limited.'
+  ],
+  '/contact': [
+    'Discuss your requirement',
+    'Prepare an email enquiry or open WhatsApp to discuss your field operations, custom software, or hardware requirement.'
+  ],
+  '/privacy': [
+    'Privacy & enquiry information',
+    'Understand how email and WhatsApp enquiry drafts work and where to ask about information handling.'
+  ],
   '/track': [
-    'Saurik Track | GPS attendance and van-stock for field teams',
-    'Privacy-transparent GPS attendance, field visits, reports, and van-stock management for sales, distribution, and service teams. Free 30-day trial.'
+    'Saurik Track — GPS Attendance & Van-Stock Tracking for Field Teams',
+    "Know who's on shift, where visits happened, and what's left in the van. Saurik Track pairs GPS attendance with live inventory for field sales and service teams. Free 30-day trial."
   ],
   '/track/': [
-    'Saurik Track | GPS attendance and van-stock for field teams',
-    'Privacy-transparent GPS attendance, field visits, reports, and van-stock management for sales, distribution, and service teams. Free 30-day trial.'
+    'Saurik Track — GPS Attendance & Van-Stock Tracking for Field Teams',
+    "Know who's on shift, where visits happened, and what's left in the van. Saurik Track pairs GPS attendance with live inventory for field sales and service teams. Free 30-day trial."
   ],
 };
 
@@ -33,6 +51,15 @@ export default function PageMetadata() {
     meta('og:description', description, 'property');
     meta('og:type', 'website', 'property');
     meta('robots', pages[pathname] ? 'index,follow' : 'noindex,follow');
+
+    let canonical = document.head.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.setAttribute('rel', 'canonical');
+      document.head.append(canonical);
+    }
+    const cleanPath = pathname === '/track' ? '/track/' : pathname;
+    canonical.href = `https://www.wwwsaurikit.com${cleanPath}`;
   }, [pathname]);
   return null;
 }

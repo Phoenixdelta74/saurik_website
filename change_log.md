@@ -6,7 +6,30 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
-## [1.3.0] - 2026-09-14
+## [1.4.0] - 2026-09-14
+
+### Added
+- **Homepage Strategic Repositioning (`Home.jsx`):**
+  - Repositioned homepage to lead with operational workforce clarity: *"Replace operational guesswork with visible, controlled field workflows."*
+  - Elevated **Saurik Track Operational Wedge** directly beneath Hero (`#wedge-track`) using warm Navy (`#212F45`) and Amber (`#C57A2E`) brand tokens with verified feature highlights.
+  - Added dedicated **Regional Operational Focus** section highlighting key commercial sectors in Tripura and Northeast India (Rubber & Bamboo processing, Tea & Agro-horticulture, FMCG distribution, and Healthcare logistics).
+  - Integrated three-layer operational stack overview in Hero right-hand panel (Primary Wedge, Supporting Digital, Supporting Physical).
+- **SEO & Canonical Foundation (`PageMetadata.jsx`):**
+  - Dynamically injected `<link rel="canonical">` pointing to `https://www.wwwsaurikit.com/` across all SPA routes.
+  - Aligned page titles and meta descriptions with the operational technology positioning.
+
+### Changed
+- **Software Page Alignment (`Software.jsx`):** Updated the Saurik Track spotlight banner from legacy neon cyan styling to warm Navy & Amber tokens matching the v3 brand system.
+- **Claim & Metric Scrubbing (`trackData.js`, `DemoModal.jsx`, `PilotModal.jsx`):**
+  - Replaced `"100% Mock GPS Rejection"` with grounded `"Hardware-Level Spoofing Detection"`.
+  - Replaced `"100% Data Delivery"` with `"Store-and-Forward Sync"`.
+  - Replaced `"99.9% Uptime Guarantee"` with `"Monitored Cloud Infrastructure"`.
+  - Replaced `"TAMPER-PROOF MOBILITY"` with `"TAMPER-RESISTANT MOBILITY"`.
+  - Replaced `"Zero spam guarantee"` with `"No unsolicited marketing emails"`.
+
+### Fixed
+- Fixed unverified absolute claims across `Home.jsx`, `trackData.js`, `DemoModal.jsx`, and `PilotModal.jsx`.
+
 
 ### Added
 - **Saurik Track v3 Landing Page (`/track`):**

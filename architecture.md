@@ -91,13 +91,17 @@ All business copy, contact details, capability lists, hardware specifications, a
 
 **Rule for developers & agents:** Never hardcode phone numbers, emails, or capability lists directly in JSX pages. Always import from the data layer.
 
-### 3.3. Equal Division Prominence & Product Showcase
-- The company operates two equal pillars: **Software & IT** (Digital Layer) and **Hardware & IT Support** (Physical Layer).
-- The Homepage hero, navigation menu, and footer maintain balanced visual weight for both divisions.
-- Visual distinction is maintained through semantic color coding:
+### 3.3. Strategic Wedge Positioning Architecture
+Per `SAURIK_IT_CUSTOMER_GROWTH_AND_POSITIONING_BLUEPRINT.md`, the company positions itself with a sharp operational wedge rather than a generic digital agency model:
+- **Master Brand Proposition:** *"SAURIK IT helps growing organizations replace unverifiable field activity, fragmented spreadsheets, and repetitive operational work with practical software, applied AI, and dependable IT infrastructure."*
+- **Primary Wedge (Field Operations & Saurik Track):** Front-and-center on the homepage hero and navigation. Solves immediate, visible pain points: unverifiable field visits, manual reporting delays, and mobile van inventory reconciliation.
+- **Supporting Pillar 1 (Digital Systems & Applied AI):** Custom operational applications, predictive data analytics, and scoped agentic AI with mandatory human review (`/software`).
+- **Supporting Pillar 2 (Physical Regional Infrastructure):** Commercial & residential CCTV surveillance, business computing, and server infrastructure in Tripura and Northeast India (`/hardware`).
+- **Regional Grounding:** Explicitly grounded in Tripura and Northeast commercial workflows (Rubber & Bamboo processing, Tea estates, FMCG distribution, and Healthcare logistics).
+- **Semantic Color Coding:**
   - **Teal (`#087F72` / `accent-teal`):** Software, AI, automation, and primary website conversions.
   - **Hardware Blue (`#2456A6` / `accent-blue`):** Hardware sales, CCTV surveillance, servers, and quote requests.
-  - **Paper & Navy & Amber (`#EEF0E7` / `#212F45` / `#C57A2E`):** Saurik Track flagship mobile ERP landing page (`/track`).
+  - **Paper & Navy & Amber (`#EEF0E7` / `#212F45` / `#C57A2E`):** Saurik Track flagship mobile ERP wedge (`/track` and `#wedge-track`).
 
 ### 3.4. Saurik Track Zero-JS Product Landing Architecture (v3 Specification)
 Following `SAURIK-TRACK-LANDING-SPEC-v3.md`, Saurik Track operates under strict architectural constraints:

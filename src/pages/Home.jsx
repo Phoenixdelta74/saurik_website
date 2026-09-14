@@ -3,45 +3,51 @@ import { Link } from 'react-router-dom';
 import {
   ArrowRight,
   BarChart3,
+  Building2,
   Camera,
   Check,
+  CheckCircle2,
   ChevronRight,
+  Clock,
   Code2,
   FileCheck2,
-  CheckCircle2,
   Layers3,
+  MapPin,
   Monitor,
   Network,
+  PackageCheck,
   Server,
+  ShieldCheck,
+  Truck,
 } from 'lucide-react';
 import ProcessTimeline from '../components/ProcessTimeline';
 import { COMPANY_INFO } from '../data/companyData';
 
 const servicePaths = [
   {
-    title: 'Software & IT',
-    label: 'Digital systems',
-    description: 'Use data, AI, and purpose-built software to address a defined business question, knowledge task, or workflow.',
+    title: 'Software & Applied AI',
+    label: 'Digital Systems & Automation',
+    description: 'Custom operational software, predictive data analytics, and carefully bounded AI workflows with mandatory human review.',
     capabilities: [
-      'Data analytics, predictive modelling, and forecasting',
-      'Generative and agentic AI with human review',
-      'Custom web applications, websites, and mobile apps',
+      'Data analytics, operational modelling, and forecasting',
+      'Agentic AI with scoped permissions and human review',
+      'Custom web portals, internal tools, and mobile workflows',
     ],
     href: '/software',
-    contactHref: '/contact?topic=data_analytics',
-    action: 'Explore software services',
+    contactHref: '/contact?topic=custom_apps',
+    action: 'Explore software capabilities',
     contactAction: 'Discuss a software need',
     icon: Code2,
     accent: 'software',
   },
   {
-    title: 'Hardware & IT Support',
-    label: 'Physical infrastructure',
-    description: 'Define the equipment, installation, or servicing requirement before models and terms are quoted.',
+    title: 'Hardware & Regional Support',
+    label: 'Physical Infrastructure',
+    description: 'CCTV surveillance, commercial computers, and dedicated server installation and maintenance across Tripura and Northeast India.',
     capabilities: [
-      'CCTV sales and services for business or home',
-      'Computer sales, upgrades, and servicing',
-      'Server installation and service',
+      'CCTV surveillance systems for commercial or residential sites',
+      'Business computer sales, upgrades, and scheduled servicing',
+      'Server installation, setup, and on-premises maintenance',
     ],
     href: '/hardware',
     contactHref: '/contact?topic=hardware_quote',
@@ -52,73 +58,119 @@ const servicePaths = [
   },
 ];
 
+const regionalSectors = [
+  {
+    name: 'Rubber & Bamboo Processing',
+    detail: 'Weighbridge transit tracking, collection depot manifests, and stock movement records.',
+    icon: Truck,
+  },
+  {
+    name: 'Tea & Agro-Horticulture',
+    detail: 'Estate dispatch verification, temperature-sensitive transit logs, and distributor handoffs.',
+    icon: PackageCheck,
+  },
+  {
+    name: 'FMCG & Wholesale Distribution',
+    detail: 'Live van-stock balances, mobile order booking, and real-time payment/delivery logs.',
+    icon: Building2,
+  },
+  {
+    name: 'Healthcare & Pharma Supply',
+    detail: 'Verified clinic and pharmacy visit logs, sample drop-off records, and return inventory audits.',
+    icon: ShieldCheck,
+  },
+];
+
 const Home = () => {
   return (
     <div className="space-y-20 pb-4 pt-8 sm:space-y-28 sm:pt-14">
+      {/* ── Hero Section: Operational Technology Partner ──────────────── */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-labelledby="home-heading">
         <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
           <div className="space-y-7 lg:col-span-7">
-            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-accent-teal">
-              Software & IT hardware
-            </p>
+            <div className="inline-flex items-center gap-2 rounded-full border border-border-subtle bg-surface px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-ink-secondary shadow-xs">
+              <span className="h-2 w-2 rounded-full bg-accent-teal" />
+              <span>Operational technology partner • Tripura &amp; Northeast India</span>
+            </div>
             <div className="space-y-5">
               <h1
                 id="home-heading"
                 className="max-w-4xl font-heading text-4xl font-extrabold leading-[1.08] tracking-tight text-ink-primary sm:text-5xl lg:text-6xl"
               >
-                Software and IT infrastructure for your business.
+                Replace operational guesswork with visible, controlled field workflows.
               </h1>
               <p className="max-w-2xl text-lg leading-relaxed text-ink-secondary sm:text-xl">
-                Custom software, practical automation, and IT hardware sales and services—shaped around the requirement you bring to us.
+                We help growing organizations eliminate unverifiable visits, reconcile van-stock in real time, and deploy dependable IT infrastructure—deliberately engineered with practical software and local regional support.
               </p>
             </div>
 
             <div className="flex flex-col gap-3 sm:flex-row">
-              <Link to="/contact" className="btn-primary group px-7 py-3.5 text-base">
-                <span>Discuss your requirement</span>
+              <Link to="/track" className="btn-primary group px-7 py-3.5 text-base">
+                <span>Explore Saurik Track</span>
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
               </Link>
-              <a href="#service-paths" className="btn-secondary px-6 py-3.5 text-base">
-                Explore our services
-              </a>
+              <Link to="/contact" className="btn-secondary px-6 py-3.5 text-base">
+                Discuss a custom requirement
+              </Link>
             </div>
 
-            <p className="max-w-xl border-l-2 border-border-subtle pl-4 text-sm leading-relaxed text-ink-secondary">
-              Serving business enquiries across both divisions, with a dedicated residential route for CCTV requirements.
-            </p>
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 pt-1 text-xs text-ink-muted">
+              <span className="flex items-center gap-1.5 font-medium text-ink-secondary">
+                <CheckCircle2 className="h-4 w-4 text-accent-teal" />
+                Zero unverified claims
+              </span>
+              <span className="flex items-center gap-1.5 font-medium text-ink-secondary">
+                <CheckCircle2 className="h-4 w-4 text-accent-teal" />
+                Direct founder accountability
+              </span>
+              <span className="flex items-center gap-1.5 font-medium text-ink-secondary">
+                <CheckCircle2 className="h-4 w-4 text-accent-teal" />
+                Agartala on-site support
+              </span>
+            </div>
           </div>
 
-          <div className="lg:col-span-5" aria-label="Software and hardware service overview">
-            <div className="relative overflow-hidden rounded-panel border border-border-subtle bg-surface p-5 shadow-card sm:p-7">
+          <div className="lg:col-span-5" aria-label="Operational wedge stack overview">
+            <div className="relative overflow-hidden rounded-panel border border-border-subtle bg-surface p-6 shadow-card sm:p-7">
               <div className="absolute -right-20 -top-20 h-56 w-56 rounded-full bg-accent-teal-light/60 blur-3xl" aria-hidden="true" />
               <div className="absolute -bottom-24 -left-16 h-56 w-56 rounded-full bg-accent-blue-light/70 blur-3xl" aria-hidden="true" />
 
-              <div className="relative space-y-5">
-                <div className="flex items-center justify-between border-b border-border-subtle pb-4">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-wider text-ink-muted">One requirement</p>
-                    <p className="mt-1 font-heading text-lg font-bold text-ink-primary">The right delivery path</p>
-                  </div>
-                  <Network className="h-6 w-6 text-ink-primary" aria-hidden="true" />
+              <div className="relative space-y-4">
+                <div className="border-b border-border-subtle pb-3">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-ink-muted">Three Focused Layers</p>
+                  <p className="mt-1 font-heading text-lg font-bold text-ink-primary">The SAURIK IT Operational Stack</p>
                 </div>
 
-                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-                  <div className="rounded-control border border-accent-teal/25 bg-accent-teal-light/45 p-4">
-                    <Code2 className="h-5 w-5 text-accent-teal" aria-hidden="true" />
-                    <p className="mt-4 text-xs font-semibold uppercase tracking-wider text-accent-teal">Software</p>
-                    <p className="mt-1 text-sm font-bold text-ink-primary">Build, analyse, automate</p>
+                <div className="rounded-control border border-[#CDD0C2] bg-[#EEF0E7]/60 p-4 transition-all hover:bg-[#EEF0E7]">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#8E4D14]">Primary Wedge</span>
+                    <span className="rounded-full bg-[#8E4D14]/10 px-2 py-0.5 text-[10px] font-semibold text-[#8E4D14]">Live Mobile ERP</span>
                   </div>
-                  <div className="rounded-control border border-accent-blue/20 bg-accent-blue-light/60 p-4">
-                    <Server className="h-5 w-5 text-accent-blue" aria-hidden="true" />
-                    <p className="mt-4 text-xs font-semibold uppercase tracking-wider text-accent-blue">Hardware</p>
-                    <p className="mt-1 text-sm font-bold text-ink-primary">Supply, install, service</p>
-                  </div>
+                  <h3 className="mt-1 font-heading text-base font-bold text-[#1C2620]">Saurik Track</h3>
+                  <p className="mt-1 text-xs text-[#4B5750]">
+                    GPS attendance + van-stock accounting. Stops WhatsApp guesswork with transparent shift manifests.
+                  </p>
                 </div>
 
-                <div className="flex items-center gap-3 rounded-control bg-ink-primary px-4 py-3 text-white">
-                  <FileCheck2 className="h-5 w-5 shrink-0 text-accent-teal-light" aria-hidden="true" />
-                  <p className="text-sm leading-relaxed text-slate-200">
-                    The scope, quotation, handover, and support terms are agreed for the specific engagement.
+                <div className="rounded-control border border-border-subtle bg-canvas p-4 transition-all hover:border-accent-teal/40">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono font-bold uppercase tracking-wider text-accent-teal">Supporting Digital</span>
+                    <span className="rounded-full bg-accent-teal-light px-2 py-0.5 text-[10px] font-semibold text-accent-teal">Software &amp; AI</span>
+                  </div>
+                  <h3 className="mt-1 font-heading text-base font-bold text-ink-primary">Custom Systems &amp; Analytics</h3>
+                  <p className="mt-1 text-xs text-ink-secondary">
+                    Operational dashboards, data pipelines, and scoped AI automation with human approval loops.
+                  </p>
+                </div>
+
+                <div className="rounded-control border border-border-subtle bg-canvas p-4 transition-all hover:border-accent-blue/40">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono font-bold uppercase tracking-wider text-accent-blue">Supporting Physical</span>
+                    <span className="rounded-full bg-accent-blue-light px-2 py-0.5 text-[10px] font-semibold text-accent-blue">Regional IT</span>
+                  </div>
+                  <h3 className="mt-1 font-heading text-base font-bold text-ink-primary">Hardware &amp; Surveillance</h3>
+                  <p className="mt-1 text-xs text-ink-secondary">
+                    Commercial CCTV, business computing, and server installations across Tripura &amp; Northeast India.
                   </p>
                 </div>
               </div>
@@ -127,15 +179,73 @@ const Home = () => {
         </div>
       </section>
 
+      {/* ── Primary Wedge: Saurik Track ──────────────── */}
+      <section id="wedge-track" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-labelledby="wedge-track-heading">
+        <div className="relative overflow-hidden rounded-panel bg-[#212F45] p-8 sm:p-12 text-white border border-[#CDD0C2]/30 shadow-card">
+          <div className="relative z-10 grid gap-8 lg:grid-cols-12 lg:items-center">
+            <div className="lg:col-span-8 space-y-4">
+              <div className="inline-flex items-center gap-2 rounded-full bg-[#1C2620]/80 px-3.5 py-1 text-xs font-mono font-semibold text-[#E4AE70] border border-[#E4AE70]/40">
+                <span className="h-2 w-2 rounded-full bg-[#3E7C4C]" />
+                <span>PRIMARY OPERATIONAL WEDGE • MOBILE ERP</span>
+              </div>
+              
+              <h2 id="wedge-track-heading" className="font-heading text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
+                Saurik Track: GPS Attendance &amp; Van-Stock Tracking
+              </h2>
+              
+              <p className="text-base leading-relaxed text-[#EEF0E7] max-w-2xl">
+                Know who&apos;s on shift, where visits happened, and what&apos;s left in the van. Saurik Track pairs GPS attendance with live inventory for field sales and distribution teams—stopping WhatsApp guesswork with transparent, verified shift manifests.
+              </p>
+
+              <div className="flex flex-wrap gap-x-6 gap-y-2 pt-2 text-xs font-mono text-[#EEF0E7]/90">
+                <span className="flex items-center gap-1.5">
+                  <CheckCircle2 className="h-4 w-4 text-[#E4AE70]" />
+                  Hardware-Level Spoofing Detection
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <CheckCircle2 className="h-4 w-4 text-[#E4AE70]" />
+                  Live Van-Stock Auto-Reconciliation
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <CheckCircle2 className="h-4 w-4 text-[#E4AE70]" />
+                  Offline Store-and-Forward Sync
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <CheckCircle2 className="h-4 w-4 text-[#E4AE70]" />
+                  Tamper-Resistant Shift Manifests
+                </span>
+              </div>
+            </div>
+
+            <div className="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col gap-3 justify-center">
+              <Link
+                to="/track"
+                className="inline-flex items-center justify-center gap-2 rounded-control bg-[#C57A2E] px-6 py-3.5 text-sm font-bold text-white hover:bg-[#A9631F] transition-all shadow-md text-center"
+              >
+                <span>Explore Saurik Track</span>
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                to="/contact?topic=saurik_track"
+                className="inline-flex items-center justify-center gap-2 rounded-control bg-white/10 border border-white/20 hover:bg-white/20 px-6 py-3 text-xs font-semibold text-white transition-colors text-center"
+              >
+                Start Free 30-Day Trial →
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Supporting Service Paths: Digital & Physical ──────────────── */}
       <section id="service-paths" className="scroll-mt-28 bg-white py-16 sm:py-20" aria-labelledby="service-paths-heading">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
-            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-accent-teal">Choose a service path</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-accent-teal">Supporting Service Paths</p>
             <h2 id="service-paths-heading" className="mt-3 font-heading text-3xl font-extrabold text-ink-primary sm:text-4xl">
-              Two divisions, each with a clear next step.
+              Custom software, applied AI, and dependable IT hardware.
             </h2>
             <p className="mt-4 text-base leading-relaxed text-ink-secondary sm:text-lg">
-              Start with the outcome you need. The detailed service pages explain the information that helps shape a useful project discussion or quotation.
+              Start with the outcome you need. Our two supporting divisions provide tailored software engineering, predictive analytics, and regional IT infrastructure installations across Tripura.
             </p>
           </div>
 
@@ -196,58 +306,31 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ── Featured Product Showcase: Saurik Track ──────────────── */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-labelledby="product-showcase-heading">
-        <div className="relative overflow-hidden rounded-panel bg-gradient-to-r from-slate-950 via-slate-900 to-cyan-950 p-8 sm:p-12 text-white border border-cyan-500/30 shadow-2xl">
-          <div className="absolute top-0 right-0 -mr-16 -mt-16 h-64 w-64 rounded-full bg-cyan-500/10 blur-3xl pointer-events-none" />
-          
-          <div className="relative z-10 grid gap-8 lg:grid-cols-12 lg:items-center">
-            <div className="lg:col-span-8 space-y-4">
-              <div className="inline-flex items-center gap-2 rounded-full bg-cyan-950 px-3 py-1 text-xs font-mono font-bold text-cyan-400 border border-cyan-800/60">
-                <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span>FLAGSHIP PRODUCT SPOTLIGHT</span>
-              </div>
-              
-              <h2 id="product-showcase-heading" className="font-heading text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
-                Saurik Track: Next-Gen Field Operations & Mobile ERP
-              </h2>
-              
-              <p className="text-base leading-relaxed text-slate-300 max-w-2xl">
-                Eliminate fake GPS visits, automate attendance with server-verified timestamps, and audit mobile van inventory in real-time. Built specifically for field distribution, sales reps, and mobile fleets.
-              </p>
+      {/* ── Regional Grounding: Tripura & Northeast Operational Focus ── */}
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-labelledby="regional-heading">
+        <div className="max-w-3xl">
+          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-accent-teal">Regional Operational Focus</p>
+          <h2 id="regional-heading" className="mt-3 font-heading text-3xl font-extrabold text-ink-primary sm:text-4xl">
+            Engineered for Tripura and Northeast commercial workflows.
+          </h2>
+          <p className="mt-4 text-base leading-relaxed text-ink-secondary">
+            Rather than deploying generic, out-of-touch software, we design and support technology built around the ground realities of regional enterprises, distribution networks, and industrial clusters.
+          </p>
+        </div>
 
-              <div className="flex flex-wrap gap-4 pt-2 text-xs font-mono text-slate-300">
-                <span className="flex items-center gap-1.5 text-cyan-300">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-400" />
-                  100% Mock GPS Rejection
+        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {regionalSectors.map((sector) => {
+            const SectorIcon = sector.icon;
+            return (
+              <div key={sector.name} className="rounded-panel border border-border-subtle bg-surface p-6 shadow-card transition-all hover:border-accent-teal/40">
+                <span className="inline-flex rounded-control bg-accent-teal-light p-3 text-accent-teal">
+                  <SectorIcon className="h-6 w-6" aria-hidden="true" />
                 </span>
-                <span className="flex items-center gap-1.5 text-cyan-300">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-400" />
-                  Dual-Location Van Auditing
-                </span>
-                <span className="flex items-center gap-1.5 text-cyan-300">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-400" />
-                  Offline Resilient Engine
-                </span>
+                <h3 className="mt-4 font-heading text-lg font-bold text-ink-primary">{sector.name}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-ink-secondary">{sector.detail}</p>
               </div>
-            </div>
-
-            <div className="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col gap-3 justify-center">
-              <Link
-                to="/track"
-                className="inline-flex items-center justify-center gap-2 rounded-control bg-gradient-to-r from-cyan-400 to-teal-400 px-6 py-3.5 text-sm font-bold text-slate-950 hover:from-cyan-300 hover:to-teal-300 transition-all shadow-lg shadow-cyan-950/50"
-              >
-                <span>Explore Saurik Track</span>
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-              <Link
-                to="/track#roi"
-                className="inline-flex items-center justify-center gap-2 rounded-control bg-slate-900 border border-slate-700 hover:border-cyan-500/50 px-6 py-3 text-xs font-semibold text-slate-200 hover:text-white transition-colors"
-              >
-                Calculate Fleet ROI Savings →
-              </Link>
-            </div>
-          </div>
+            );
+          })}
         </div>
       </section>
 

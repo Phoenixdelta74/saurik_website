@@ -86,39 +86,38 @@ const Software = () => {
 
       {/* ── Flagship Product Spotlight: Saurik Track ──────────── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="rounded-panel p-6 sm:p-8 bg-slate-900 text-white border border-cyan-500/30 shadow-elevated relative overflow-hidden">
-          <div className="absolute -top-24 -right-24 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="rounded-panel p-6 sm:p-8 bg-[#212F45] text-white border border-[#CDD0C2]/30 shadow-card relative overflow-hidden">
           <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <div className="space-y-3 max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/80 border border-cyan-500/40 text-cyan-400 text-xs font-mono uppercase tracking-wider">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                Featured Flagship Product • Mobile ERP
+              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#1C2620]/80 border border-[#E4AE70]/40 text-[#E4AE70] text-xs font-mono uppercase tracking-wider">
+                <span className="w-2 h-2 rounded-full bg-[#3E7C4C]" />
+                Primary Operational Wedge • Mobile ERP
               </div>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-white font-heading tracking-tight">
-                Saurik Track: Hardware-Verified Field &amp; Fleet ERP
+                Saurik Track: GPS Attendance &amp; Van-Stock Tracking
               </h2>
-              <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
-                Looking for pre-engineered field operations software? Saurik Track combines hardware-verified GPS check-ins, offline van inventory management, and automated order booking with sub-10-second ERP sync.
+              <p className="text-sm sm:text-base text-[#EEF0E7] leading-relaxed">
+                Looking for pre-engineered field operations software? Saurik Track pairs GPS attendance with live inventory for field sales and distribution teams—stopping WhatsApp guesswork with transparent, verified shift manifests.
               </p>
-              <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs font-mono text-cyan-300 pt-1">
-                <span>✓ Anti-Spoof Hardware GPS</span>
-                <span>✓ Van Inventory Barcode Scan</span>
-                <span>✓ Offline-First Sync Engine</span>
+              <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs font-mono text-[#EEF0E7]/90 pt-1">
+                <span>✓ Hardware-Level Spoofing Detection</span>
+                <span>✓ Live Van-Stock Auto-Reconciliation</span>
+                <span>✓ Offline Store-and-Forward Sync</span>
               </div>
             </div>
             <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto flex-shrink-0">
               <Link
                 to="/track"
-                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-control bg-gradient-to-r from-cyan-500 to-teal-500 text-slate-950 font-bold text-sm shadow-md hover:from-cyan-400 hover:to-teal-400 transition-all text-center"
+                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-control bg-[#C57A2E] text-white font-bold text-sm shadow-md hover:bg-[#A9631F] transition-all text-center"
               >
                 <span>Explore Saurik Track</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
-                to="/track#roi"
-                className="inline-flex items-center justify-center px-4 py-3 rounded-control bg-slate-800 text-slate-200 border border-slate-700 hover:bg-slate-700 text-sm font-medium transition-colors text-center"
+                to="/contact?topic=saurik_track"
+                className="inline-flex items-center justify-center px-4 py-3 rounded-control bg-white/10 text-white border border-white/20 hover:bg-white/20 text-sm font-medium transition-colors text-center"
               >
-                ROI Calculator
+                Start Free Trial →
               </Link>
             </div>
           </div>

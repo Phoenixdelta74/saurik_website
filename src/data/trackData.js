@@ -15,7 +15,7 @@ export const TRACK_HERO = {
   microTrust: [
     { icon: "ShieldCheck", label: "Google Cloud Server Timestamps" },
     { icon: "BatteryCharging", label: "< 3% Daily Battery Impact" },
-    { icon: "AlertOctagon", label: "100% Mock GPS Rejection" },
+    { icon: "AlertOctagon", label: "Hardware Spoofing Detection" },
     { icon: "PackageCheck", label: "Instant Dual-Location Van Auditing" },
   ],
 };
@@ -56,8 +56,8 @@ export const TRACK_PROBLEM_SOLUTION = [
 export const TRACK_PILLARS = [
   {
     id: "anti-tamper",
-    tag: "TAMPER-PROOF MOBILITY",
-    title: "Real Visits. Real Timestamps. Zero Excuses.",
+    tag: "TAMPER-RESISTANT MOBILITY",
+    title: "Real Visits. Real Timestamps. Verified Accountability.",
     summary: "Built-in hardware verification stops mock location spoofing and device clock tampering at the root.",
     bullets: [
       {
@@ -70,10 +70,10 @@ export const TRACK_PILLARS = [
       },
       {
         head: "Transparent Employee Disclosure",
-        text: "Clear, app-store-compliant privacy dialogs guarantee trust and full regulatory compliance.",
+        text: "Clear, app-store-compliant privacy dialogs protect employee trust and respect regulatory guidelines.",
       },
     ],
-    metric: "100% Mock GPS Rejection",
+    metric: "Mock GPS Detection",
   },
   {
     id: "van-inventory",
@@ -121,7 +121,7 @@ export const TRACK_PILLARS = [
     id: "offline-resilience",
     tag: "OFFLINE RELIABILITY",
     title: "Works in Basements, Rural Routes, and Industrial Parks.",
-    summary: "Store-and-forward encrypted local SQLite queue guarantees zero data drops during network dead zones.",
+    summary: "Store-and-forward encrypted local SQLite queue prevents data loss during network dead zones.",
     bullets: [
       {
         head: "Encrypted On-Device Buffer",
@@ -136,7 +136,7 @@ export const TRACK_PILLARS = [
         text: "Atomic local state updates prevent transfer collisions and phantom inventory counts.",
       },
     ],
-    metric: "100% Data Delivery",
+    metric: "Store-and-Forward Sync",
   },
 ];
 
@@ -223,13 +223,13 @@ export const TRACK_SECURITY = [
     icon: "Lock",
   },
   {
-    title: "Privacy & Regulatory Compliance",
-    description: "Built-in DPDP and GDPR compliant employee data export, retention policies, and account deletion flows.",
+    title: "Privacy & Data Protection Principles",
+    description: "Built with transparent employee data export, retention policies, and account deletion flows.",
     icon: "FileCheck",
   },
   {
-    title: "99.9% Uptime Guarantee",
-    description: "Powered by Google Cloud Platform serverless infrastructure with automated horizontal scaling and multi-region failover.",
+    title: "Monitored Cloud Infrastructure",
+    description: "Hosted on resilient cloud infrastructure with automated scaling, health checks, and secure backups.",
     icon: "Server",
   },
 ];
@@ -237,7 +237,7 @@ export const TRACK_SECURITY = [
 export const TRACK_FAQS = [
   {
     q: "Will this drain my employees' phone batteries?",
-    a: "No. Saurik Track runs a native, optimized foreground service that utilizes intelligent adaptive location sampling. Typical daily battery consumption is less than 3–4% over a full 8-hour shift.",
+    a: "No. Saurik Track runs an optimized foreground service that utilizes intelligent adaptive location sampling. Typical daily battery consumption is less than 3–4% over an 8-hour shift.",
   },
   {
     q: "Can employees fake their GPS coordinates with mock location apps?",
@@ -253,7 +253,7 @@ export const TRACK_FAQS = [
   },
   {
     q: "Is our company data isolated from other businesses?",
-    a: "Yes, 100%. Every single read and write is enforced through strict multi-tenant access control rules. Your routes, client details, pricing, and stock remain strictly confidential.",
+    a: "Yes. Every single read and write is enforced through strict multi-tenant access control rules. Your routes, client details, pricing, and stock remain strictly confidential.",
   },
 ];
 

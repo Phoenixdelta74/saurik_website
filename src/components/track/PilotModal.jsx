@@ -179,7 +179,7 @@ const PilotModal = ({ isOpen, onClose }) => {
               <div className="text-[11px] text-slate-400 text-center flex items-center justify-center gap-2 pt-1">
                 <span>Direct dispatch to engineering lead</span>
                 <span>•</span>
-                <span>Zero spam guarantee</span>
+                <span>No unsolicited marketing emails</span>
               </div>
             </form>
           </div>
