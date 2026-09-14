@@ -68,4 +68,8 @@ Routes are `/`, `/software`, `/hardware`, `/about`, `/contact`, and `/privacy`; 
   - Update `change_log.md` with every deliverable under a structured version entry (`Added`, `Changed`, `Fixed`).
   - Update `testing.md` and `masterdeveloper.md` whenever test suites or developer patterns are introduced or modified.
 - **Always verify builds and test suites**: Run `npm.cmd run build` and relevant verification scripts (`test/verify_track_spec.cjs`, `test/verify_track_e2e.cjs`, etc.) before concluding work.
-
+- **Spec reset and work isolation protocol**: When directed to scrap or pivot from an existing feature implementation, never permanently delete previous work without confirmation. Archive previous work to `archive/<feature-tag>/` to maintain a clean active workspace while preserving prior implementation history.
+- **Pre-release testing gate before commit & push**: Prior to committing and pushing to remote:
+  - Execute `web-release-tester` checks: production build (`npm.cmd run build`), all automated test suites (`npm.cmd test`, `test/verify_chatbot.cjs`), and verify zero-JS SSR crawlability.
+  - Audit for negative constraints: zero fabricated metrics, zero unsubstantiated compliance badges, and truthful contact feedback wording.
+  - Provide structured, descriptive commit messages documenting scope, test outcomes, and updated docs.
