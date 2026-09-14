@@ -952,6 +952,133 @@ section[id] {
   color: var(--slate);
 }
 
+/* ── Inline Operations Chat Assistant ────────────────── */
+.track-inline-chat-container {
+  margin-top: 56px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 4px 20px rgba(33, 47, 69, 0.05);
+}
+
+.track-chat-header {
+  margin-bottom: 20px;
+}
+
+.track-chat-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--amber-strong);
+  background: rgba(197, 122, 46, 0.1);
+  padding: 4px 12px;
+  border-radius: 9999px;
+  letter-spacing: 0.06em;
+}
+
+.track-chat-pulse {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--moss);
+  box-shadow: 0 0 6px var(--moss);
+}
+
+.track-chat-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--ink);
+  margin-top: 10px;
+  margin-bottom: 6px;
+  letter-spacing: -0.01em;
+}
+
+.track-chat-subtitle {
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+  line-height: 1.5;
+  margin-bottom: 0;
+}
+
+.track-chat-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 18px 0;
+}
+
+.track-chip-link,
+.track-chip-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 8px 14px;
+  border-radius: 20px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 150ms ease;
+  min-height: 38px;
+}
+
+.track-chip-link:hover,
+.track-chip-btn:hover:not(:disabled) {
+  border-color: var(--amber-strong);
+  background: #ffffff;
+  color: var(--amber-strong);
+  transform: translateY(-1px);
+}
+
+.track-chat-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.track-chat-trial-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--amber-strong);
+  text-decoration: none;
+  transition: color 150ms ease;
+}
+
+.track-chat-trial-link:hover {
+  text-decoration: underline;
+  color: var(--amber-hover);
+}
+
+@media (max-width: 640px) {
+  .track-inline-chat-container {
+    padding: 20px 16px;
+    margin-top: 40px;
+    border-radius: 12px;
+  }
+  .track-chat-title {
+    font-size: 1.15rem;
+  }
+  .track-chat-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   html {

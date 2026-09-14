@@ -209,16 +209,33 @@ Per design specification, the enquiry system provides truthful, accurate user fe
 
 ---
 
-## 7. AI Website Assistant
+## 7. AI Website Assistant & Saurik Track Operations Specialist
 
-The global `ChatWidget` is a client-side conversation UI. It sends the latest conversation messages to `POST /api/chat`; the browser never receives an LLM API key.
+The application provides two purpose-built AI conversation experiences powered by a shared, secure serverless API boundary:
 
-- `api/chat.js` validates the request method and message shape, limits the forwarded history to the most recent 20 messages, and returns neutral configuration/service errors.
-- `src/data/chatContext.js` assembles the system prompt from the company, software, and hardware data modules. This is the assistant's single content source and includes rules against invented claims, unsupported pricing, forecast guarantees, and unsupervised consequential actions.
-- `api/_lib/llmProviders.js` selects Anthropic, OpenAI, OpenRouter, or Ollama using server-side environment variables.
-- The widget provides keyboard focus handling, Escape-to-close behavior, live status updates, reduced-motion support, and a truthful fallback linking visitors to Contact and WhatsApp.
-- Local Vite development renders the widget, but the API requires Vercel or `vercel dev` with a configured provider.
-- `ChatWidget` and floating WhatsApp CTA are explicitly hidden on `/track` per `SAURIK-TRACK-LANDING-SPEC.md`.
+1. **Global Site Assistant (`ChatWidget`):**
+   - A floating client-side conversation widget available across the corporate SPA pages (`/`, `/software`, `/hardware`, `/about`, `/contact`, `/privacy`).
+   - Grounded in `CHAT_SYSTEM_PROMPT` (`src/data/chatContext.js`), answering questions about corporate software development, AI workflows, and hardware infrastructure.
+   - Hides automatically on `/track` to preserve viewport clarity and avoid obstructing sticky mobile CTA bars.
+
+2. **Inline Operations & Technical Specialist (`TrackInlineChat`):**
+   - Embedded inline directly within the FAQ section (`#faq`) of Saurik Track (`/track`).
+   - Solves mobile clutter: operates entirely as an in-page interactive card rather than a floating element.
+   - Grounded in `TRACK_CHAT_SYSTEM_PROMPT` and founder-verified answers across 10 mission-critical operational areas:
+     - **Location as evidence, not blind proof:** Mock-location/fake GPS signals, speed jumps, and identical coordinates route visits to manager exception queues rather than silent automatic acceptance.
+     - **Android battery optimization reality:** Uses foreground services and first-day setup checklists for aggressive OEM killers (Xiaomi, Realme, Samsung); displays tracking-health gaps when killed.
+     - **Offline sync:** Queues data locally in SQLite on zero-signal mountain routes (Tripura/Northeast) with original timestamps and visible offline intervals.
+     - **Tally & Excel exports:** Generates structured accounting data without unverified "one-click" promises.
+     - **Damaged goods stock segregation:** Van stock separates damaged returns from saleable inventory.
+     - **Shift-based privacy:** Tracks strictly between check-in and checkout; zero off-the-clock tracking with employee transparency views.
+     - **Pricing & Pilots:** ₹699/user/month standard flexibility with 1–2 van pilot onboarding.
+
+3. **Serverless Architecture & Dual-Mode API (`POST /api/chat`):**
+   - `api/chat.js` supports `mode: 'general'` (default) and `mode: 'track'`.
+   - Forwarding is limited to the last 20 messages.
+   - Zero LLM API credentials or private environment variables are ever leaked to the browser.
+   - Supported backend providers: Anthropic (Claude 3.5 Sonnet), OpenAI (GPT-4o), OpenRouter, and local Ollama.
+   - Zero-JS static crawler fallback in `public/track/index.html` renders interactive question chips linking directly to `/contact?topic=saurik_track`.
 
 ---
 
@@ -250,3 +267,11 @@ For optimal search indexing and rich social previews on WhatsApp, LinkedIn, and 
   - Interaction to Next Paint (INP): ≤ 200ms
   - Cumulative Layout Shift (CLS): ≤ 0.1
   - Saurik Track Page Weight: ≤ 250 KB (Achieved: **32.3 KB** combined HTML/CSS).
+## Arthos product landing page
+
+Arthos is served as a static, crawlable product page at `/arthos/` through the
+Vercel rewrite to `public/arthos/index.html`. Its page-specific CSS, launch-state
+configuration, logo, and social preview asset remain scoped under
+`public/arthos/`; it does not enter the React SPA shell. The launch configuration
+defaults to pre-launch so the page cannot imply that trial activation, checkout,
+or downloads are available before those journeys are verified.

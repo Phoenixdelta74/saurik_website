@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import TrackInlineChat from '../components/track/TrackInlineChat';
 import './Track.css';
 
 const Track = () => {
@@ -361,6 +362,9 @@ const Track = () => {
                 </div>
               </details>
             </div>
+
+            {/* Interactive Operations & Technical Specialist Assistant */}
+            <TrackInlineChat />
           </div>
         </section>
 

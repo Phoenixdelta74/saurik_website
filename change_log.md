@@ -6,6 +6,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [1.5.0] - 2026-09-15
+
+### Added
+- **Saurik Track Operations & Technical Specialist (`TrackInlineChat.jsx`):**
+  - Built and mounted an inline interactive AI specialist directly inside the `#faq` section of `/track`.
+  - Eliminates mobile clutter by rendering as a native in-page card rather than a viewport-obstructing floating widget.
+  - Features high-contrast suggestion chips ("How does fake GPS detection work?", "Tally & Excel data export?", "Battery drain on budget phones?", etc.), conversational thread history, and direct trial handoff.
+  - Grounded in `TRACK_CHAT_SYSTEM_PROMPT` containing 10 founder-verified operational and technical answers (location as evidence with manager exception queues, Android foreground battery checklists, offline SQLite queues, Tally field mapping, van damaged-goods stock separation, and shift-based privacy).
+- **Dual-Mode Serverless AI API (`api/chat.js`):**
+  - Added support for `mode: 'track'`, dynamically routing to `TRACK_CHAT_SYSTEM_PROMPT` while preserving corporate site knowledge under `mode: 'general'`.
+- **Zero-JS Static Crawler Fallback (`public/track/index.html`):**
+  - Added a matching static, crawler-friendly operational specialist card within `<section id="faq">` preserving all 10 section IDs and passing strict zero-JS SSR verification.
+- **Automated Verification:**
+  - Expanded `test/verify_chatbot.cjs` to validate dual-mode routing, prompt grounding, and inline mounting.
+
+### Changed
+- **Track CSS Styles (`src/pages/Track.css`, `public/track/styles.css`):**
+  - Added comprehensive responsive styles for `.track-inline-chat-container`, suggestion chips, loading bounce dots, and mobile viewports.
+
 ## [1.4.0] - 2026-09-14
 
 ### Added
@@ -214,3 +233,20 @@ When committing changes, prepend an entry under `## [Unreleased]` or a new versi
 - **Removed**: for now-removed features.
 - **Fixed**: for any bug or accessibility fixes.
 - **Security**: in case of vulnerabilities addressed.
+## 2026-09-15
+
+### Added
+
+- Arthos Invoice Studio v2 landing-page verification covering required sections,
+  claim boundaries, pre-launch CTA routing, and crawlable metadata.
+- Centralized Arthos pre-launch configuration and a 1200x630 product social
+  preview asset.
+
+### Changed
+
+- Updated Arthos social metadata to use a large-image card and the dedicated
+  product preview asset.
+
+### Fixed
+
+- Added automated regression coverage for the Arthos v2 acceptance criteria.

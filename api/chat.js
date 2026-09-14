@@ -1,4 +1,4 @@
-import { CHAT_SYSTEM_PROMPT } from '../src/data/chatContext.js';
+import { CHAT_SYSTEM_PROMPT, TRACK_CHAT_SYSTEM_PROMPT } from '../src/data/chatContext.js';
 import { getChatReply, ProviderConfigError } from './_lib/llmProviders.js';
 
 const MAX_HISTORY_MESSAGES = 20;
@@ -16,15 +16,16 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed.' });
   }
 
-  const { messages } = req.body || {};
+  const { messages, mode } = req.body || {};
 
   if (!Array.isArray(messages) || messages.length === 0 || !messages.every(isValidMessage)) {
     return res.status(400).json({ error: 'Invalid request.' });
   }
 
   try {
+    const systemPrompt = mode === 'track' ? TRACK_CHAT_SYSTEM_PROMPT : CHAT_SYSTEM_PROMPT;
     const reply = await getChatReply(
-      CHAT_SYSTEM_PROMPT,
+      systemPrompt,
       messages.slice(-MAX_HISTORY_MESSAGES).map((m) => ({ role: m.role, content: m.content }))
     );
 
