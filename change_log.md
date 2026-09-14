@@ -6,6 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [1.6.0] - 2026-09-15
+
+### Added
+- **Arthos Invoice Studio React SPA Integration (`src/pages/Arthos.jsx` & `src/pages/Arthos.css`):**
+  - Integrated `Arthos.jsx` as a first-class React SPA route mounted under `/arthos` and `/arthos/` in `src/App.jsx`.
+  - Scoped CSS under `.arthos-page` preventing global style leakage into the main application shell.
+  - Implemented all 9 required semantic sections per `ARTHOS-LANDING-PAGE-SPEC-v2.md`: two-tier navigation, Hero with illustrative Business Health preview card, Desktop vs Cloud editions comparison, 5 structured business problem cards, 5 feature cards, 5-step workflow, data/backup isolation disclosure, 60-day trial status, and 7 native FAQ accordions.
+  - Connected navigation links in `Header.jsx` (desktop and mobile) and `Footer.jsx` using React Router's `<NavLink>` and `<Link>` for instant client-side routing.
+  - Extended automated test suite in `test/verify_arthos_spec.cjs` to enforce React SPA parity and App shell routing.
+
+### Changed
+- **Navigation Flow:** Converted external `<a>` tags for `/arthos` in Header and Footer into native React Router links.
+- **Architecture Documentation:** Updated `architecture.md` (Section 10) to detail the dual-surface SPA and static SSR architecture for Arthos.
+
 ## [1.5.0] - 2026-09-15
 
 ### Added

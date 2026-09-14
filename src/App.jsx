@@ -14,6 +14,7 @@ import Contact from './pages/Contact';
 import Privacy from './pages/Privacy';
 import NotFound from './pages/NotFound';
 import Track from './pages/Track';
+import Arthos from './pages/Arthos';
 
 // Helper component to handle scrolling on route change or hash change
 const ScrollToTop = () => {
@@ -37,6 +38,7 @@ const ScrollToTop = () => {
 const AppContent = () => {
   const { pathname } = useLocation();
   const isTrackPage = pathname === '/track' || pathname === '/track/';
+  const isArthosPage = pathname === '/arthos' || pathname === '/arthos/';
 
   if (isTrackPage) {
     return (
@@ -44,6 +46,17 @@ const AppContent = () => {
         <Routes>
           <Route path="/track" element={<Track />} />
           <Route path="/track/" element={<Track />} />
+        </Routes>
+      </main>
+    );
+  }
+
+  if (isArthosPage) {
+    return (
+      <main id="main-content" tabIndex={-1} className="focus:outline-none">
+        <Routes>
+          <Route path="/arthos" element={<Arthos />} />
+          <Route path="/arthos/" element={<Arthos />} />
         </Routes>
       </main>
     );

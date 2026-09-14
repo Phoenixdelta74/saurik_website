@@ -85,6 +85,7 @@ const Contact = () => {
       hardware_computers: 'Computer Sales & Workstations',
       hardware_servers: `Server ${formData.serverType === 'installation' ? 'Installation' : 'Servicing'}`,
       hardware_quote: 'General Hardware Quotation',
+      arthos_early_access: 'Arthos Invoice Studio — Early access',
       not_sure: 'Not sure yet / General enquiry',
     };
     return labels[val] || val;
@@ -384,6 +385,9 @@ const Contact = () => {
                       <option value="hardware_computers">Computer Sales & Workstations</option>
                       <option value="hardware_servers">Server Installation & Service</option>
                       <option value="hardware_quote">General Hardware Quotation</option>
+                    </optgroup>
+                    <optgroup label="── Arthos Invoice Studio ──">
+                      <option value="arthos_early_access">Arthos Invoice Studio — Early access</option>
                     </optgroup>
                   </select>
                 </div>

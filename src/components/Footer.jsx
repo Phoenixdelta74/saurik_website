@@ -55,6 +55,11 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
+                <Link to="/arthos" className="hover:text-ink-primary hover:underline transition-colors">
+                  Arthos Invoice Studio (GST Invoicing)
+                </Link>
+              </li>
+              <li>
                 <Link to="/software#data-analytics" className="hover:text-ink-primary hover:underline transition-colors">
                   Data Analytics as a Service
                 </Link>

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Arthos Invoice Studio</title>
+  <desc id="desc">GST-aware invoicing, clear collections, and a better view of your business.</desc>
+  <rect width="1200" height="630" fill="#eef0e7"/>
+  <rect x="72" y="72" width="1056" height="486" rx="20" fill="#fdfdfb" stroke="#cdd0c2" stroke-width="3"/>
+  <rect x="72" y="72" width="16" height="486" fill="#3b4a99"/>
+  <text x="132" y="176" fill="#4b5750" font-family="Arial, sans-serif" font-size="25" letter-spacing="4">SAURIK IT PRODUCT</text>
+  <text x="132" y="270" fill="#1c2620" font-family="Arial, sans-serif" font-size="64" font-weight="700">Arthos Invoice Studio</text>
+  <text x="132" y="340" fill="#4b5750" font-family="Arial, sans-serif" font-size="31">GST-aware invoicing. Clear collections.</text>
+  <text x="132" y="386" fill="#4b5750" font-family="Arial, sans-serif" font-size="31">A better view of your business.</text>
+  <rect x="132" y="454" width="254" height="54" rx="27" fill="#3b4a99"/>
+  <text x="259" y="489" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="20" font-weight="700">Desktop or Cloud</text>
+  <text x="1040" y="500" text-anchor="end" fill="#3e7c4c" font-family="Arial, sans-serif" font-size="22" font-weight="700">60-day trial planned</text>
+</svg>

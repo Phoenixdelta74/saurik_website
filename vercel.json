@@ -6,6 +6,8 @@
     { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/track", "destination": "/track/index.html" },
     { "source": "/track/", "destination": "/track/index.html" },
+    { "source": "/arthos", "destination": "/arthos/index.html" },
+    { "source": "/arthos/", "destination": "/arthos/index.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

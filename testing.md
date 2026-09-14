@@ -135,3 +135,12 @@ Test in developer tools responsive mode at:
 - **768px:** iPad/Tablet portrait (grid transitions to single column).
 - **1024px:** Tablet landscape / small laptop.
 - **1440px:** Desktop (content bounded to max width).
+## Arthos Invoice Studio Landing Page
+
+- `npm.cmd test` includes `test/verify_arthos_spec.cjs`, which checks:
+  - The 9 required semantic sections in exact order (`hero`, `editions`, `problems`, `features`, `workflow`, `data-and-backups`, `trial-and-pricing`, `faq`, `final-cta`).
+  - Strict parity between static crawler HTML (`public/arthos/index.html`) and the React SPA component (`src/pages/Arthos.jsx`).
+  - Route registration in `App.jsx` (`/arthos` and `/arthos/`) and cross-links in `Header.jsx` and `Footer.jsx`.
+  - Launch-state enforcement (State A: Pre-launch with "Request early access" pointing to `/contact?topic=arthos_early_access`).
+  - 60-day trial claims, edition boundary disclaimers (Desktop offline local storage vs Cloud internet account storage), and zero unverified P&L/GST filing claims.
+  - Social preview asset (`public/arthos/og-image.svg` at 1200×630).

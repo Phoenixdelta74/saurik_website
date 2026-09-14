@@ -39,9 +39,9 @@ export default function Header() {
         
         <nav aria-label="Main navigation" className="hidden lg:flex items-center gap-2">
           {links.map(([to, label, badge]) => (
-            <NavLink 
-              key={to} 
-              to={to} 
+            <NavLink
+              key={to}
+              to={to}
               className={({ isActive }) => `
                 px-3.5 py-2.5 rounded-control text-sm font-medium flex items-center gap-1.5 transition-colors
                 ${isActive ? 'bg-white text-accent-teal shadow-subtle' : 'text-ink-secondary hover:text-ink-primary hover:bg-slate-100/60'}
@@ -56,6 +56,15 @@ export default function Header() {
               )}
             </NavLink>
           ))}
+          <NavLink
+            to="/arthos"
+            className={({ isActive }) => `
+              px-3.5 py-2.5 rounded-control text-sm font-medium flex items-center gap-1.5 transition-colors
+              ${isActive ? 'bg-white text-accent-teal shadow-subtle' : 'text-ink-secondary hover:text-ink-primary hover:bg-slate-100/60'}
+            `}
+          >
+            <span>Arthos Invoice Studio</span>
+          </NavLink>
         </nav>
 
         <div className="hidden lg:block">
@@ -90,6 +99,9 @@ export default function Header() {
             )}
           </NavLink>
         ))}
+        <NavLink to="/arthos" onClick={() => setOpen(false)} className="px-4 py-4 border-b border-border-subtle font-medium flex items-center justify-between">
+          <span>Arthos Invoice Studio</span>
+        </NavLink>
         <Link to="/contact" onClick={() => setOpen(false)} className="btn-primary mt-4">Discuss your requirement <ArrowRight size={16} /></Link>
         <Link to="/privacy" onClick={() => setOpen(false)} className="px-4 py-4 text-sm">Privacy & enquiry information</Link>
       </nav>

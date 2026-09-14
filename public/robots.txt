@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
 Allow: /track/
+Allow: /arthos/
 
 Sitemap: https://www.wwwsaurikit.com/sitemap.xml

@@ -267,11 +267,22 @@ For optimal search indexing and rich social previews on WhatsApp, LinkedIn, and 
   - Interaction to Next Paint (INP): ≤ 200ms
   - Cumulative Layout Shift (CLS): ≤ 0.1
   - Saurik Track Page Weight: ≤ 250 KB (Achieved: **32.3 KB** combined HTML/CSS).
-## Arthos product landing page
+## 10. Arthos Invoice Studio Architecture
 
-Arthos is served as a static, crawlable product page at `/arthos/` through the
-Vercel rewrite to `public/arthos/index.html`. Its page-specific CSS, launch-state
-configuration, logo, and social preview asset remain scoped under
-`public/arthos/`; it does not enter the React SPA shell. The launch configuration
-defaults to pre-launch so the page cannot imply that trial activation, checkout,
-or downloads are available before those journeys are verified.
+Arthos Invoice Studio (`/arthos`) mirrors the proven dual-surface architecture of Saurik Track:
+
+1. **Client-Side SPA Route (`src/pages/Arthos.jsx` & `src/pages/Arthos.css`):**
+   - Built with React 18 and scoped CSS under `.arthos-page`.
+   - Mounted at `/arthos` and `/arthos/` in `src/App.jsx`.
+   - Features dedicated two-tier navigation (`nav#site-nav` with corporate links and product section links), interactive illustrative Business Health preview card, editions comparison (Desktop vs Cloud), 5 structured business problem cards, 5 feature cards, 5-step workflow, data/backup isolation disclosure, 60-day trial status, and 7 native FAQ disclosures.
+   - Integrated into the global Header and Footer using React Router's `<NavLink>` and `<Link>` for instantaneous, client-side routing without full-page reloads.
+
+2. **Zero-JS Static Crawler Fallback (`public/arthos/index.html`):**
+   - Pre-rendered static HTML and CSS (`public/arthos/styles.css`) served at `/arthos/` through Vercel rewrites and edge CDN.
+   - Provides instant first contentful paint and crawlability for search engines and social bots without requiring JavaScript execution.
+   - Includes JSON-LD structured data (`SoftwareApplication`) and complete OpenGraph/Twitter card previews (`public/arthos/og-image.svg`).
+
+3. **Centralized Launch State Management (`public/arthos/launch-config.js`):**
+   - Centralized configuration controlling launch states (Pre-launch vs Trial Available).
+   - Currently active: **State A (Pre-launch)** with primary CTA *"Request early access"* routing to `/contact?topic=arthos_early_access`.
+   - Strictly enforces truthfulness constraints: zero unconfirmed pricing, no fake instant download or cloud signup links, and clear isolation between Desktop local storage and Cloud accounts.
