@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Changed
+- **Header Navigation Redesign (`Header.jsx`):**
+  - Replaced the crowded flat row of products and services with a dedicated, accessible **"Products"** dropdown menu.
+  - Grouped **Saurik Track** (`LIVE ERP`) and **Arthos Invoice Studio** (`INVOICING`) inside a floating flyout menu with feature summaries and iconography (`Compass`, `Receipt`).
+  - Added strict `whitespace-nowrap` across all links and action buttons, completely eliminating two-line text wrapping, staggered heights, and mobile reflow issues on desktop/laptop displays.
+  - Organized mobile drawer navigation into distinct "Software Products" and "Corporate Services" sections.
+
+### Added
+- **Arthos Blueprint Induction Proposal:** Added
+  `docs/ARTHOS_BLUEPRINT_INDUCTION_RECOMMENDATIONS.md` with the recommended
+  positioning, validation, website, funnel, content, measurement, risk, and
+  founder-decision changes for a future growth-blueprint revision.
+
 ## [1.6.0] - 2026-09-15
 
 ### Added

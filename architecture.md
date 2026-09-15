@@ -167,15 +167,21 @@ Following `SAURIK-TRACK-LANDING-SPEC-v3.md`, Saurik Track operates under strict 
 
 ## 5. Routing and Deep-Linking Strategy
 
-### 5.1. Route Map
+### 5.1. Route Map & Global Header Architecture
 - `/` : Corporate Home page
 - `/software` : Software & IT capabilities (with deep hash anchors)
 - `/hardware` : Hardware & IT Support (with deep hash anchors)
 - `/about` : Company background and principles
 - `/contact` : Smart enquiry form with preselected query parameters
-- `/track` : Saurik Track flagship mobile ERP landing page (served via static HTML & synchronized SPA component)
+- `/track` : Saurik Track flagship mobile ERP landing page (accessible via Products dropdown and dedicated route)
+- `/arthos` : Arthos Invoice Studio product landing page (accessible via Products dropdown and dedicated route)
 - `/privacy` : Plain-English data handling and enquiry policy
 - `*` : Catch-all 404 page
+
+The global `Header` component organizes top-level navigation into clean, single-line items (`whitespace-nowrap`) to eliminate text wrapping and vertical height jitter across display sizes:
+- **Products Dropdown:** Groups individual software products (**Saurik Track** with `LIVE ERP` badge, **Arthos Invoice Studio** with `INVOICING` badge) into an accessible flyout menu with feature summaries.
+- **Corporate Links:** Direct links for Software & IT, Hardware & IT Support, and About.
+- **Mobile Menu Drawer:** Renders accessible grouped navigation dividing Software Products from Corporate Services.
 
 ### 5.2. Query-String Topic Preselection
 Every call-to-action on service sections links directly to `/contact` with an intentional query string:
