@@ -3,7 +3,15 @@ import OpenAI from 'openai';
 
 export class ProviderConfigError extends Error {}
 
-const provider = () => (process.env.LLM_PROVIDER || 'anthropic').trim().toLowerCase();
+const provider = () => {
+  if (process.env.LLM_PROVIDER) {
+    return process.env.LLM_PROVIDER.trim().toLowerCase();
+  }
+  if (process.env.OPENAI_API_KEY) return 'openai';
+  if (process.env.OPENROUTER_API_KEY) return 'openrouter';
+  if (process.env.ANTHROPIC_API_KEY) return 'anthropic';
+  return 'openai';
+};
 
 const requireEnv = (name) => {
   const value = process.env[name];
@@ -43,7 +51,7 @@ async function callOpenAICompatible({ apiKey, baseURL, model, defaultHeaders, sy
 function callOpenAI(systemPrompt, messages) {
   return callOpenAICompatible({
     apiKey: requireEnv('OPENAI_API_KEY'),
-    model: requireEnv('OPENAI_MODEL'),
+    model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
     systemPrompt,
     messages,
   });
@@ -53,7 +61,7 @@ function callOpenRouter(systemPrompt, messages) {
   return callOpenAICompatible({
     apiKey: requireEnv('OPENROUTER_API_KEY'),
     baseURL: 'https://openrouter.ai/api/v1',
-    model: requireEnv('OPENROUTER_MODEL'),
+    model: process.env.OPENROUTER_MODEL || 'meta-llama/llama-3.3-70b-instruct:free',
     defaultHeaders: {
       'HTTP-Referer': process.env.SITE_URL || 'https://wwwsaurikit.com',
       'X-Title': 'SAURIK IT Website Assistant',
