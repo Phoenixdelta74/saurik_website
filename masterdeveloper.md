@@ -150,6 +150,15 @@ Always use `<Logo />` from `src/components/Logo.jsx`. Props:
 - `showSubtitle` (boolean, default: true): Shows `"IT Pvt Ltd"` and tagline.
 - `isLight` (boolean, default: false): Inverts accompanying text for dark backgrounds.
 
+### Pattern 6: Dual-Panel Voice & Chat Multimodal Assistant
+For conversational website assistance:
+- Use `src/components/ChatWidget.jsx` mounted in `src/App.jsx`.
+- Desktop view renders split-screen: Text Chat (`w-1/2`) and Voice Studio (`w-1/2`).
+- Mobile view (< 768px) uses a tab toggle (`activeMobileTab: 'chat' | 'voice'`) preserving audio state.
+- STT runs client-side via `webkitSpeechRecognition` (zero API overhead).
+- Spoken responses stream from `/api/tts` (OpenAI `tts-1`) with fallback to browser `speechSynthesis`.
+- Interruption: Speaking or tapping the mic button halts active audio playback instantly.
+
 ---
 
 ## 4. Verification Checklist Before Committing

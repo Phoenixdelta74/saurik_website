@@ -320,7 +320,7 @@ Invite your first field rep the same day. No credit card, no setup calls require
 ```
 
 **Button:**
-```
+```go 
 Start free 30-day trial
 ```
 

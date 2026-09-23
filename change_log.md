@@ -19,6 +19,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   positioning, validation, website, funnel, content, measurement, risk, and
   founder-decision changes for a future growth-blueprint revision.
 
+## [1.7.0] - 2026-09-23
+
+### Added
+- **Interactive Dual-Panel Voice & Chat Assistant (`ChatWidget.jsx`):**
+  - Upgraded floating chat assistant into an interactive dual-panel popup modal.
+  - On desktop (`md:` breakpoint), renders side-by-side: Text Chat Studio on the left, Voice Agent Studio on the right.
+  - On mobile (< 768px), provides an accessible top tab switcher (`[💬 Text Chat]` and `[🎙️ Voice Agent]`) to prevent cramped layouts while maintaining unified audio/transcript state.
+- **Neural Text-to-Speech Serverless Endpoint (`api/tts.js`):**
+  - Added serverless endpoint using OpenAI `tts-1` (`nova` voice) returning `audio/mpeg` with audio caching headers and markdown-stripping speech text sanitization.
+  - Implemented graceful HTTP 503 fallback when `OPENAI_API_KEY` is not present, triggering instant browser-native `speechSynthesis`.
+- **Speech & Audio Orchestration Hook (`src/hooks/useVoiceAgent.js`):**
+  - Integrated browser-native SpeechRecognition (`webkitSpeechRecognition`) for zero-cost, instant client-side speech-to-text.
+  - Built dual-engine speech synthesis: streams high-fidelity neural audio from `/api/tts` with automatic fallback to natural browser voices.
+  - Implemented real-time interruption: tapping the mic or speaking instantly halts active audio playback.
+- **Voice Agent UI Components (`VoiceAgentPanel.jsx`, `VoiceVisualizer.jsx`):**
+  - Built animated multi-ring audio visualizer orb reacting to speaking, listening, and idle states with bounce bars.
+  - Added real-time interim speech transcript preview ("Hearing: ..."), microphone action button with pulse rings, and speaker mute/unmute control.
+- **Automated Verification Suite (`test/verify_voice_assistant.cjs`):**
+  - Added automated checks for TTS endpoint response, audio types, hook lifecycle, and ChatWidget dual-panel layout integrated into `npm test`.
+
 ## [1.6.0] - 2026-09-15
 
 ### Added

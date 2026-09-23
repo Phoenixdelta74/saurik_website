@@ -58,6 +58,17 @@ node test/track_data_test.cjs
 - Multi-currency ROI formula accuracy (USD & INR).
 - 4 pillars, 5 problem-solution rows, and security spec exports.
 
+### 2.5. Dual-Panel Voice & Chat Assistant Verification Suite
+```bash
+node test/verify_voice_assistant.cjs
+```
+**Pass Criteria:**
+- Verifies existence of `api/tts.js`, `src/hooks/useVoiceAgent.js`, `src/components/voice/VoiceVisualizer.jsx`, `src/components/voice/VoiceAgentPanel.jsx`, and `src/components/ChatWidget.jsx`.
+- Confirms OpenAI Neural TTS `tts-1` integration and error handling (503/400).
+- Confirms speech recognition lifecycle, neural audio playback, and browser speech synthesis fallback.
+- Confirms real-time synchronization between speech input and chat message state.
+- Confirms responsive desktop split and mobile tab switcher.
+
 ### 2.5. Chatbot & Provider Verification
 ```bash
 node test/verify_chatbot.cjs

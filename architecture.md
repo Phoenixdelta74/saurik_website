@@ -1,7 +1,7 @@
 # SAURIK IT Website Architecture & Technical Design Principles
 
-**Version:** 1.4  
-**Last Updated:** 14 September 2026  
+**Version:** 1.5  
+**Last Updated:** 23 September 2026  
 **Status:** Living Technical Architecture Document  
 
 ---
@@ -292,3 +292,50 @@ Arthos Invoice Studio (`/arthos`) mirrors the proven dual-surface architecture o
    - Centralized configuration controlling launch states (Pre-launch vs Trial Available).
    - Currently active: **State A (Pre-launch)** with primary CTA *"Request early access"* routing to `/contact?topic=arthos_early_access`.
    - Strictly enforces truthfulness constraints: zero unconfirmed pricing, no fake instant download or cloud signup links, and clear isolation between Desktop local storage and Cloud accounts.
+
+---
+
+## 11. Dual-Panel Voice & Chat Assistant Architecture
+
+The website incorporates an interactive multimodal assistant combining conversational text with natural human voice:
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User
+    participant BrowserSTT as Browser Speech Recognition
+    participant ChatWidget as Dual-Panel Studio (ChatWidget.jsx)
+    participant ChatAPI as Serverless LLM (/api/chat)
+    participant TTS_API as Serverless TTS (/api/tts)
+    participant AudioPlayer as HTML5 Audio / Browser Fallback
+
+    User->>ChatWidget: Click "Speak" / Tap Mic
+    ChatWidget->>BrowserSTT: Start listening (en-IN)
+    User->>BrowserSTT: Spoken query
+    BrowserSTT-->>ChatWidget: Real-time interim & final transcript
+    ChatWidget->>ChatWidget: Append query to chat log & display
+    ChatWidget->>ChatAPI: POST /api/chat (prompt grounding)
+    ChatAPI-->>ChatWidget: Spoken response text
+    ChatWidget->>ChatWidget: Append reply to chat log
+    ChatWidget->>TTS_API: POST /api/tts (clean text, voice: nova)
+    alt OpenAI Key Active
+        TTS_API-->>ChatWidget: audio/mpeg stream
+        ChatWidget->>AudioPlayer: Play neural human voice
+    else API Key Missing / Quota Offline
+        TTS_API-->>ChatWidget: HTTP 503
+        ChatWidget->>AudioPlayer: Fallback to window.speechSynthesis
+    end
+    ChatWidget->>User: Audio playback with animated visualizer
+```
+
+1. **Client Interface (`ChatWidget.jsx`):**
+   - Side-by-side dual-panel layout on desktop/tablet (`md:` breakpoint): Left panel displays the full conversational text history, quick prompts, and text input; Right panel houses the Voice Agent Studio.
+   - Mobile responsive mode (< 768px): Accessible top tab switcher (`[💬 Text Chat]` and `[🎙️ Voice Agent]`) preserving simultaneous audio and transcript synchronization.
+2. **Audio Engine & Interruption (`useVoiceAgent.js`):**
+   - Speech-to-Text: Client-side Web Speech Recognition API (`webkitSpeechRecognition`) transcribing user speech at zero server cost.
+   - Text-to-Speech: High-definition neural audio via `/api/tts` (OpenAI `tts-1`, `nova` voice) with automatic fallback to natural browser `speechSynthesis`.
+   - Full duplex interruption: Speaking or tapping the mic button instantly terminates active audio playback and puts the assistant into listening mode.
+3. **Voice Studio Visuals (`VoiceVisualizer.jsx`, `VoiceAgentPanel.jsx`):**
+   - Concentric animated waveform orb reacting dynamically to speaking, listening, and thinking states.
+   - Live speech transcript display and one-tap speaker mute/unmute control.
+
