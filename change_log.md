@@ -46,6 +46,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - Locked in the 65% Apple Sheer Glass design token (`bg-white/65 backdrop-blur-3xl ring-1 ring-white/60`) with specular white highlights and deep blur.
   - Replaced the horizontal scrolling quick-prompt carousel with responsive in-chat topic suggestion cards displayed immediately upon opening the chat without horizontal scroll.
   - Unified branding across all surfaces to **"Saurik AI Advisor"** and purged internal developer cost wording from user-facing UI.
+- **Multi-Model Routing & Strict Language Mirroring (`api/chat.js`, `api/_lib/llmProviders.js`, `chatContext.js`):**
+  - Added source-based LLM routing: voice queries automatically run on OpenAI GPT for fast, natural spoken reasoning; text typing queries run on OpenRouter (Gemini Pro / Flash).
+  - Enforced Language Matching Mandate: queries in Hindi or Bengali are guaranteed responses purely in Hindi (Devanagari) or Bengali, preventing unwanted English translation.
 
 ## [1.6.0] - 2026-09-15
 

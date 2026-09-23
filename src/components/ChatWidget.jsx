@@ -43,10 +43,11 @@ const ChatWidget = () => {
   const toggleButtonRef = useRef(null);
   const inputRef = useRef(null);
   const logRef = useRef(null);
+  const selectedLangRef = useRef('en-IN');
 
   // Send message to LLM Brain
   const sendToAssistant = useCallback(
-    async (userInput, currentMessages, shouldSpeak = false) => {
+    async (userInput, currentMessages, shouldSpeak = false, source = 'text', customLang = null) => {
       const nextMessages = [...currentMessages, { role: 'user', content: userInput }];
       setMessages(nextMessages);
       setStatus('sending');
@@ -55,7 +56,11 @@ const ChatWidget = () => {
         const response = await fetch('/api/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ messages: nextMessages.slice(-10) }),
+          body: JSON.stringify({
+            messages: nextMessages.slice(-10),
+            source,
+            lang: customLang || selectedLangRef.current || 'en-IN',
+          }),
         });
 
         if (!response.ok) {
@@ -89,7 +94,7 @@ const ChatWidget = () => {
   const handleSpeechRecognized = useCallback(
     (spokenText) => {
       if (!spokenText.trim()) return;
-      sendToAssistant(spokenText, messages, true);
+      sendToAssistant(spokenText, messages, true, 'voice', selectedLangRef.current);
     },
     [messages, sendToAssistant]
   );
@@ -99,6 +104,13 @@ const ChatWidget = () => {
     onSpeechRecognized: handleSpeechRecognized,
     isMuted,
   });
+
+  // Keep selectedLangRef in sync with voiceAgent.selectedLanguage
+  useEffect(() => {
+    if (voiceAgent?.selectedLanguage) {
+      selectedLangRef.current = voiceAgent.selectedLanguage;
+    }
+  }, [voiceAgent?.selectedLanguage]);
 
   // Focus management
   useEffect(() => {
@@ -143,12 +155,12 @@ const ChatWidget = () => {
     setInput('');
     // Speak response if user is on mobile voice tab or sound is unmuted
     const shouldSpeak = activeMobileTab === 'voice' || !isMuted;
-    sendToAssistant(trimmed, messages, shouldSpeak);
+    sendToAssistant(trimmed, messages, shouldSpeak, 'text', selectedLangRef.current);
   };
 
   const handleQuickQuestion = (question) => {
     if (status === 'sending') return;
-    sendToAssistant(question, messages, !isMuted);
+    sendToAssistant(question, messages, !isMuted, 'text', selectedLangRef.current);
   };
 
   const panelAnimationClass = prefersReducedMotion()

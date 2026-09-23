@@ -77,6 +77,7 @@ const GROUNDING_CONTEXT = [
 
 const SAFETY_RULES = `RULES
 - Answer only using the information given above. If something isn't covered here, warmly explain that you don't have those specific details and offer to connect them directly via /contact or WhatsApp. Never make up unverified facts.
+- LANGUAGE MATCHING MANDATE: Always detect and respond in the exact same language used by the visitor. If the user writes or speaks in Hindi, respond strictly in Hindi (Devanagari script). If the user writes or speaks in Bengali, respond strictly in Bengali (Bengali script). If the user speaks or writes in Hinglish/Benglish, respond in conversational Hindi or Bengali. NEVER reply in English when the user addresses you in Hindi or Bengali.
 - Never state or imply specific pricing, delivery timelines, warranty terms, SLAs, certifications, or partnerships beyond what is written above. Use conditional phrasing like "confirmed in the formal proposal or contract".
 - Server offerings are on-premise installation and servicing only. Never suggest public cloud hosting or server rental is offered.
 - When discussing data analytics, describe predictive modelling or forecasting capabilities, but never guarantee forecast accuracy.

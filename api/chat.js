@@ -16,7 +16,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed.' });
   }
 
-  const { messages, mode } = req.body || {};
+  const { messages, mode, source = 'text', lang } = req.body || {};
 
   if (!Array.isArray(messages) || messages.length === 0 || !messages.every(isValidMessage)) {
     return res.status(400).json({ error: 'Invalid request.' });
@@ -26,7 +26,8 @@ export default async function handler(req, res) {
     const systemPrompt = mode === 'track' ? TRACK_CHAT_SYSTEM_PROMPT : CHAT_SYSTEM_PROMPT;
     const reply = await getChatReply(
       systemPrompt,
-      messages.slice(-MAX_HISTORY_MESSAGES).map((m) => ({ role: m.role, content: m.content }))
+      messages.slice(-MAX_HISTORY_MESSAGES).map((m) => ({ role: m.role, content: m.content })),
+      { source, lang }
     );
 
     if (!reply) {

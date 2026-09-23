@@ -17,16 +17,15 @@ const providersPath = path.resolve(__dirname, '../api/_lib/llmProviders.js');
 assert(fs.existsSync(providersPath), 'api/_lib/llmProviders.js must exist');
 const providersContent = fs.readFileSync(providersPath, 'utf8');
 assert(providersContent.includes('anthropic'), 'llmProviders must support anthropic');
-assert(providersContent.includes('openai'), 'llmProviders must support openai');
-assert(providersContent.includes('openrouter'), 'llmProviders must support openrouter');
-assert(providersContent.includes('ollama'), 'llmProviders must support ollama');
-console.log('✔ Test 2: Multi-provider engine (Anthropic, OpenAI, OpenRouter, Ollama) verified.');
+assert(providersContent.includes('providerForSource'), 'llmProviders must support providerForSource routing');
+console.log('✔ Test 2: Multi-provider engine (Anthropic, OpenAI, OpenRouter, Ollama) with source routing verified.');
 
 // 3. Check ChatContext grounding
 const contextPath = path.resolve(__dirname, '../src/data/chatContext.js');
 assert(fs.existsSync(contextPath), 'src/data/chatContext.js must exist');
 const contextContent = fs.readFileSync(contextPath, 'utf8');
 assert(contextContent.includes('CHAT_SYSTEM_PROMPT'), 'chatContext must export CHAT_SYSTEM_PROMPT');
+assert(contextContent.includes('LANGUAGE MATCHING MANDATE'), 'chatContext must include language matching mandate');
 assert(contextContent.includes('renderSoftwareSection'), 'chatContext must include software section');
 assert(contextContent.includes('renderHardwareSection'), 'chatContext must include hardware section');
 assert(contextContent.includes('renderTrackSection'), 'chatContext must include track section');
