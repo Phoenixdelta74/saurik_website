@@ -36,8 +36,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - **Voice Agent UI Components (`VoiceAgentPanel.jsx`, `VoiceVisualizer.jsx`):**
   - Built animated multi-ring audio visualizer orb reacting to speaking, listening, and idle states with bounce bars.
   - Added real-time interim speech transcript preview ("Hearing: ..."), microphone action button with pulse rings, and speaker mute/unmute control.
+- **Zero-Cost Native Voice Engine Standard (`AGENTS.md`, `masterdeveloper.md`, `architecture.md`):**
+  - Codified the non-negotiable architectural rule establishing client-side browser Web Speech APIs as the primary, zero-cost voice engine with zero recurring cloud API charges.
+  - Added native multilingual selection supporting Indian English (`en-IN`), Hindi (`hi-IN`), and Bengali (`bn-IN`) for both Speech Recognition and Speech Synthesis.
+  - Built continuous **Hands-Free Call Mode** with automatic 450ms acoustic cushion between speech ending and microphone reactivation for an effortless phone-call experience.
 - **Automated Verification Suite (`test/verify_voice_assistant.cjs`):**
-  - Added automated checks for TTS endpoint response, audio types, hook lifecycle, and ChatWidget dual-panel layout integrated into `npm test`.
+  - Added automated checks for zero-cost voice synthesis, hook lifecycle, continuous mode, and ChatWidget dual-panel layout integrated into `npm test`.
+- **Apple Glass & UX Refinements (`ChatWidget.jsx`, `VoiceAgentPanel.jsx`):**
+  - Locked in the 65% Apple Sheer Glass design token (`bg-white/65 backdrop-blur-3xl ring-1 ring-white/60`) with specular white highlights and deep blur.
+  - Replaced the horizontal scrolling quick-prompt carousel with responsive in-chat topic suggestion cards displayed immediately upon opening the chat without horizontal scroll.
+  - Unified branding across all surfaces to **"Saurik AI Advisor"** and purged internal developer cost wording from user-facing UI.
 
 ## [1.6.0] - 2026-09-15
 

@@ -9,10 +9,10 @@ const VoiceVisualizer = ({ isListening, isSpeaking, status }) => {
         <div
           className={`absolute inset-0 rounded-full blur-xl transition-all duration-700 pointer-events-none ${
             isSpeaking
-              ? 'bg-gradient-to-tr from-cyan-500/40 via-teal-400/50 to-emerald-400/40 scale-125 animate-pulse'
+              ? 'bg-gradient-to-tr from-accent-teal/25 via-cyan-400/30 to-emerald-400/25 scale-125 animate-pulse'
               : isListening
-              ? 'bg-gradient-to-tr from-amber-400/40 via-orange-500/40 to-cyan-500/40 scale-125 animate-ping duration-1000'
-              : 'bg-cyan-500/10 scale-90'
+              ? 'bg-gradient-to-tr from-amber-400/30 via-orange-400/25 to-accent-teal/20 scale-125 animate-ping duration-1000'
+              : 'bg-accent-teal/10 scale-90'
           }`}
         />
 
@@ -20,62 +20,62 @@ const VoiceVisualizer = ({ isListening, isSpeaking, status }) => {
         <div
           className={`absolute inset-2 rounded-full border-2 transition-all duration-500 ${
             isSpeaking
-              ? 'border-cyan-400/60 animate-spin duration-3000'
+              ? 'border-accent-teal/50 animate-spin duration-3000'
               : isListening
-              ? 'border-amber-400/80 scale-110 animate-pulse'
-              : 'border-slate-800'
+              ? 'border-amber-400/70 scale-110 animate-pulse'
+              : 'border-slate-200/80'
           }`}
         />
 
         <div
           className={`absolute inset-6 rounded-full border border-dashed transition-all duration-500 ${
             isSpeaking
-              ? 'border-teal-300/80 animate-spin-reverse duration-2000'
+              ? 'border-cyan-400/60 animate-spin-reverse duration-2000'
               : isListening
-              ? 'border-cyan-400 animate-ping duration-700'
-              : 'border-slate-800/80'
+              ? 'border-amber-500/80 animate-ping duration-700'
+              : 'border-slate-300/60'
           }`}
         />
 
-        {/* Central Core Orb */}
+        {/* Central Core Orb: Deep Navy Glass Core */}
         <div
-          className={`relative z-10 w-20 h-20 rounded-full flex items-center justify-center shadow-2xl transition-all duration-500 ${
+          className={`relative z-10 w-20 h-20 rounded-full flex items-center justify-center shadow-xl transition-all duration-500 ${
             isSpeaking
-              ? 'bg-gradient-to-br from-cyan-400 to-teal-600 text-slate-950 shadow-cyan-500/50 scale-105'
+              ? 'bg-[#102A43] border-2 border-accent-teal shadow-accent-teal/30 scale-105'
               : isListening
-              ? 'bg-gradient-to-br from-amber-400 to-orange-500 text-slate-950 shadow-amber-500/50 scale-110'
-              : 'bg-slate-900 border border-slate-700/80 text-cyan-400 shadow-slate-950'
+              ? 'bg-[#102A43] border-2 border-amber-400 shadow-amber-500/30 scale-110'
+              : 'bg-[#102A43] border border-teal-500/30 shadow-slate-900/20'
           }`}
         >
           {/* Internal Waveform Bars */}
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1.5">
             <span
               className={`w-1 rounded-full transition-all duration-300 ${
                 isSpeaking
-                  ? 'h-8 bg-slate-950 animate-bounce'
+                  ? 'h-8 bg-teal-400 animate-bounce'
                   : isListening
-                  ? 'h-7 bg-slate-950 animate-pulse'
-                  : 'h-2 bg-cyan-400/50'
+                  ? 'h-7 bg-amber-400 animate-pulse'
+                  : 'h-2 bg-teal-400/60'
               }`}
               style={{ animationDelay: '0ms' }}
             />
             <span
               className={`w-1 rounded-full transition-all duration-300 ${
                 isSpeaking
-                  ? 'h-11 bg-slate-950 animate-bounce'
+                  ? 'h-11 bg-cyan-300 animate-bounce'
                   : isListening
-                  ? 'h-10 bg-slate-950 animate-pulse'
-                  : 'h-3 bg-cyan-400/70'
+                  ? 'h-10 bg-amber-300 animate-pulse'
+                  : 'h-3.5 bg-teal-300'
               }`}
               style={{ animationDelay: '150ms' }}
             />
             <span
               className={`w-1 rounded-full transition-all duration-300 ${
                 isSpeaking
-                  ? 'h-7 bg-slate-950 animate-bounce'
+                  ? 'h-7 bg-teal-400 animate-bounce'
                   : isListening
-                  ? 'h-8 bg-slate-950 animate-pulse'
-                  : 'h-2 bg-cyan-400/50'
+                  ? 'h-8 bg-amber-400 animate-pulse'
+                  : 'h-2 bg-teal-400/60'
               }`}
               style={{ animationDelay: '300ms' }}
             />
@@ -88,13 +88,13 @@ const VoiceVisualizer = ({ isListening, isSpeaking, status }) => {
         <span
           className={`w-2 h-2 rounded-full ${
             isSpeaking
-              ? 'bg-cyan-400 animate-ping'
+              ? 'bg-accent-teal animate-ping'
               : isListening
-              ? 'bg-amber-400 animate-pulse'
-              : 'bg-slate-600'
+              ? 'bg-amber-500 animate-pulse'
+              : 'bg-slate-400'
           }`}
         />
-        <span className="text-xs font-mono tracking-wider font-semibold uppercase text-slate-300">
+        <span className="text-xs font-mono tracking-wider font-semibold uppercase text-ink-primary">
           {isSpeaking
             ? 'Speaking with Client'
             : isListening

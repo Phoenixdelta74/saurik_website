@@ -295,47 +295,45 @@ Arthos Invoice Studio (`/arthos`) mirrors the proven dual-surface architecture o
 
 ---
 
-## 11. Dual-Panel Voice & Chat Assistant Architecture
+## 11. Dual-Panel Voice & Chat Assistant Architecture (Zero-Cost Native Engine)
 
-The website incorporates an interactive multimodal assistant combining conversational text with natural human voice:
+The website incorporates an interactive multimodal assistant combining conversational text with natural voice driven primarily by a **Zero-Cost Native Engine**:
 
 ```mermaid
 sequenceDiagram
     autonumber
     actor User
-    participant BrowserSTT as Browser Speech Recognition
+    participant BrowserSTT as Browser Speech Recognition (en-IN/hi-IN/bn-IN)
     participant ChatWidget as Dual-Panel Studio (ChatWidget.jsx)
     participant ChatAPI as Serverless LLM (/api/chat)
-    participant TTS_API as Serverless TTS (/api/tts)
-    participant AudioPlayer as HTML5 Audio / Browser Fallback
+    participant SpeechSynth as Client window.speechSynthesis (Natural Regional Voice)
 
-    User->>ChatWidget: Click "Speak" / Tap Mic
-    ChatWidget->>BrowserSTT: Start listening (en-IN)
+    User->>ChatWidget: Click "Speak" / Start Hands-Free Call
+    ChatWidget->>BrowserSTT: Start listening (Selected Language)
     User->>BrowserSTT: Spoken query
     BrowserSTT-->>ChatWidget: Real-time interim & final transcript
     ChatWidget->>ChatWidget: Append query to chat log & display
     ChatWidget->>ChatAPI: POST /api/chat (prompt grounding)
     ChatAPI-->>ChatWidget: Spoken response text
     ChatWidget->>ChatWidget: Append reply to chat log
-    ChatWidget->>TTS_API: POST /api/tts (clean text, voice: nova)
-    alt OpenAI Key Active
-        TTS_API-->>ChatWidget: audio/mpeg stream
-        ChatWidget->>AudioPlayer: Play neural human voice
-    else API Key Missing / Quota Offline
-        TTS_API-->>ChatWidget: HTTP 503
-        ChatWidget->>AudioPlayer: Fallback to window.speechSynthesis
+    ChatWidget->>SpeechSynth: speak(cleanedText, optimalRegionalVoice)
+    SpeechSynth->>User: Spoken audio output + animated visualizer
+    alt Hands-Free Continuous Mode Active
+        SpeechSynth-->>ChatWidget: utterance.onend
+        Note over ChatWidget,BrowserSTT: 450ms safety cushion to prevent speaker echo
+        ChatWidget->>BrowserSTT: Automatically resume listening for next question
     end
-    ChatWidget->>User: Audio playback with animated visualizer
 ```
 
 1. **Client Interface (`ChatWidget.jsx`):**
-   - Side-by-side dual-panel layout on desktop/tablet (`md:` breakpoint): Left panel displays the full conversational text history, quick prompts, and text input; Right panel houses the Voice Agent Studio.
+   - Side-by-side dual-panel layout on desktop/tablet (`md:` breakpoint): Left panel displays conversational history, quick prompts, and text input; Right panel houses the Voice Agent Studio.
    - Mobile responsive mode (< 768px): Accessible top tab switcher (`[💬 Text Chat]` and `[🎙️ Voice Agent]`) preserving simultaneous audio and transcript synchronization.
-2. **Audio Engine & Interruption (`useVoiceAgent.js`):**
-   - Speech-to-Text: Client-side Web Speech Recognition API (`webkitSpeechRecognition`) transcribing user speech at zero server cost.
-   - Text-to-Speech: High-definition neural audio via `/api/tts` (OpenAI `tts-1`, `nova` voice) with automatic fallback to natural browser `speechSynthesis`.
-   - Full duplex interruption: Speaking or tapping the mic button instantly terminates active audio playback and puts the assistant into listening mode.
+2. **Zero-Cost Native Audio Engine (`useVoiceAgent.js`):**
+   - **Speech-to-Text (STT)**: Powered 100% client-side by `webkitSpeechRecognition` with native Indian language selection (`en-IN` English, `hi-IN` Hindi, `bn-IN` Bengali).
+   - **Text-to-Speech (TTS)**: Driven primarily by `window.speechSynthesis` dynamically binding to high-quality natural regional device voices (Google, Microsoft Natural, Apple Samantha/Rishi). Zero recurring cloud API cost.
+   - **Continuous Hands-Free Call Mode**: Automatically triggers `startListening()` 450ms after speech playback concludes, providing a seamless phone-call-style back-and-forth experience without clicking.
+   - **Full Duplex Interruption**: Speaking or tapping the mic button halts speech synthesis playback instantly.
 3. **Voice Studio Visuals (`VoiceVisualizer.jsx`, `VoiceAgentPanel.jsx`):**
    - Concentric animated waveform orb reacting dynamically to speaking, listening, and thinking states.
-   - Live speech transcript display and one-tap speaker mute/unmute control.
+   - Live speech transcript display, language selector dropdown, hands-free call toggle, and one-tap speaker mute/unmute control.
 

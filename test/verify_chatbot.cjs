@@ -38,7 +38,7 @@ const widgetPath = path.resolve(__dirname, '../src/components/ChatWidget.jsx');
 assert(fs.existsSync(widgetPath), 'src/components/ChatWidget.jsx must exist');
 const widgetContent = fs.readFileSync(widgetPath, 'utf8');
 assert(widgetContent.includes('/api/chat'), 'ChatWidget must send POST to /api/chat');
-assert(widgetContent.includes('SAURIK IT AI Advisor'), 'ChatWidget must display header');
+assert(widgetContent.toLowerCase().includes('saurik ai advisor'), 'ChatWidget must display header');
 assert(widgetContent.includes('animate-ping'), 'ChatWidget must feature high-speed pulsing aura');
 console.log('✔ Test 4: ChatWidget UI, pulsing animations, and /api/chat integration verified.');
 

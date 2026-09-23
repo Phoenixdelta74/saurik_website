@@ -215,39 +215,39 @@ const ChatWidget = () => {
       {/* Dual-Panel Studio Modal Popup Window */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/70 backdrop-blur-sm print:hidden"
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-900/35 backdrop-blur-sm print:hidden"
           role="dialog"
           aria-modal="true"
-          aria-label="SAURIK IT Voice & Chat Advisor"
+          aria-label="Saurik AI Advisor"
         >
           <div
-            className={`w-full max-w-4xl h-[90vh] max-h-[660px] bg-surface rounded-2xl shadow-2xl border border-slate-800 flex flex-col overflow-hidden ${panelAnimationClass}`}
+            className={`w-full max-w-4xl h-[90vh] max-h-[660px] bg-white/65 backdrop-blur-3xl border border-white/90 shadow-[0_30px_70px_-12px_rgba(16,42,67,0.26),0_0_0_1px_rgba(255,255,255,0.7)] ring-1 ring-white/60 rounded-3xl flex flex-col overflow-hidden transition-all duration-300 ${panelAnimationClass}`}
           >
             {/* Top Shared Header */}
-            <div className="flex items-center justify-between px-4 py-3 bg-slate-950 text-white border-b border-slate-800 shrink-0">
-              <div className="flex items-center gap-2.5">
+            <div className="flex items-center justify-between px-4 sm:px-5 py-3.5 bg-white/50 backdrop-blur-2xl border-b border-white/60 text-ink-primary shrink-0 gap-2">
+              <div className="flex items-center gap-2.5 shrink-0">
                 <span className="relative flex h-2.5 w-2.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-500" />
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-teal opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-accent-teal" />
                 </span>
-                <span className="text-xs sm:text-sm font-bold font-heading text-slate-100">
-                  SAURIK IT AI Advisor
+                <span className="text-xs sm:text-sm font-bold font-heading text-ink-primary whitespace-nowrap">
+                  Saurik AI Advisor
                 </span>
-                <span className="hidden sm:inline-flex text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800/60 font-semibold items-center gap-1">
-                  <Radio className="w-3 h-3 text-cyan-400 animate-pulse" />
+                <span className="hidden sm:inline-flex text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-accent-teal-light text-accent-teal border border-accent-teal/20 font-semibold items-center gap-1.5">
+                  <Radio className="w-3 h-3 text-accent-teal animate-pulse" />
                   Voice + Chat
                 </span>
               </div>
 
               {/* Mobile Tab Switcher (Visible on small screens only) */}
-              <div className="flex md:hidden items-center bg-slate-900 p-0.5 rounded-lg border border-slate-800">
+              <div className="flex md:hidden items-center bg-slate-100/80 p-0.5 rounded-xl border border-slate-200/60">
                 <button
                   type="button"
                   onClick={() => setActiveMobileTab('chat')}
-                  className={`flex items-center gap-1 px-2.5 py-1 text-xs rounded-md font-medium transition-all ${
+                  className={`flex items-center gap-1 px-2.5 py-1 text-xs rounded-lg font-medium transition-all ${
                     activeMobileTab === 'chat'
-                      ? 'bg-cyan-500 text-slate-950 font-bold shadow'
-                      : 'text-slate-400 hover:text-white'
+                      ? 'bg-accent-teal text-white font-bold shadow-sm'
+                      : 'text-ink-secondary hover:text-ink-primary'
                   }`}
                 >
                   <MessageSquare className="w-3.5 h-3.5" />
@@ -256,32 +256,32 @@ const ChatWidget = () => {
                 <button
                   type="button"
                   onClick={() => setActiveMobileTab('voice')}
-                  className={`flex items-center gap-1 px-2.5 py-1 text-xs rounded-md font-medium transition-all ${
+                  className={`flex items-center gap-1 px-2.5 py-1 text-xs rounded-lg font-medium transition-all ${
                     activeMobileTab === 'voice'
-                      ? 'bg-cyan-500 text-slate-950 font-bold shadow'
-                      : 'text-slate-400 hover:text-white'
+                      ? 'bg-accent-teal text-white font-bold shadow-sm'
+                      : 'text-ink-secondary hover:text-ink-primary'
                   }`}
                 >
                   <Mic className="w-3.5 h-3.5" />
                   <span>Voice</span>
                   {voiceAgent.isSpeaking && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-slate-950 animate-ping" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
                   )}
                 </button>
               </div>
 
               {/* Action Controls */}
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1 sm:gap-2">
                 <button
                   type="button"
                   onClick={() => {
                     if (!isMuted) voiceAgent.cancelSpeech();
                     setIsMuted((prev) => !prev);
                   }}
-                  className={`p-1.5 rounded-lg border text-xs transition-colors hidden sm:flex items-center gap-1 ${
+                  className={`p-1.5 rounded-xl border text-xs transition-all hidden sm:flex items-center gap-1 ${
                     isMuted
-                      ? 'bg-rose-950/60 border-rose-800 text-rose-300'
-                      : 'bg-slate-900 border-slate-700 text-slate-300 hover:text-white'
+                      ? 'bg-rose-50 border-rose-200 text-rose-600'
+                      : 'bg-white/80 hover:bg-white border-slate-200/80 text-ink-secondary hover:text-ink-primary shadow-subtle'
                   }`}
                   aria-label={isMuted ? 'Unmute voice' : 'Mute voice'}
                   title={isMuted ? 'Unmute voice output' : 'Mute voice output'}
@@ -292,7 +292,7 @@ const ChatWidget = () => {
                 <button
                   type="button"
                   onClick={handleClose}
-                  className="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-cyan-400"
+                  className="text-ink-muted hover:text-ink-primary p-1.5 rounded-xl hover:bg-slate-100 transition-colors focus:outline-none focus:ring-2 focus:ring-accent-teal"
                   aria-label="Close assistant modal"
                 >
                   <X className="w-5 h-5" />
@@ -304,7 +304,7 @@ const ChatWidget = () => {
             <div className="flex-1 flex overflow-hidden">
               {/* LEFT SIDE: Text Chat Studio */}
               <div
-                className={`w-full md:w-1/2 flex flex-col h-full bg-surface border-r border-border-subtle ${
+                className={`w-full md:w-1/2 flex flex-col h-full bg-white/25 backdrop-blur-xl border-r border-white/50 transition-all duration-300 ${
                   activeMobileTab === 'chat' ? 'flex' : 'hidden md:flex'
                 }`}
               >
@@ -313,57 +313,65 @@ const ChatWidget = () => {
                   ref={logRef}
                   aria-live="polite"
                   aria-atomic="false"
-                  className="flex-1 overflow-y-auto p-4 space-y-3"
+                  className="flex-1 overflow-y-auto p-4 space-y-3.5"
                 >
                   {messages.map((message, index) => (
                     <div
                       key={index}
                       className={`text-sm rounded-2xl px-4 py-3 max-w-[88%] leading-relaxed ${
                         message.role === 'user'
-                          ? 'ml-auto bg-cyan-600 text-white shadow-sm'
-                          : 'bg-canvas text-ink-primary border border-border-subtle shadow-subtle'
+                          ? 'ml-auto bg-accent-teal text-white shadow-md shadow-accent-teal/20'
+                          : 'bg-white/95 backdrop-blur-md text-ink-primary border border-slate-200/80 shadow-subtle'
                       }`}
                     >
-                      <div className="text-[11px] font-mono uppercase tracking-wider mb-1 opacity-70">
+                      <div className="text-[10px] font-mono uppercase tracking-wider mb-1 font-semibold opacity-90">
                         {message.role === 'user' ? 'You' : 'SAURIK IT AI'}
                       </div>
                       <div className="whitespace-pre-wrap">{message.content}</div>
                     </div>
                   ))}
 
+                  {/* Initial Quick Ask Topics (Displayed directly inside chat without horizontal scroll) */}
+                  {messages.length <= 1 && (
+                    <div className="pt-2 space-y-2.5 animate-in fade-in duration-300">
+                      <div className="flex items-center gap-1.5 px-1 text-[11px] font-mono uppercase tracking-wider font-semibold text-ink-muted">
+                        <Sparkles className="w-3 h-3 text-accent-teal" />
+                        <span>Quick Topics to Explore</span>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        {SUGGESTED_QUESTIONS.map((question, idx) => (
+                          <button
+                            key={idx}
+                            type="button"
+                            onClick={() => handleQuickQuestion(question)}
+                            disabled={status === 'sending'}
+                            className="text-left text-xs p-3 rounded-2xl bg-white/90 hover:bg-white text-ink-secondary hover:text-ink-primary border border-slate-200/80 hover:border-accent-teal/60 shadow-subtle hover:shadow-md transition-all group disabled:opacity-50 flex items-start justify-between gap-2"
+                          >
+                            <span className="leading-snug font-medium">{question}</span>
+                            <span className="text-accent-teal font-bold group-hover:translate-x-1 transition-transform shrink-0 mt-0.5">
+                              →
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
                   {status === 'sending' && (
-                    <div className="text-xs rounded-xl px-4 py-3 max-w-[85%] bg-canvas text-cyan-700 flex items-center gap-2 border border-cyan-200">
-                      <span className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse" />
+                    <div className="text-xs rounded-xl px-4 py-3 max-w-[85%] bg-white/80 text-accent-teal flex items-center gap-2 border border-slate-200/60 shadow-subtle">
+                      <span className="w-2 h-2 rounded-full bg-accent-teal animate-pulse" />
                       <span className="font-mono">Processing consultation response…</span>
                     </div>
                   )}
                 </div>
 
-                {/* Quick Prompts Carousel */}
-                <div className="px-4 py-2 border-t border-border-subtle bg-canvas/50 overflow-x-auto flex items-center gap-2 no-scrollbar">
-                  <span className="text-[10px] uppercase font-mono text-ink-muted shrink-0">
-                    Quick Ask:
-                  </span>
-                  {SUGGESTED_QUESTIONS.map((q, idx) => (
-                    <button
-                      key={idx}
-                      type="button"
-                      onClick={() => handleQuickQuestion(q)}
-                      disabled={status === 'sending'}
-                      className="text-[11px] whitespace-nowrap px-2.5 py-1 rounded-full bg-surface border border-border-subtle text-ink-secondary hover:text-accent-teal hover:border-accent-teal transition-all shrink-0 disabled:opacity-50"
-                    >
-                      {q}
-                    </button>
-                  ))}
-                </div>
-
                 {/* Help Note */}
-                <div className="px-4 py-1 text-[11px] text-ink-muted bg-surface flex items-center justify-between">
+                <div className="px-4 py-2 text-[11px] text-ink-muted bg-white/30 border-t border-slate-200/50 flex items-center justify-between">
                   <span>
                     Formal RFQ or urgent support?{' '}
                     <Link
                       to="/contact"
-                      className="underline hover:text-accent-teal font-semibold"
+                      className="text-accent-teal hover:underline font-semibold"
                       onClick={handleClose}
                     >
                       Contact page
@@ -373,7 +381,7 @@ const ChatWidget = () => {
                       href={COMPANY_INFO.whatsappLink}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="underline hover:text-accent-teal font-semibold"
+                      className="text-accent-teal hover:underline font-semibold"
                     >
                       WhatsApp
                     </a>
@@ -383,7 +391,7 @@ const ChatWidget = () => {
                 {/* Text Input Form */}
                 <form
                   onSubmit={handleTextSubmit}
-                  className="flex items-center gap-2 p-3 border-t border-border-subtle bg-surface"
+                  className="flex items-center gap-2 p-3 border-t border-slate-200/70 bg-white/50"
                 >
                   <label htmlFor="chat-studio-input" className="sr-only">
                     Type your question
@@ -396,13 +404,13 @@ const ChatWidget = () => {
                     onChange={(event) => setInput(event.target.value)}
                     disabled={status === 'sending'}
                     placeholder="Type a message or use Voice on the right…"
-                    className="flex-1 min-w-0 text-sm px-3.5 py-2.5 rounded-xl border border-border-subtle focus:outline-none focus:ring-2 focus:ring-cyan-500 disabled:opacity-60 bg-canvas"
+                    className="flex-1 min-w-0 text-sm px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white/95 text-ink-primary placeholder-ink-muted focus:outline-none focus:ring-2 focus:ring-accent-teal focus:border-accent-teal shadow-subtle disabled:opacity-60 transition-all"
                   />
                   <button
                     type="submit"
                     disabled={status === 'sending' || !input.trim()}
                     aria-label="Send message"
-                    className="shrink-0 w-11 h-11 flex items-center justify-center rounded-xl bg-cyan-500 text-slate-950 font-bold hover:bg-cyan-400 transition-colors focus:outline-none focus:ring-2 focus:ring-cyan-400 disabled:opacity-50 shadow"
+                    className="shrink-0 w-11 h-11 flex items-center justify-center rounded-xl bg-accent-teal hover:bg-accent-teal-dark text-white font-bold hover:scale-105 active:scale-95 transition-all focus:outline-none focus:ring-2 focus:ring-accent-teal disabled:opacity-50 shadow-md shadow-accent-teal/25"
                   >
                     <Send className="w-4 h-4" />
                   </button>
@@ -422,6 +430,10 @@ const ChatWidget = () => {
                   interimTranscript={voiceAgent.interimTranscript}
                   permissionError={voiceAgent.permissionError}
                   status={status}
+                  selectedLanguage={voiceAgent.selectedLanguage}
+                  onSelectLanguage={voiceAgent.setSelectedLanguage}
+                  isContinuousMode={voiceAgent.isContinuousMode}
+                  onToggleContinuousMode={() => voiceAgent.setIsContinuousMode((prev) => !prev)}
                   onStartListening={voiceAgent.startListening}
                   onStopListening={voiceAgent.stopListening}
                   onCancelSpeech={voiceAgent.cancelSpeech}
@@ -430,6 +442,7 @@ const ChatWidget = () => {
                     if (!isMuted) voiceAgent.cancelSpeech();
                     setIsMuted((prev) => !prev);
                   }}
+                  bgClass="bg-white/15 backdrop-blur-2xl"
                 />
               </div>
             </div>

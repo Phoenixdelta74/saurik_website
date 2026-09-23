@@ -1,18 +1,89 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 
+export const SUPPORTED_LANGUAGES = [
+  { code: 'en-IN', label: 'English (India)', nativeLabel: 'English', recognitionLang: 'en-IN' },
+  { code: 'hi-IN', label: 'Hindi (हिंदी)', nativeLabel: 'हिन्दी', recognitionLang: 'hi-IN' },
+  { code: 'bn-IN', label: 'Bengali (বাংলা)', nativeLabel: 'বাংলা', recognitionLang: 'bn-IN' },
+];
+
 export function useVoiceAgent({ onSpeechRecognized, isMuted = false }) {
   const [isSupported, setIsSupported] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [interimTranscript, setInterimTranscript] = useState('');
   const [permissionError, setPermissionError] = useState(null);
-  const [selectedVoice, setSelectedVoice] = useState('nova');
+  const [selectedLanguage, setSelectedLanguage] = useState('en-IN');
+  const [isContinuousMode, setIsContinuousMode] = useState(false); // Hands-free back-and-forth mode
 
   const recognitionRef = useRef(null);
-  const activeAudioRef = useRef(null);
-  const activeBlobUrlRef = useRef(null);
+  const isContinuousRef = useRef(isContinuousMode);
+  const selectedLangRef = useRef(selectedLanguage);
+  const restartTimerRef = useRef(null);
 
-  // Initialize Speech Recognition
+  // Keep refs in sync for event listeners
+  useEffect(() => {
+    isContinuousRef.current = isContinuousMode;
+  }, [isContinuousMode]);
+
+  useEffect(() => {
+    selectedLangRef.current = selectedLanguage;
+    if (recognitionRef.current) {
+      recognitionRef.current.lang = selectedLanguage;
+    }
+  }, [selectedLanguage]);
+
+  // Clean text helper to strip markdown artifacts
+  const cleanTextForSpeech = (text) => {
+    if (!text) return '';
+    return text
+      .replace(/\*\*([^*]+)\*\*/g, '$1')
+      .replace(/\*([^*]+)\*/g, '$1')
+      .replace(/#+\s+/g, '')
+      .replace(/`([^`]+)`/g, '$1')
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+      .replace(/https?:\/\/\S+/g, '')
+      .trim();
+  };
+
+  const cancelSpeech = useCallback(() => {
+    if (restartTimerRef.current) {
+      clearTimeout(restartTimerRef.current);
+      restartTimerRef.current = null;
+    }
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+    }
+    setIsSpeaking(false);
+  }, []);
+
+  const startListening = useCallback(() => {
+    cancelSpeech();
+    setPermissionError(null);
+    setInterimTranscript('');
+
+    if (recognitionRef.current) {
+      try {
+        recognitionRef.current.lang = selectedLangRef.current;
+        recognitionRef.current.start();
+      } catch (err) {
+        // Recognition might already be active
+        console.warn('Recognition start caught:', err);
+      }
+    }
+  }, [cancelSpeech]);
+
+  const stopListening = useCallback(() => {
+    if (recognitionRef.current) {
+      try {
+        recognitionRef.current.stop();
+      } catch (e) {
+        // ignore
+      }
+    }
+    setIsListening(false);
+  }, []);
+
+  // Initialize Web Speech Recognition
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
@@ -22,7 +93,7 @@ export function useVoiceAgent({ onSpeechRecognized, isMuted = false }) {
       const recognition = new SpeechRecognition();
       recognition.continuous = false;
       recognition.interimResults = true;
-      recognition.lang = 'en-IN'; // Indian English / Global English
+      recognition.lang = selectedLangRef.current;
 
       recognition.onstart = () => {
         setIsListening(true);
@@ -51,7 +122,7 @@ export function useVoiceAgent({ onSpeechRecognized, isMuted = false }) {
           setInterimTranscript('');
           setIsListening(false);
           if (onSpeechRecognized) {
-            onSpeechRecognized(final.trim());
+            onSpeechRecognized(final.trim(), selectedLangRef.current);
           }
         }
       };
@@ -59,11 +130,9 @@ export function useVoiceAgent({ onSpeechRecognized, isMuted = false }) {
       recognition.onerror = (event) => {
         console.warn('Speech recognition error:', event.error);
         if (event.error === 'not-allowed') {
-          setPermissionError('Microphone permission was denied. Please allow microphone access in your browser.');
-        } else if (event.error === 'no-speech') {
-          // Normal timeout, ignore
-        } else {
-          setPermissionError(`Microphone issue: ${event.error}`);
+          setPermissionError('Microphone permission was denied. Please allow microphone access in your browser settings.');
+        } else if (event.error !== 'no-speech') {
+          setPermissionError(`Microphone notice: ${event.error}`);
         }
         setIsListening(false);
         setInterimTranscript('');
@@ -83,151 +152,99 @@ export function useVoiceAgent({ onSpeechRecognized, isMuted = false }) {
         try {
           recognitionRef.current.abort();
         } catch (e) {
-          // ignore cleanup abort errors
+          // ignore
         }
       }
     };
   }, [onSpeechRecognized]);
 
-  // Clean up any active audio on unmount
+  // Clean up speech on unmount
   useEffect(() => {
     return () => {
       cancelSpeech();
     };
-  }, []);
-
-  const cancelSpeech = useCallback(() => {
-    // Stop HTML5 Audio
-    if (activeAudioRef.current) {
-      activeAudioRef.current.pause();
-      activeAudioRef.current.currentTime = 0;
-      activeAudioRef.current = null;
-    }
-    if (activeBlobUrlRef.current) {
-      URL.revokeObjectURL(activeBlobUrlRef.current);
-      activeBlobUrlRef.current = null;
-    }
-    // Stop Browser Web Speech Synthesis
-    if (typeof window !== 'undefined' && window.speechSynthesis) {
-      window.speechSynthesis.cancel();
-    }
-    setIsSpeaking(false);
-  }, []);
-
-  const startListening = useCallback(() => {
-    cancelSpeech(); // Interrupt any active assistant speech immediately
-    setPermissionError(null);
-    setInterimTranscript('');
-
-    if (recognitionRef.current) {
-      try {
-        recognitionRef.current.start();
-      } catch (err) {
-        // Recognition might already be running
-        console.warn('Recognition start caught:', err);
-      }
-    }
   }, [cancelSpeech]);
 
-  const stopListening = useCallback(() => {
-    if (recognitionRef.current) {
-      try {
-        recognitionRef.current.stop();
-      } catch (err) {
-        // ignore
-      }
-    }
-    setIsListening(false);
-  }, []);
+  // Find the optimal natural browser voice for the selected language
+  const getOptimalVoice = (langCode) => {
+    if (typeof window === 'undefined' || !window.speechSynthesis) return null;
+    const voices = window.speechSynthesis.getVoices();
+    if (!voices || voices.length === 0) return null;
 
-  // Text-To-Speech with Neural OpenAI first and Browser fallback second
+    const baseLang = langCode.split('-')[0].toLowerCase();
+
+    // 1. Exact match with Natural / High quality
+    const naturalExact = voices.find(
+      (v) =>
+        v.lang.toLowerCase() === langCode.toLowerCase() &&
+        (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Premium'))
+    );
+    if (naturalExact) return naturalExact;
+
+    // 2. Exact language match
+    const exactLang = voices.find((v) => v.lang.toLowerCase() === langCode.toLowerCase());
+    if (exactLang) return exactLang;
+
+    // 3. Base language match (e.g. 'hi' for 'hi-IN', 'bn' for 'bn-IN')
+    const baseMatch = voices.find(
+      (v) =>
+        v.lang.toLowerCase().startsWith(baseLang) ||
+        v.name.toLowerCase().includes(baseLang)
+    );
+    if (baseMatch) return baseMatch;
+
+    // 4. Fallback to any English or default voice
+    return voices.find((v) => v.lang.startsWith('en')) || voices[0] || null;
+  };
+
+  // Zero-Cost Native Engine: Primary Speech Synthesis
   const speak = useCallback(
-    async (text) => {
+    (text, forcedLang) => {
       if (!text || isMuted) return;
 
       cancelSpeech();
-      setIsSpeaking(true);
 
-      // Clean text for speech
-      const cleaned = text
-        .replace(/\*\*([^*]+)\*\*/g, '$1')
-        .replace(/\*([^*]+)\*/g, '$1')
-        .replace(/#+\s+/g, '')
-        .replace(/`([^`]+)`/g, '$1')
-        .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-        .trim();
+      const cleaned = cleanTextForSpeech(text);
+      if (!cleaned) return;
 
-      if (!cleaned) {
-        setIsSpeaking(false);
+      if (typeof window === 'undefined' || !window.speechSynthesis) {
         return;
       }
 
-      // 1. Attempt OpenAI Neural Voice via /api/tts
-      try {
-        const response = await fetch('/api/tts', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text: cleaned, voice: selectedVoice }),
-        });
+      const lang = forcedLang || selectedLangRef.current;
+      const utterance = new SpeechSynthesisUtterance(cleaned);
+      utterance.lang = lang;
+      utterance.rate = 1.0;
+      utterance.pitch = 1.0;
 
-        if (response.ok && response.headers.get('content-type')?.includes('audio')) {
-          const blob = await response.blob();
-          const url = URL.createObjectURL(blob);
-          activeBlobUrlRef.current = url;
-
-          const audio = new Audio(url);
-          activeAudioRef.current = audio;
-
-          audio.onended = () => {
-            setIsSpeaking(false);
-            cancelSpeech();
-          };
-
-          audio.onerror = () => {
-            console.warn('Audio playback error, falling back to browser speech synthesis');
-            fallbackBrowserSpeak(cleaned);
-          };
-
-          await audio.play();
-          return;
-        }
-      } catch (err) {
-        console.warn('Neural TTS request failed, switching to browser speech synthesis fallback:', err);
+      const voice = getOptimalVoice(lang);
+      if (voice) {
+        utterance.voice = voice;
       }
 
-      // 2. Fallback to Browser SpeechSynthesis
-      fallbackBrowserSpeak(cleaned);
+      utterance.onstart = () => {
+        setIsSpeaking(true);
+      };
+
+      utterance.onend = () => {
+        setIsSpeaking(false);
+        // Hands-Free Continuous Mode: auto-listen after AI finishes speaking
+        if (isContinuousRef.current) {
+          restartTimerRef.current = setTimeout(() => {
+            startListening();
+          }, 450); // 450ms safety cushion to prevent hearing speaker echo
+        }
+      };
+
+      utterance.onerror = (e) => {
+        console.warn('Speech synthesis notice:', e);
+        setIsSpeaking(false);
+      };
+
+      window.speechSynthesis.speak(utterance);
     },
-    [isMuted, selectedVoice, cancelSpeech]
+    [isMuted, cancelSpeech, startListening]
   );
-
-  const fallbackBrowserSpeak = (text) => {
-    if (typeof window === 'undefined' || !window.speechSynthesis) {
-      setIsSpeaking(false);
-      return;
-    }
-
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'en-IN';
-    utterance.rate = 1.0;
-    utterance.pitch = 1.0;
-
-    // Pick natural voice if available
-    const voices = window.speechSynthesis.getVoices();
-    const naturalVoice = voices.find(
-      (v) =>
-        (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Samantha') || v.name.includes('Rishi')) &&
-        v.lang.startsWith('en')
-    );
-    if (naturalVoice) {
-      utterance.voice = naturalVoice;
-    }
-
-    utterance.onend = () => setIsSpeaking(false);
-    utterance.onerror = () => setIsSpeaking(false);
-
-    window.speechSynthesis.speak(utterance);
-  };
 
   return {
     isSupported,
@@ -235,8 +252,10 @@ export function useVoiceAgent({ onSpeechRecognized, isMuted = false }) {
     isSpeaking,
     interimTranscript,
     permissionError,
-    selectedVoice,
-    setSelectedVoice,
+    selectedLanguage,
+    setSelectedLanguage,
+    isContinuousMode,
+    setIsContinuousMode,
     startListening,
     stopListening,
     speak,

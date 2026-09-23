@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const assert = require('assert');
 
-console.log('=== VERIFYING DUAL-PANEL VOICE & CHAT ASSISTANT ===\n');
+console.log('=== VERIFYING DUAL-PANEL VOICE & CHAT ASSISTANT (ZERO-COST NATIVE ENGINE) ===\n');
 
 // 1. Verify file existence
 const requiredFiles = [
@@ -19,62 +19,39 @@ for (const relPath of requiredFiles) {
   console.log(`✔ File exists: ${relPath}`);
 }
 
-// 2. Verify api/tts.js structure
-const ttsCode = fs.readFileSync(path.resolve(__dirname, '../api/tts.js'), 'utf8');
-assert(ttsCode.includes('OpenAI'), 'api/tts.js must import OpenAI');
-assert(ttsCode.includes('tts-1'), 'api/tts.js must use tts-1 model');
-assert(ttsCode.includes('audio/mpeg'), 'api/tts.js must return audio/mpeg content type');
-assert(ttsCode.includes('OPENAI_API_KEY'), 'api/tts.js must check process.env.OPENAI_API_KEY');
-console.log('✔ api/tts.js properly configured with OpenAI tts-1 and audio/mpeg streaming.');
-
-// 3. Verify useVoiceAgent hook capabilities
+// 2. Verify useVoiceAgent hook capabilities (Zero-Cost Native Engine)
 const hookCode = fs.readFileSync(path.resolve(__dirname, '../src/hooks/useVoiceAgent.js'), 'utf8');
 assert(hookCode.includes('SpeechRecognition'), 'useVoiceAgent must support SpeechRecognition');
-assert(hookCode.includes('speechSynthesis'), 'useVoiceAgent must support speechSynthesis fallback');
-assert(hookCode.includes('/api/tts'), 'useVoiceAgent must call /api/tts endpoint');
-assert(hookCode.includes('cancelSpeech'), 'useVoiceAgent must provide interrupt / cancelSpeech capability');
-console.log('✔ useVoiceAgent hook supports STT, Neural TTS, and browser fallback.');
+assert(hookCode.includes('speechSynthesis'), 'useVoiceAgent must use speechSynthesis as native engine');
+assert(hookCode.includes('SUPPORTED_LANGUAGES'), 'useVoiceAgent must export SUPPORTED_LANGUAGES');
+assert(hookCode.includes('en-IN') && hookCode.includes('hi-IN') && hookCode.includes('bn-IN'), 'useVoiceAgent must support English, Hindi, and Bengali');
+assert(hookCode.includes('isContinuousMode'), 'useVoiceAgent must support isContinuousMode hands-free loop');
+assert(hookCode.includes('cancelSpeech'), 'useVoiceAgent must provide interrupt capability');
+console.log('✔ useVoiceAgent verified with zero-cost native speech, multilingual support, and hands-free mode.');
 
-// 4. Verify VoiceAgentPanel UI
+// 3. Verify VoiceAgentPanel UI
 const panelCode = fs.readFileSync(path.resolve(__dirname, '../src/components/voice/VoiceAgentPanel.jsx'), 'utf8');
 assert(panelCode.includes('VoiceVisualizer'), 'VoiceAgentPanel must embed VoiceVisualizer');
-assert(panelCode.includes('Click to Speak with Agent'), 'VoiceAgentPanel must have primary speak action button');
-assert(panelCode.includes('onCancelSpeech'), 'VoiceAgentPanel must support speech interruption');
-console.log('✔ VoiceAgentPanel UI verified with animated visualizer and mic controls.');
+assert(panelCode.includes('voice-lang-select'), 'VoiceAgentPanel must include language selector');
+assert(panelCode.includes('Saurik AI Advisor'), 'VoiceAgentPanel must display uniform Saurik AI Advisor branding');
+console.log('✔ VoiceAgentPanel UI verified with language selector, hands-free call toggle, and uniform branding.');
 
-// 5. Verify ChatWidget Dual-Panel Layout
+// 4. Verify ChatWidget Dual-Panel Layout
 const widgetCode = fs.readFileSync(path.resolve(__dirname, '../src/components/ChatWidget.jsx'), 'utf8');
 assert(widgetCode.includes('VoiceAgentPanel'), 'ChatWidget must embed VoiceAgentPanel');
 assert(widgetCode.includes('activeMobileTab'), 'ChatWidget must support responsive mobile tabs');
-assert(widgetCode.includes('handleSpeechRecognized'), 'ChatWidget must synchronize recognized speech with chat state');
+assert(widgetCode.includes('selectedLanguage'), 'ChatWidget must pass selectedLanguage to panel');
+assert(widgetCode.includes('isContinuousMode'), 'ChatWidget must pass isContinuousMode to panel');
 assert(widgetCode.includes('voiceAgent.speak'), 'ChatWidget must invoke voiceAgent.speak on replies');
-console.log('✔ ChatWidget verified with side-by-side dual-panel and synchronized voice/chat state.');
+console.log('✔ ChatWidget verified with side-by-side dual-panel, language selection, and continuous mode.');
 
-// 6. Test api/tts.js offline / missing key handler response
-const ttsHandler = require('../api/tts.js').default;
-const mockRes = {
-  statusCode: null,
-  headers: {},
-  body: null,
-  status(code) {
-    this.statusCode = code;
-    return this;
-  },
-  setHeader(key, val) {
-    this.headers[key] = val;
-    return this;
-  },
-  json(data) {
-    this.body = data;
-    return this;
-  },
-};
+// 5. Verify Implementation Rules in AGENTS.md & masterdeveloper.md
+const agentsGuide = fs.readFileSync(path.resolve(__dirname, '../AGENTS.md'), 'utf8');
+assert(agentsGuide.includes('Zero-Cost Native Voice Engine Rule'), 'AGENTS.md must include Zero-Cost Native Voice Engine Rule');
+console.log('✔ AGENTS.md verified: Zero-Cost Native Voice Engine Rule is codified.');
 
-(async () => {
-  // Test missing text
-  await ttsHandler({ method: 'POST', body: {} }, mockRes);
-  assert(mockRes.statusCode === 503 || mockRes.statusCode === 400, 'TTS must return 503 (if no key) or 400 (if no text)');
-  console.log('✔ api/tts.js endpoint error handling test passed.');
+const masterGuide = fs.readFileSync(path.resolve(__dirname, '../masterdeveloper.md'), 'utf8');
+assert(masterGuide.includes('Mandatory Zero-Cost Native Voice Engine'), 'masterdeveloper.md must include Directive 7');
+console.log('✔ masterdeveloper.md verified: Mandatory Zero-Cost Native Voice Engine directive is codified.');
 
-  console.log('\n=== ALL VOICE & CHAT ASSISTANT CHECKS PASSED SUCCESSFULLY! ===');
-})();
+console.log('\n=== ALL ZERO-COST NATIVE VOICE ENGINE CHECKS PASSED SUCCESSFULLY! ===');

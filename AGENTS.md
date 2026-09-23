@@ -39,6 +39,7 @@ Routes are `/`, `/software`, `/hardware`, `/about`, `/contact`, and `/privacy`; 
 - Preserve query-string topic selection when linking a service to `/contact`.
 - Keep the AI assistant grounded in `src/data/chatContext.js`; update the shared data sources when published service information changes.
 - Keep animation brief and respect reduced-motion preferences.
+- **Zero-Cost Native Voice Engine Rule**: The website voice assistant must operate primarily via the client's browser-native Web Speech APIs (`SpeechRecognition` for STT and `SpeechSynthesis` for TTS). It must never mandate external paid TTS/STT API keys for standard client voice operation, ensuring zero recurring voice API expenses, instant client-side performance, multilingual capability (English, Hindi, Bengali), and an accessible continuous hands-free conversation loop.
 
 ## Product and content constraints
 

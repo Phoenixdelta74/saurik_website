@@ -23,6 +23,10 @@
 6. **Always Maintain Architecture & Change Logs**:
    - Update `architecture.md` when system components, routes, or protocols change.
    - Update `change_log.md` with every commit or milestone.
+7. **Mandatory Zero-Cost Native Voice Engine**:
+   - The website voice assistant must operate primarily via the client's browser-native Web Speech APIs (`SpeechRecognition` for STT and `SpeechSynthesis` for TTS).
+   - Standard client voice operation must NEVER require external paid TTS or STT API keys (zero recurring external voice billing).
+   - Must support natural Indian English (`en-IN`), Hindi (`hi-IN`), and Bengali (`bn-IN`), alongside a hands-free continuous call loop.
 
 ---
 
@@ -150,14 +154,15 @@ Always use `<Logo />` from `src/components/Logo.jsx`. Props:
 - `showSubtitle` (boolean, default: true): Shows `"IT Pvt Ltd"` and tagline.
 - `isLight` (boolean, default: false): Inverts accompanying text for dark backgrounds.
 
-### Pattern 6: Dual-Panel Voice & Chat Multimodal Assistant
+### Pattern 6: Dual-Panel Voice & Chat Multimodal Assistant (Zero-Cost Native Engine)
 For conversational website assistance:
 - Use `src/components/ChatWidget.jsx` mounted in `src/App.jsx`.
 - Desktop view renders split-screen: Text Chat (`w-1/2`) and Voice Studio (`w-1/2`).
 - Mobile view (< 768px) uses a tab toggle (`activeMobileTab: 'chat' | 'voice'`) preserving audio state.
-- STT runs client-side via `webkitSpeechRecognition` (zero API overhead).
-- Spoken responses stream from `/api/tts` (OpenAI `tts-1`) with fallback to browser `speechSynthesis`.
-- Interruption: Speaking or tapping the mic button halts active audio playback instantly.
+- **Speech-to-Text**: Runs client-side via `webkitSpeechRecognition` with multilingual support (`en-IN`, `hi-IN`, `bn-IN`) at zero cost.
+- **Text-to-Speech**: Driven primarily by client-side `window.speechSynthesis` selecting the highest quality natural regional voice without incurring external paid API charges.
+- **Hands-Free Call Mode**: Automatically restarts listening 450ms after speech ends to enable continuous phone-call-style back-and-forth dialogue.
+- **Interruption**: Speaking or tapping the mic button halts active audio playback instantly.
 
 ---
 
