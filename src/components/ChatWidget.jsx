@@ -36,17 +36,21 @@ const ChatWidget = () => {
     if (isArthos) {
       return [
         "What is the difference between Desktop and Cloud?",
-        "Does Arthos Desktop work without internet?",
-        "How do I request early access for the 60-day trial?",
+        "Does Arthos Desktop work 100% offline without internet?",
         "Does Arthos file GST returns directly?",
+        "How do I request early access for the 60-day trial?",
+        "Where are local backups and records stored?",
+        "Can Desktop data be automatically synced to Cloud?",
       ];
     }
     if (isTrack) {
       return [
-        "Can Saurik Track work without internet?",
         "How does fake GPS detection work?",
-        "Can field reps see their own hours?",
-        "How can I book a 30-day pilot?",
+        "Tally & Excel data export?",
+        "Battery drain on cheap phones?",
+        "Zero-signal mountain routes in Tripura?",
+        "Can reps see their own hours?",
+        "₹699 billing & license flexibility?",
       ];
     }
     return [

@@ -47,40 +47,28 @@ const appContent = fs.readFileSync(appPath, 'utf8');
 assert(appContent.includes('<ChatWidget />'), 'App.jsx must mount <ChatWidget />');
 console.log('✔ Test 5: Global mounting in App.jsx verified.');
 
-// 6. Check Track Operations Specialist grounding and API mode support
+// 6. Check Saurik Track Operations grounding in global chatContext
 assert(contextContent.includes('TRACK_CHAT_SYSTEM_PROMPT'), 'chatContext must export TRACK_CHAT_SYSTEM_PROMPT');
 assert(contextContent.includes('TRACK_OPERATIONS_KNOWLEDGE'), 'chatContext must export TRACK_OPERATIONS_KNOWLEDGE');
-assert(contextContent.includes('FOUNDER-VERIFIED TECHNICAL & OPERATIONAL SPECIFICATIONS'), 'chatContext must include operational groundings');
+assert(contextContent.includes('FOUNDER-VERIFIED TECHNICAL & OPERATIONAL SPECIFICATIONS FOR SAURIK TRACK'), 'chatContext must include operational groundings');
 assert(apiChat.includes("mode === 'track'"), 'api/chat.js must check mode === "track"');
 assert(apiChat.includes('TRACK_CHAT_SYSTEM_PROMPT'), 'api/chat.js must reference TRACK_CHAT_SYSTEM_PROMPT');
 
-const trackChatPath = path.resolve(__dirname, '../src/components/track/TrackInlineChat.jsx');
-assert(fs.existsSync(trackChatPath), 'src/components/track/TrackInlineChat.jsx must exist');
-const trackChatContent = fs.readFileSync(trackChatPath, 'utf8');
-assert(trackChatContent.includes("mode: 'track'"), 'TrackInlineChat must send mode: track to /api/chat');
-assert(trackChatContent.includes('Saurik Track Operations & Technical Specialist'), 'TrackInlineChat must have assistant header/greeting');
-
 const trackPagePath = path.resolve(__dirname, '../src/pages/Track.jsx');
 const trackPageContent = fs.readFileSync(trackPagePath, 'utf8');
-assert(trackPageContent.includes('<TrackInlineChat />'), 'Track.jsx must mount <TrackInlineChat /> in FAQ section');
-console.log('✔ Test 6: Specialized Saurik Track Operations Assistant grounding, mode router, and inline mounting verified.');
+assert(!trackPageContent.includes('<TrackInlineChat'), 'Track.jsx must not have duplicate inline chat box');
+console.log('✔ Test 6: Unified Saurik Track Operations Assistant knowledge grounded in global chat and clean page verified.');
 
-// 7. Check Arthos Invoice Studio Specialist grounding and API mode support
+// 7. Check Arthos Invoice Studio grounding in global chatContext
 assert(contextContent.includes('ARTHOS_CHAT_SYSTEM_PROMPT'), 'chatContext must export ARTHOS_CHAT_SYSTEM_PROMPT');
 assert(contextContent.includes('ARTHOS_OPERATIONS_KNOWLEDGE'), 'chatContext must export ARTHOS_OPERATIONS_KNOWLEDGE');
 assert(contextContent.includes('FOUNDER-VERIFIED SPECIFICATIONS FOR ARTHOS INVOICE STUDIO'), 'chatContext must include arthos groundings');
 assert(apiChat.includes("mode === 'arthos'"), 'api/chat.js must check mode === "arthos"');
 assert(apiChat.includes('ARTHOS_CHAT_SYSTEM_PROMPT'), 'api/chat.js must reference ARTHOS_CHAT_SYSTEM_PROMPT');
 
-const arthosChatPath = path.resolve(__dirname, '../src/components/arthos/ArthosInlineChat.jsx');
-assert(fs.existsSync(arthosChatPath), 'src/components/arthos/ArthosInlineChat.jsx must exist');
-const arthosChatContent = fs.readFileSync(arthosChatPath, 'utf8');
-assert(arthosChatContent.includes("mode: 'arthos'"), 'ArthosInlineChat must send mode: arthos to /api/chat');
-assert(arthosChatContent.includes('Arthos Invoice Studio Specialist'), 'ArthosInlineChat must have assistant greeting');
-
 const arthosPagePath = path.resolve(__dirname, '../src/pages/Arthos.jsx');
 const arthosPageContent = fs.readFileSync(arthosPagePath, 'utf8');
-assert(arthosPageContent.includes('<ArthosInlineChat />'), 'Arthos.jsx must mount <ArthosInlineChat /> in FAQ section');
-console.log('✔ Test 7: Specialized Arthos Invoice Studio Assistant grounding, mode router, and inline mounting verified.');
+assert(!arthosPageContent.includes('<ArthosInlineChat'), 'Arthos.jsx must not have duplicate inline chat box');
+console.log('✔ Test 7: Unified Arthos Invoice Studio Assistant knowledge grounded in global chat and clean page verified.');
 
 console.log('\n=== ALL CHATBOT TESTS PASSED SUCCESSFULLY! ===\n');

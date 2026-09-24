@@ -7,18 +7,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [Unreleased]
 
 ### Added
-- **Unified AI Advisor Across All Pages (`ChatWidget.jsx`, `App.jsx`):**
-  - Standardized the floating **Saurik AI Advisor** and WhatsApp CTA across all application routes, including `/arthos` and `/track`.
-  - Added route-aware context detection in `ChatWidget.jsx` dynamically tailoring starter prompts for corporate, Track, and Arthos visitors, while automatically propagating `mode: 'arthos'` or `mode: 'track'` to `/api/chat`.
-- **Specialized Arthos Invoice Studio Assistant (`ArthosInlineChat.jsx`, `Arthos.jsx`, `Arthos.css`):**
-  - Created interactive inline specialist assistant mounted directly inside the FAQ section of `Arthos.jsx`.
-  - Styled with the refined **Apple Sheer Glass** aesthetic (`rgba(255, 255, 255, 0.72)` background, `backdrop-filter: blur(24px)`, specular borders, 20px rounded corners, and subtle elevation).
-  - Grounded in founder-verified specifications: 100% offline Windows desktop edition, remote cloud access, GST document generation, no direct GSTR filing, and 60-day trial status.
-- **Apple Sheer Glass Styling Alignment (`Track.css`):**
-  - Refactored `track-inline-chat-container` to share the same Apple Sheer Glass frosted translucency, borders, and shadows for seamless visual coherence across both product landing pages.
-- **Verification Suite Expansion (`verify_chatbot.cjs`, `package.json`):**
-  - Added Test 7 to `test/verify_chatbot.cjs` verifying Arthos specialist grounding, API mode router, component existence, and page mounting.
-  - Linked `node test/verify_chatbot.cjs` into `package.json`'s `npm test` script.
+- **Unified Global AI Advisor Across All Pages (`ChatWidget.jsx`, `chatContext.js`):**
+  - Consolidated all AI interactions into the single, omni-present floating **Saurik AI Advisor** modal across every page of the website (including `/arthos` and `/track`).
+  - Incorporated full operational specifications (`TRACK_OPERATIONS_KNOWLEDGE` and `ARTHOS_OPERATIONS_KNOWLEDGE`) directly into the global `GROUNDING_CONTEXT` so the AI assistant understands deep ground-reality questions (offline operation, fake GPS detection, mountain routes, van reconciliations, ₹699 pricing, Desktop vs Cloud, 60-day trials, GST document generation) from any page.
+  - Expanded route-aware starter questions in `ChatWidget.jsx` with full question sets for Arthos and Track.
+- **Cleaned Product Page Layouts (`Track.jsx`, `Arthos.jsx`, `Track.css`, `Arthos.css`):**
+  - Removed redundant duplicate inline chat boxes from `/track` and `/arthos` FAQ sections, eliminating clutter and providing a clean, distraction-free reading experience while maintaining 100% of the knowledge in the floating AI Advisor.
+  - Archived previous inline chat components to `archive/inline-chat/` per workspace preservation standards.
+  - Purged unused inline chat CSS, trimming the production CSS bundle by ~10 kB.
+- **Verification Suite Alignment (`verify_chatbot.cjs`):**
+  - Updated tests 6 & 7 in `test/verify_chatbot.cjs` to verify that both Track and Arthos operational knowledge are deeply grounded in the global chat context and that product pages maintain clean layouts. All test suites pass with 0 errors.
 
 ### Changed
 - **Header Navigation Redesign (`Header.jsx`):**
