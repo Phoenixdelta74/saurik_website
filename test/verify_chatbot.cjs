@@ -65,4 +65,22 @@ const trackPageContent = fs.readFileSync(trackPagePath, 'utf8');
 assert(trackPageContent.includes('<TrackInlineChat />'), 'Track.jsx must mount <TrackInlineChat /> in FAQ section');
 console.log('✔ Test 6: Specialized Saurik Track Operations Assistant grounding, mode router, and inline mounting verified.');
 
+// 7. Check Arthos Invoice Studio Specialist grounding and API mode support
+assert(contextContent.includes('ARTHOS_CHAT_SYSTEM_PROMPT'), 'chatContext must export ARTHOS_CHAT_SYSTEM_PROMPT');
+assert(contextContent.includes('ARTHOS_OPERATIONS_KNOWLEDGE'), 'chatContext must export ARTHOS_OPERATIONS_KNOWLEDGE');
+assert(contextContent.includes('FOUNDER-VERIFIED SPECIFICATIONS FOR ARTHOS INVOICE STUDIO'), 'chatContext must include arthos groundings');
+assert(apiChat.includes("mode === 'arthos'"), 'api/chat.js must check mode === "arthos"');
+assert(apiChat.includes('ARTHOS_CHAT_SYSTEM_PROMPT'), 'api/chat.js must reference ARTHOS_CHAT_SYSTEM_PROMPT');
+
+const arthosChatPath = path.resolve(__dirname, '../src/components/arthos/ArthosInlineChat.jsx');
+assert(fs.existsSync(arthosChatPath), 'src/components/arthos/ArthosInlineChat.jsx must exist');
+const arthosChatContent = fs.readFileSync(arthosChatPath, 'utf8');
+assert(arthosChatContent.includes("mode: 'arthos'"), 'ArthosInlineChat must send mode: arthos to /api/chat');
+assert(arthosChatContent.includes('Arthos Invoice Studio Specialist'), 'ArthosInlineChat must have assistant greeting');
+
+const arthosPagePath = path.resolve(__dirname, '../src/pages/Arthos.jsx');
+const arthosPageContent = fs.readFileSync(arthosPagePath, 'utf8');
+assert(arthosPageContent.includes('<ArthosInlineChat />'), 'Arthos.jsx must mount <ArthosInlineChat /> in FAQ section');
+console.log('✔ Test 7: Specialized Arthos Invoice Studio Assistant grounding, mode router, and inline mounting verified.');
+
 console.log('\n=== ALL CHATBOT TESTS PASSED SUCCESSFULLY! ===\n');

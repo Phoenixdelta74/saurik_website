@@ -1,4 +1,4 @@
-import { CHAT_SYSTEM_PROMPT, TRACK_CHAT_SYSTEM_PROMPT } from '../src/data/chatContext.js';
+import { CHAT_SYSTEM_PROMPT, TRACK_CHAT_SYSTEM_PROMPT, ARTHOS_CHAT_SYSTEM_PROMPT } from '../src/data/chatContext.js';
 import { getChatReply, ProviderConfigError } from './_lib/llmProviders.js';
 
 const MAX_HISTORY_MESSAGES = 20;
@@ -23,7 +23,13 @@ export default async function handler(req, res) {
   }
 
   try {
-    const systemPrompt = mode === 'track' ? TRACK_CHAT_SYSTEM_PROMPT : CHAT_SYSTEM_PROMPT;
+    let systemPrompt = CHAT_SYSTEM_PROMPT;
+    if (mode === 'track') {
+      systemPrompt = TRACK_CHAT_SYSTEM_PROMPT;
+    } else if (mode === 'arthos') {
+      systemPrompt = ARTHOS_CHAT_SYSTEM_PROMPT;
+    }
+
     const reply = await getChatReply(
       systemPrompt,
       messages.slice(-MAX_HISTORY_MESSAGES).map((m) => ({ role: m.role, content: m.content })),

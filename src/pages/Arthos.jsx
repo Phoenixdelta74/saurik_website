@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import ArthosInlineChat from '../components/arthos/ArthosInlineChat';
 import './Arthos.css';
 
 const Arthos = () => {
@@ -311,6 +312,9 @@ const Arthos = () => {
             <div className="faq-answer"><p>Migration availability between Desktop and Cloud will be confirmed before launch. Automatic migration or synchronisation is not currently offered.</p></div>
           </details>
         </div>
+
+        {/* Interactive Arthos Invoice Studio Specialist Assistant */}
+        <ArthosInlineChat />
       </div>
     </section>
 

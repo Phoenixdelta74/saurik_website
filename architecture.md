@@ -37,6 +37,7 @@ graph TD
         RouterView --> About[/about About & Story]
         RouterView --> Contact[/contact Smart Enquiry]
         RouterView --> TrackClient[/track React Route Component]
+        RouterView --> ArthosClient[/arthos React Route Component]
         RouterView --> Privacy[/privacy Data Policy]
         RouterView --> NotFound[* 404 Fallback]
     end

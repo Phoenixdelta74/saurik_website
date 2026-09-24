@@ -69,19 +69,31 @@ node test/verify_voice_assistant.cjs
 - Confirms real-time synchronization between speech input and chat message state.
 - Confirms responsive desktop split and mobile tab switcher.
 
-### 2.5. Chatbot & Provider Verification
+### 2.6. Chatbot & Specialist Assistant Verification
 ```bash
 node test/verify_chatbot.cjs
 ```
 **Pass Criteria:**
-- `api/chat.js` endpoint validation.
-- Multi-provider fallback engine (Anthropic, OpenAI, OpenRouter, Ollama).
-- Grounded context and system prompt structure.
+- `api/chat.js` endpoint validation and dynamic mode router (`mode: 'track'`, `mode: 'arthos'`).
+- Multi-provider engine (Anthropic, OpenAI, OpenRouter, Ollama) with source routing.
+- Grounded context and system prompt structure (`chatContext.js`).
+- Specialized Saurik Track Operations Assistant grounding, mode router, and inline mounting.
+- Specialized Arthos Invoice Studio Assistant grounding, mode router, and inline mounting (`ArthosInlineChat.jsx`).
 
-### 2.6. Full Automated Test Suite Execution
-Run all test suites sequentially:
+### 2.7. Arthos Invoice Studio Spec Verification
 ```bash
-node test/verify_track_spec.cjs ; node test/verify_track_e2e.cjs ; node test/track_data_test.cjs ; node test/verify_chatbot.cjs
+node test/verify_arthos_spec.cjs
+```
+**Pass Criteria:**
+- Verifies exact 9 section IDs in exact sequence across static HTML and React SPA.
+- Confirms 60-day trial status and negative constraints (no direct GST filing, no sync claims).
+- Verifies cross-links in Header, Footer, and App routing.
+
+### 2.8. Full Automated Test Suite Execution
+Run the complete automated gate:
+```bash
+npm test
+# Equivalent to: node test/verify_track_spec_v3.cjs && node test/verify_track_e2e.cjs && node test/verify_arthos_spec.cjs && node test/verify_voice_assistant.cjs && node test/verify_chatbot.cjs
 ```
 
 ---

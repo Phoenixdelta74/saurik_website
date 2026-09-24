@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import {
   MessageCircle,
   Mic,
@@ -22,17 +22,41 @@ const FALLBACK_MESSAGE =
 const WELCOME_MESSAGE =
   "Hi! I'm your SAURIK IT AI advisor. You can chat with me here or click the microphone to talk with our voice agent. How can I help you today?";
 
-const SUGGESTED_QUESTIONS = [
-  "Can Saurik Track work without internet?",
-  "What custom software do you build?",
-  "Tell me about on-premise IT infrastructure",
-  "How can I book a 30-day pilot?",
-];
-
 const prefersReducedMotion = () =>
   typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const ChatWidget = () => {
+  const location = useLocation();
+  const isTrack = location.pathname.startsWith('/track');
+  const isArthos = location.pathname.startsWith('/arthos');
+
+  const pageMode = isTrack ? 'track' : isArthos ? 'arthos' : undefined;
+
+  const currentQuestions = useMemo(() => {
+    if (isArthos) {
+      return [
+        "What is the difference between Desktop and Cloud?",
+        "Does Arthos Desktop work without internet?",
+        "How do I request early access for the 60-day trial?",
+        "Does Arthos file GST returns directly?",
+      ];
+    }
+    if (isTrack) {
+      return [
+        "Can Saurik Track work without internet?",
+        "How does fake GPS detection work?",
+        "Can field reps see their own hours?",
+        "How can I book a 30-day pilot?",
+      ];
+    }
+    return [
+      "Can Saurik Track work without internet?",
+      "What is Arthos Invoice Studio?",
+      "What custom software & AI agents do you build?",
+      "Tell me about on-premise IT infrastructure",
+    ];
+  }, [isTrack, isArthos]);
+
   const [isOpen, setIsOpen] = useState(false);
   const [activeMobileTab, setActiveMobileTab] = useState('chat'); // 'chat' | 'voice'
   const [messages, setMessages] = useState([{ role: 'assistant', content: WELCOME_MESSAGE }]);
@@ -60,6 +84,7 @@ const ChatWidget = () => {
             messages: nextMessages.slice(-10),
             source,
             lang: customLang || selectedLangRef.current || 'en-IN',
+            mode: pageMode,
           }),
         });
 
@@ -351,7 +376,7 @@ const ChatWidget = () => {
                         <span>Quick Topics to Explore</span>
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        {SUGGESTED_QUESTIONS.map((question, idx) => (
+                        {currentQuestions.map((question, idx) => (
                           <button
                             key={idx}
                             type="button"

@@ -42,23 +42,31 @@ const AppContent = () => {
 
   if (isTrackPage) {
     return (
-      <main id="main-content" tabIndex={-1} className="focus:outline-none">
-        <Routes>
-          <Route path="/track" element={<Track />} />
-          <Route path="/track/" element={<Track />} />
-        </Routes>
-      </main>
+      <div className="min-h-screen flex flex-col bg-canvas text-ink-primary selection:bg-accent-teal selection:text-white">
+        <main id="main-content" tabIndex={-1} className="flex-grow focus:outline-none">
+          <Routes>
+            <Route path="/track" element={<Track />} />
+            <Route path="/track/" element={<Track />} />
+          </Routes>
+        </main>
+        <WhatsAppCTA />
+        <ChatWidget />
+      </div>
     );
   }
 
   if (isArthosPage) {
     return (
-      <main id="main-content" tabIndex={-1} className="focus:outline-none">
-        <Routes>
-          <Route path="/arthos" element={<Arthos />} />
-          <Route path="/arthos/" element={<Arthos />} />
-        </Routes>
-      </main>
+      <div className="min-h-screen flex flex-col bg-canvas text-ink-primary selection:bg-accent-teal selection:text-white">
+        <main id="main-content" tabIndex={-1} className="flex-grow focus:outline-none">
+          <Routes>
+            <Route path="/arthos" element={<Arthos />} />
+            <Route path="/arthos/" element={<Arthos />} />
+          </Routes>
+        </main>
+        <WhatsAppCTA />
+        <ChatWidget />
+      </div>
     );
   }
 

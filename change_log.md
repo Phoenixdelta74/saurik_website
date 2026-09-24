@@ -6,6 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
+- **Unified AI Advisor Across All Pages (`ChatWidget.jsx`, `App.jsx`):**
+  - Standardized the floating **Saurik AI Advisor** and WhatsApp CTA across all application routes, including `/arthos` and `/track`.
+  - Added route-aware context detection in `ChatWidget.jsx` dynamically tailoring starter prompts for corporate, Track, and Arthos visitors, while automatically propagating `mode: 'arthos'` or `mode: 'track'` to `/api/chat`.
+- **Specialized Arthos Invoice Studio Assistant (`ArthosInlineChat.jsx`, `Arthos.jsx`, `Arthos.css`):**
+  - Created interactive inline specialist assistant mounted directly inside the FAQ section of `Arthos.jsx`.
+  - Styled with the refined **Apple Sheer Glass** aesthetic (`rgba(255, 255, 255, 0.72)` background, `backdrop-filter: blur(24px)`, specular borders, 20px rounded corners, and subtle elevation).
+  - Grounded in founder-verified specifications: 100% offline Windows desktop edition, remote cloud access, GST document generation, no direct GSTR filing, and 60-day trial status.
+- **Apple Sheer Glass Styling Alignment (`Track.css`):**
+  - Refactored `track-inline-chat-container` to share the same Apple Sheer Glass frosted translucency, borders, and shadows for seamless visual coherence across both product landing pages.
+- **Verification Suite Expansion (`verify_chatbot.cjs`, `package.json`):**
+  - Added Test 7 to `test/verify_chatbot.cjs` verifying Arthos specialist grounding, API mode router, component existence, and page mounting.
+  - Linked `node test/verify_chatbot.cjs` into `package.json`'s `npm test` script.
+
 ### Changed
 - **Header Navigation Redesign (`Header.jsx`):**
   - Replaced the crowded flat row of products and services with a dedicated, accessible **"Products"** dropdown menu.
