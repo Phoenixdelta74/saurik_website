@@ -110,7 +110,10 @@ export async function getChatReply(systemPrompt, messages, { source = 'text', la
 
   // Prepend strict language mirroring instructions based on selected language and user input
   let enrichedSystemPrompt = systemPrompt;
-  if (lang === 'hi-IN') {
+  if (lang === 'en-IN') {
+    enrichedSystemPrompt +=
+      '\n\nCRITICAL LANGUAGE MANDATE: The user has selected English. You MUST generate your response completely in clear, natural, professional English. Do NOT answer in Hindi or any other language unless explicitly requested by the user.';
+  } else if (lang === 'hi-IN') {
     enrichedSystemPrompt +=
       '\n\nCRITICAL LANGUAGE MANDATE: The user is communicating in Hindi. You MUST generate your response completely in authentic, natural Hindi (using proper Devanagari script). Do NOT answer in English. Do NOT apologize in English.';
   } else if (lang === 'bn-IN') {
@@ -118,12 +121,12 @@ export async function getChatReply(systemPrompt, messages, { source = 'text', la
       '\n\nCRITICAL LANGUAGE MANDATE: The user is communicating in Bengali. You MUST generate your response completely in authentic, natural Bengali (using Bengali script). Do NOT answer in English. Do NOT apologize in English.';
   } else {
     enrichedSystemPrompt +=
-      '\n\nCRITICAL LANGUAGE MANDATE: Always detect and respond in the exact language used by the visitor (Hindi in Hindi, Bengali in Bengali, English in English). If the visitor writes or speaks in Hindi or Bengali, never respond in English.';
+      '\n\nCRITICAL LANGUAGE MANDATE: Always detect and respond in the exact language used by the visitor (English in English, Hindi in Hindi, Bengali in Bengali). Never switch languages unprompted.';
   }
 
   if (source === 'voice') {
     enrichedSystemPrompt +=
-      '\n\nVOICE ASSISTANT PACING DIRECTIVE: Keep your answer spoken-friendly, conversational, and concise (2 to 3 sentences maximum) so it sounds natural when spoken aloud.';
+      '\n\nVOICE ASSISTANT PACING DIRECTIVE: Keep your answer spoken-friendly, conversational, and strictly 2 to 3 sentences maximum so it sounds natural and clear when spoken aloud by the voice engine without getting cut off.';
   }
 
   return call(enrichedSystemPrompt, messages);

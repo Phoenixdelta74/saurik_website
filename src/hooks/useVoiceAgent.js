@@ -211,7 +211,16 @@ export function useVoiceAgent({ onSpeechRecognized, isMuted = false }) {
         return;
       }
 
-      const lang = forcedLang || selectedLangRef.current;
+      // Script detection to guarantee the synthesizer voice matches the text script
+      let lang = forcedLang || selectedLangRef.current || 'en-IN';
+      if (/[\u0900-\u097F]/.test(cleaned)) {
+        lang = 'hi-IN';
+      } else if (/[\u0980-\u09FF]/.test(cleaned)) {
+        lang = 'bn-IN';
+      } else if (!forcedLang && selectedLangRef.current === 'en-IN') {
+        lang = 'en-IN';
+      }
+
       const utterance = new SpeechSynthesisUtterance(cleaned);
       utterance.lang = lang;
       utterance.rate = 1.0;
@@ -241,6 +250,9 @@ export function useVoiceAgent({ onSpeechRecognized, isMuted = false }) {
         setIsSpeaking(false);
       };
 
+      if (window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+      }
       window.speechSynthesis.speak(utterance);
     },
     [isMuted, cancelSpeech, startListening]

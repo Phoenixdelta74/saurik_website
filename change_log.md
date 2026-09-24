@@ -18,6 +18,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - **Verification Suite Alignment (`verify_chatbot.cjs`):**
   - Updated tests 6 & 7 in `test/verify_chatbot.cjs` to verify that both Track and Arthos operational knowledge are deeply grounded in the global chat context and that product pages maintain clean layouts. All test suites pass with 0 errors.
 
+### Fixed
+- **Voice Assistant Language Inversion & Speech Synthesis Cutoff (`chatContext.js`, `llmProviders.js`, `useVoiceAgent.js`):**
+  - Enforced bidirectional language matching in `src/data/chatContext.js` and explicit affirmative English directives in `api/_lib/llmProviders.js`, preventing the model from inverting English queries into Hindi.
+  - Calibrated voice prompt pacing to strictly 2 to 3 sentences, preventing browser Web Speech API (`SpeechSynthesis`) buffer overflow and mid-sentence audio cutoff.
+  - Added dynamic Unicode script detection in `useVoiceAgent.js` (`speak()`) to ensure synthesizer voices automatically align with Devanagari, Bengali, or English text without speech synthesis error.
+  - Included active `speechSynthesis.resume()` call prior to speaking to prevent browser playback stalls.
+
 ### Changed
 - **Header Navigation Redesign (`Header.jsx`):**
   - Replaced the crowded flat row of products and services with a dedicated, accessible **"Products"** dropdown menu.
