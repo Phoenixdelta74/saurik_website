@@ -89,11 +89,22 @@ node test/verify_arthos_spec.cjs
 - Confirms 60-day trial status and negative constraints (no direct GST filing, no sync claims).
 - Verifies cross-links in Header, Footer, and App routing.
 
-### 2.8. Full Automated Test Suite Execution
+### 2.8. Demand-planning use-case demo
+```bash
+node test/verify_use_case_analytics.cjs
+```
+**Pass criteria:**
+- FMCG, manufacturing, and apparel each produce a deterministic three-month baseline.
+- Sample decisions mix prepare-more, slow-down, and keep-plan outcomes, and stay worded as example planning options.
+- The page keeps the sample-data disclaimer and links to `/contact?topic=data_analytics`.
+- The route is registered at `/use-cases`, with industry addresses for FMCG, manufacturing, and apparel.
+- The headline leads with the planning decision. Software and the footer link to `/use-cases`. The sitemap lists all four addresses.
+
+### 2.9. Full Automated Test Suite Execution
 Run the complete automated gate:
 ```bash
 npm test
-# Equivalent to: node test/verify_track_spec_v3.cjs && node test/verify_track_e2e.cjs && node test/verify_arthos_spec.cjs && node test/verify_voice_assistant.cjs && node test/verify_chatbot.cjs
+# Equivalent to: node test/verify_track_spec_v3.cjs && node test/verify_track_e2e.cjs && node test/verify_arthos_spec.cjs && node test/verify_voice_assistant.cjs && node test/verify_chatbot.cjs && node test/verify_use_case_analytics.cjs
 ```
 
 ---

@@ -29,6 +29,8 @@ const renderSoftwareSection = () => {
   const faqs = SOFTWARE_FAQS.map((f) => `Q: ${f.q}\nA: ${f.a}`).join('\n\n');
 
   return `SOFTWARE & IT CAPABILITIES
+A sample demand-planning demo is published at /use-cases for FMCG, manufacturing, and apparel. Its figures are invented sample data. When discussing that demo or data analytics, describe predictive modelling or forecasting, and never guarantee forecast accuracy.
+
 ${capabilities}
 
 Software FAQs:
