@@ -239,8 +239,8 @@ The application provides two purpose-built AI conversation experiences powered b
      - **Shift-based privacy:** Tracks strictly between check-in and checkout; zero off-the-clock tracking with employee transparency views.
      - **Pricing & Pilots:** ₹699/user/month standard flexibility with 1–2 van pilot onboarding.
 
-3. **Serverless Architecture & Dual-Mode API (`POST /api/chat`):**
-   - `api/chat.js` supports `mode: 'general'` (default) and `mode: 'track'`.
+3. **Serverless Architecture & Multi-Mode API (`POST /api/chat`):**
+   - `api/chat.js` supports contextual system prompt routing: `mode: 'general'` (default), `mode: 'track'`, `mode: 'arthos'`, and `mode: 'use-cases'`.
    - Forwarding is limited to the last 20 messages.
    - Zero LLM API credentials or private environment variables are ever leaked to the browser.
    - Supported backend providers: Anthropic (Claude 3.5 Sonnet), OpenAI (GPT-4o), OpenRouter, and local Ollama.

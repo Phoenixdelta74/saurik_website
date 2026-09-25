@@ -7,6 +7,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [Unreleased]
 
 ### Added
+- **Demand Planning AI Knowledge Base Grounding (`chatContext.js`, `api/chat.js`, `ChatWidget.jsx`):**
+  - Grounded the new Demand Planning Use Case (`/use-cases` and dedicated industry routes for FMCG, manufacturing, and apparel) into the AI assistant's core knowledge base via `USE_CASES_KNOWLEDGE` and `USE_CASES_CHAT_SYSTEM_PROMPT`.
+  - Added route detection (`isUseCases`) and tailored starter questions for `/use-cases` in `ChatWidget.jsx`, along with `mode === 'use-cases'` support in `api/chat.js`.
+  - Added automated test 8 in `test/verify_chatbot.cjs` verifying knowledge grounding and ChatWidget integration.
+- **Demand-planning demo visual alignment:**
+  - Set the use-case page to the site canvas, navy text, and teal actions. Headings use Outfit at the Software page size, and body and labels use Inter at 14px or larger. The forecast panel remains the single navy stage.
 - **Demand-planning demo selling copy and links:**
   - Rewrote the use-case headline around stock, production, and buy decisions, and added three visible questions about real projects, forecast limits, and sample data.
   - Added industry addresses for FMCG, manufacturing, and apparel that reuse the same demo.

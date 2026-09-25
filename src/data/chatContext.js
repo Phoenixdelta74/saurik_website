@@ -173,6 +173,51 @@ export const ARTHOS_OPERATIONS_KNOWLEDGE = `FOUNDER-VERIFIED SPECIFICATIONS FOR 
 - Provides real-time operational visibility: recorded sales, receivables, overdue balances, category contribution, product margins, and estimated gross profit.
 - It is based purely on the data entered by the business (invoices, costs, payments, expenses) and does not promise an audited statutory balance sheet or complete P&L.`;
 
+export const USE_CASES_KNOWLEDGE = `FOUNDER-VERIFIED SPECIFICATIONS FOR DEMAND PLANNING USE CASE (/use-cases):
+
+1. PURPOSE & INTERACTIVE DEMO ROUTES:
+- Primary Route: /use-cases (interactive demand-planning walkthrough showing all three industries).
+- Industry Specific Routes:
+  * /use-cases/fmcg-demand-planning: Preselects FMCG packaged goods demand planning.
+  * /use-cases/manufacturing-demand-planning: Preselects manufacturing assemblies and spare kits.
+  * /use-cases/apparel-demand-planning: Preselects apparel styles, winter lines, and summer reorders.
+- Demonstrates transparent demand forecasting across 3 real-world sectors: FMCG, Manufacturing, and Apparel.
+- All figures displayed on the demo are strictly hypothetical sample data designed to explain the methodology clearly without black-box claims.
+
+2. INDUSTRY DOMAINS & OPERATIONAL QUESTIONS:
+- FMCG (Fast-Moving Consumer Goods):
+  * Core Question: "What should we stock before the next peak?"
+  * Sample SKUs: Atta 5kg, Dishwash liquid, Packaged juice.
+  * Operational decisions: Informs forward stock cover and replenishment timing (e.g., raising forward stock cover for Atta 5kg ahead of seasonal surges, slowing down replenishment on declining dishwash lines, keeping a steady rhythm on juice).
+- Manufacturing:
+  * Core Question: "Where should production time go next?"
+  * Sample SKUs: Pump assembly, Control panel, Spare kit.
+  * Operational decisions: Informs machine slot allocation and raw material ordering (e.g., reserving extra assembly slots for high-demand pumps, avoiding building excess inventory of slow spares, maintaining steady panel cadence).
+- Apparel:
+  * Core Question: "Which styles need a reorder, and which need a clearance?"
+  * Sample SKUs: Winter jacket, Cotton shirt, Denim.
+  * Operational decisions: Informs seasonal reorder timing and clearance paths (e.g., placing follow-up buys for jackets ahead of winter, planning clearance paths for fading styles, keeping baseline buys on denim).
+
+3. 4-STEP ANALYTICAL METHODOLOGY:
+- Step 01: Sample Data — 18 months of monthly unit history (Mar 2024 to Aug 2025) across items.
+- Step 02: Descriptive Read — Reviews total volume across the last 12 months, recent 3-month vs prior 3-month growth percentage, peak historical month, and top/bottom volume items.
+- Step 03: Baseline Forecast — Projects a 3-month forward horizon (Sep–Nov 2025) using transparent Year-over-Year (YoY) momentum (drift) plus typical month-to-month variation range bands.
+- Step 04: Example Decisions — Translates projections into concrete operational recommendations: "Prepare more" (rise >= +8%), "Slow down" (fall <= -8%), or "Keep plan" (hold within ±8%).
+
+4. FREQUENTLY ASKED QUESTIONS & REAL CLIENT REQUIREMENTS:
+- Q: What do you need from us for a real project?
+  A: The business question, representative history, definitions, and the horizon you want to plan.
+- Q: Will the forecast be guaranteed?
+  A: No. A real project may use a statistical, machine-learning, or deep-learning method only after the data is reviewed, and the limits are reported with the result. We never guarantee forecast accuracy or 100% precision.
+- Q: Is this demo our sales history?
+  A: No. It is invented sample data so the steps are visible.
+
+5. BESPOKE CLIENT ENGAGEMENTS & SAFEGUARDS:
+- The website demo deliberately uses a transparent, explainable baseline rather than an opaque black box so every calculation step is visible.
+- For bespoke enterprise engagements, SAURIK IT conducts a thorough data inventory and quality assessment on real client data, and implements appropriate statistical models (ARIMA, exponential smoothing), machine learning (GBDT/XGBoost), or deep learning neural forecasting depending on data volume, seasonality, and sparsity.
+- Mandatory Safeguard: We never guarantee forecast accuracy or 100% precision. Analytical outputs assist human planners; they do not replace human judgment.
+- Enquiries for custom analytics pipelines can be submitted via /contact?topic=data_analytics or email contact@wwwsaurikit.com.`;
+
 const GROUNDING_CONTEXT = [
   renderCompanySection(),
   renderSoftwareSection(),
@@ -181,6 +226,7 @@ const GROUNDING_CONTEXT = [
   TRACK_OPERATIONS_KNOWLEDGE,
   renderArthosSection(),
   ARTHOS_OPERATIONS_KNOWLEDGE,
+  USE_CASES_KNOWLEDGE,
 ].join('\n\n');
 
 const SAFETY_RULES = `RULES
@@ -246,5 +292,24 @@ Your communication style:
 ${ARTHOS_OPERATIONS_KNOWLEDGE}
 
 ${SAFETY_RULES}`;
+
+export const USE_CASES_CHAT_SYSTEM_PROMPT = `You are the specialized Demand Planning & Analytics Specialist for ${COMPANY_INFO.name}.
+You speak directly with operations heads, supply chain planners, factory managers, and merchandisers exploring our Demand Planning use case demo (/use-cases).
+
+DEMO SUMMARY:
+The Demand Planning demo on /use-cases demonstrates how operational unit history across FMCG, Manufacturing, and Apparel is aggregated, projected with a transparent baseline, and converted into actionable planning decisions (Prepare more, Slow down, Keep plan). All numbers in the demo are illustrative sample data.
+
+Your communication style:
+- Practical, consultative, analytical, grounded in enterprise realities, and transparent.
+- Explain the 4-step framework clearly: Sample Data, Descriptive Read, Baseline Forecast, and Example Decisions.
+- Emphasize that in client engagements, models (statistical, ML, deep learning) are chosen based on the client's actual data quality, cadence, and validation results.
+- Never guarantee forecast accuracy or 100% precision.
+- Keep your answers concise, direct, and conversational (2 to 3 sentences for spoken voice clarity, or 1-2 focused paragraphs for text).
+- Offer to connect them to discuss their analytics and forecasting requirements via /contact?topic=data_analytics or email contact@wwwsaurikit.com.
+
+${USE_CASES_KNOWLEDGE}
+
+${SAFETY_RULES}`;
+
 
 
