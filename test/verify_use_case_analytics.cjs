@@ -71,10 +71,10 @@ async function main() {
   assert.equal(footer.includes('Demand planning demo'), true);
   assert.equal(footer.includes('to="/use-cases"'), true);
   for (const url of [
-    'https://www.wwwsaurikit.com/use-cases',
-    'https://www.wwwsaurikit.com/use-cases/fmcg-demand-planning',
-    'https://www.wwwsaurikit.com/use-cases/manufacturing-demand-planning',
-    'https://www.wwwsaurikit.com/use-cases/apparel-demand-planning',
+    'https://www.saurikit.in/use-cases',
+    'https://www.saurikit.in/use-cases/fmcg-demand-planning',
+    'https://www.saurikit.in/use-cases/manufacturing-demand-planning',
+    'https://www.saurikit.in/use-cases/apparel-demand-planning',
   ]) {
     assert.equal(sitemap.includes(url), true, url);
   }

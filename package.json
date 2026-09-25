@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && node scripts/prerender.js",
     "preview": "vite preview",
-    "test": "node test/verify_track_spec_v3.cjs && node test/verify_track_e2e.cjs && node test/verify_arthos_spec.cjs && node test/verify_voice_assistant.cjs && node test/verify_chatbot.cjs && node test/verify_use_case_analytics.cjs"
+    "test": "node test/verify_track_spec_v3.cjs && node test/verify_track_e2e.cjs && node test/verify_arthos_spec.cjs && node test/verify_voice_assistant.cjs && node test/verify_chatbot.cjs && node test/verify_use_case_analytics.cjs && node test/verify_seo_prerender.cjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.125.0",

@@ -271,7 +271,7 @@ const Arthos = () => {
           <p>Pricing is being finalised ahead of launch. For a live demo or to discuss current pricing and availability, contact our team directly and we'll get back to you.</p>
           <div className="trial-cta-group">
             <Link to="/contact?topic=arthos_early_access" className="btn-primary" data-launch-cta data-conversion="early-access" data-placement="trial">Request early access</Link>
-            <a href="mailto:contact@wwwsaurikit.com" className="btn-secondary">Email us for a demo</a>
+            <a href="mailto:contact@saurikit.in" className="btn-secondary">Email us for a demo</a>
           </div>
         </div>
       </div>
@@ -300,7 +300,7 @@ const Arthos = () => {
           </details>
           <details className="faq-item">
             <summary><span>What happens when the 60-day trial ends?</span><span className="toggle" aria-hidden="true"></span></summary>
-            <div className="faq-answer"><p>A paid licence or subscription is required to continue using Arthos after the 60-day trial ends. Pricing, billing, and the exact handling of records after expiry will be published once confirmed. In the meantime, <a href="mailto:contact@wwwsaurikit.com">contact us</a> for a live demo or to discuss current pricing and availability.</p></div>
+            <div className="faq-answer"><p>A paid licence or subscription is required to continue using Arthos after the 60-day trial ends. Pricing, billing, and the exact handling of records after expiry will be published once confirmed. In the meantime, <a href="mailto:contact@saurikit.in">contact us</a> for a live demo or to discuss current pricing and availability.</p></div>
           </details>
           <details className="faq-item">
             <summary><span>Does Arthos file GST returns?</span><span className="toggle" aria-hidden="true"></span></summary>
@@ -350,7 +350,7 @@ const Arthos = () => {
           <li><Link to="/privacy">Privacy Policy</Link></li>
         </ul>
         <div className="footer-contact-wrap">
-          <a href="mailto:contact@wwwsaurikit.com" className="footer-contact">contact@wwwsaurikit.com</a>
+          <a href="mailto:contact@saurikit.in" className="footer-contact">contact@saurikit.in</a>
           <a href="tel:+919862087157" className="footer-contact">+91 98620 87157</a>
         </div>
       </div>

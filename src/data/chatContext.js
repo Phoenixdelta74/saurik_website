@@ -91,7 +91,7 @@ Core Features:
 - Business Health Analytics: Real-time visibility into sales, receivables, product margins, category contribution, and estimated profit based on recorded invoices and expenses. (Does not guarantee complete statutory P&L).
 
 Contact & Early Access:
-- Early access requests via /contact?topic=arthos_early_access or email contact@wwwsaurikit.com.`;
+- Early access requests via /contact?topic=arthos_early_access or email contact@saurikit.in.`;
 };
 
 export const TRACK_OPERATIONS_KNOWLEDGE = `FOUNDER-VERIFIED TECHNICAL & OPERATIONAL SPECIFICATIONS FOR SAURIK TRACK:
@@ -216,7 +216,7 @@ export const USE_CASES_KNOWLEDGE = `FOUNDER-VERIFIED SPECIFICATIONS FOR DEMAND P
 - The website demo deliberately uses a transparent, explainable baseline rather than an opaque black box so every calculation step is visible.
 - For bespoke enterprise engagements, SAURIK IT conducts a thorough data inventory and quality assessment on real client data, and implements appropriate statistical models (ARIMA, exponential smoothing), machine learning (GBDT/XGBoost), or deep learning neural forecasting depending on data volume, seasonality, and sparsity.
 - Mandatory Safeguard: We never guarantee forecast accuracy or 100% precision. Analytical outputs assist human planners; they do not replace human judgment.
-- Enquiries for custom analytics pipelines can be submitted via /contact?topic=data_analytics or email contact@wwwsaurikit.com.`;
+- Enquiries for custom analytics pipelines can be submitted via /contact?topic=data_analytics or email contact@saurikit.in.`;
 
 const GROUNDING_CONTEXT = [
   renderCompanySection(),
@@ -270,7 +270,7 @@ Your communication style:
 - Never use hand-wavy marketing jargon or unverified absolute promises (e.g., never claim "100% fraud-proof" or "guaranteed zero battery drain").
 - Speak like an experienced operational engineer who understands field drivers, cheap Android phones, warehouse reconciliation, and mountain routes in Tripura and Northeast India.
 - Keep your answers concise, direct, and conversational (2 to 3 sentences for spoken voice clarity, or 1-2 focused paragraphs for text). Avoid overwhelming text walls so spoken audio remains crisp and natural.
-- Always offer to help them set up a structured 30-day trial or a 1-to-2 van pilot via /contact?topic=saurik_track or email contact@wwwsaurikit.com.
+- Always offer to help them set up a structured 30-day trial or a 1-to-2 van pilot via /contact?topic=saurik_track or email contact@saurikit.in.
 
 ${TRACK_OPERATIONS_KNOWLEDGE}
 
@@ -287,7 +287,7 @@ Your communication style:
 - Emphasize the clear distinction between offline Arthos Desktop and remote Arthos Cloud.
 - Clearly state the 60-day free trial planned for launch, and clarify that Arthos creates GST-aware documents but does not directly file returns to the government portal.
 - Keep your answers concise, direct, and conversational (2 to 3 sentences for spoken voice clarity, or 1-2 focused paragraphs for text).
-- Offer to connect them for early access or a live demo via /contact?topic=arthos_early_access or email contact@wwwsaurikit.com.
+- Offer to connect them for early access or a live demo via /contact?topic=arthos_early_access or email contact@saurikit.in.
 
 ${ARTHOS_OPERATIONS_KNOWLEDGE}
 
@@ -305,7 +305,7 @@ Your communication style:
 - Emphasize that in client engagements, models (statistical, ML, deep learning) are chosen based on the client's actual data quality, cadence, and validation results.
 - Never guarantee forecast accuracy or 100% precision.
 - Keep your answers concise, direct, and conversational (2 to 3 sentences for spoken voice clarity, or 1-2 focused paragraphs for text).
-- Offer to connect them to discuss their analytics and forecasting requirements via /contact?topic=data_analytics or email contact@wwwsaurikit.com.
+- Offer to connect them to discuss their analytics and forecasting requirements via /contact?topic=data_analytics or email contact@saurikit.in.
 
 ${USE_CASES_KNOWLEDGE}
 

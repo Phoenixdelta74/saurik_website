@@ -96,13 +96,21 @@ const CCTVSelector = () => {
                 The accepted quotation identifies any assessment, equipment, cabling, installation, configuration, and handover included.
               </div>
             </div>
-            <Link
-              to="/contact?topic=cctv_commercial"
-              className="btn-hardware text-xs py-2.5 px-4 whitespace-nowrap self-start sm:self-center"
-            >
-              <span>Request Commercial CCTV Quote</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
+            <div className="flex flex-wrap items-center gap-2 self-start sm:self-center">
+              <Link
+                to="/services/cctv-installation"
+                className="btn-secondary text-xs py-2.5 px-3 whitespace-nowrap"
+              >
+                Detailed CCTV Guide
+              </Link>
+              <Link
+                to="/contact?topic=cctv_commercial"
+                className="btn-hardware text-xs py-2.5 px-4 whitespace-nowrap"
+              >
+                <span>Request Commercial Quote</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
           </div>
         </div>
       ) : (
@@ -151,13 +159,21 @@ const CCTVSelector = () => {
                 Company name is optional. You can begin with the areas to cover and whether this is a new installation or service request.
               </div>
             </div>
-            <Link
-              to="/contact?topic=cctv_residential"
-              className="btn-primary text-xs py-2.5 px-4 whitespace-nowrap self-start sm:self-center"
-            >
-              <span>Request Home CCTV Quote</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
+            <div className="flex flex-wrap items-center gap-2 self-start sm:self-center">
+              <Link
+                to="/services/cctv-installation"
+                className="btn-secondary text-xs py-2.5 px-3 whitespace-nowrap"
+              >
+                Detailed CCTV Guide
+              </Link>
+              <Link
+                to="/contact?topic=cctv_residential"
+                className="btn-primary text-xs py-2.5 px-4 whitespace-nowrap"
+              >
+                <span>Request Home CCTV Quote</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
           </div>
         </div>
       )}

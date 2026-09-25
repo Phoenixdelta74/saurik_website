@@ -90,88 +90,104 @@ const Home = () => {
           <div className="space-y-7 lg:col-span-7">
             <div className="inline-flex items-center gap-2 rounded-full border border-border-subtle bg-surface px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-ink-secondary shadow-xs">
               <span className="h-2 w-2 rounded-full bg-accent-teal" />
-              <span>Operational technology partner • Tripura &amp; Northeast India</span>
+              <span>Software &amp; IT Services • Agartala, Tripura &amp; Northeast India</span>
             </div>
             <div className="space-y-5">
               <h1
                 id="home-heading"
                 className="max-w-4xl font-heading text-4xl font-extrabold leading-[1.08] tracking-tight text-ink-primary sm:text-5xl lg:text-6xl"
               >
-                Replace operational guesswork with visible, controlled field workflows.
+                Software, Field-Team Tools and IT Services in Tripura
               </h1>
               <p className="max-w-2xl text-lg leading-relaxed text-ink-secondary sm:text-xl">
-                We help growing organizations eliminate unverifiable visits, reconcile van-stock in real time, and deploy dependable IT infrastructure—deliberately engineered with practical software and local regional support.
+                Headquartered in Agartala, SAURIK IT delivers field workforce tracking software (Saurik Track), custom web applications, CCTV surveillance, and dependable IT hardware infrastructure for growing businesses across Tripura and the wider Northeast region.
               </p>
             </div>
 
             <div className="flex flex-col gap-3 sm:flex-row">
-              <Link to="/track" className="btn-primary group px-7 py-3.5 text-base">
-                <span>Explore Saurik Track</span>
+              <Link to="/contact" className="btn-primary group px-7 py-3.5 text-base">
+                <span>Discuss your requirement</span>
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
               </Link>
-              <Link to="/contact" className="btn-secondary px-6 py-3.5 text-base">
-                Discuss a custom requirement
+              <Link to="/track" className="btn-secondary px-6 py-3.5 text-base">
+                Explore Saurik Track
               </Link>
             </div>
 
             <div className="flex flex-wrap items-center gap-x-6 gap-y-2 pt-1 text-xs text-ink-muted">
               <span className="flex items-center gap-1.5 font-medium text-ink-secondary">
                 <CheckCircle2 className="h-4 w-4 text-accent-teal" />
-                Zero unverified claims
-              </span>
-              <span className="flex items-center gap-1.5 font-medium text-ink-secondary">
-                <CheckCircle2 className="h-4 w-4 text-accent-teal" />
-                Direct founder accountability
-              </span>
-              <span className="flex items-center gap-1.5 font-medium text-ink-secondary">
-                <CheckCircle2 className="h-4 w-4 text-accent-teal" />
                 Agartala on-site support
+              </span>
+              <span className="flex items-center gap-1.5 font-medium text-ink-secondary">
+                <CheckCircle2 className="h-4 w-4 text-accent-teal" />
+                Direct founder engineering
+              </span>
+              <span className="flex items-center gap-1.5 font-medium text-ink-secondary">
+                <CheckCircle2 className="h-4 w-4 text-accent-teal" />
+                Tripura &amp; Northeast deployment
               </span>
             </div>
           </div>
 
-          <div className="lg:col-span-5" aria-label="Operational wedge stack overview">
+          <div className="lg:col-span-5" aria-label="Core offerings overview">
             <div className="relative overflow-hidden rounded-panel border border-border-subtle bg-surface p-6 shadow-card sm:p-7">
               <div className="absolute -right-20 -top-20 h-56 w-56 rounded-full bg-accent-teal-light/60 blur-3xl" aria-hidden="true" />
               <div className="absolute -bottom-24 -left-16 h-56 w-56 rounded-full bg-accent-blue-light/70 blur-3xl" aria-hidden="true" />
 
               <div className="relative space-y-4">
                 <div className="border-b border-border-subtle pb-3">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-ink-muted">Three Focused Layers</p>
-                  <p className="mt-1 font-heading text-lg font-bold text-ink-primary">The SAURIK IT Operational Stack</p>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-ink-muted">Three Focused Capabilities</p>
+                  <p className="mt-1 font-heading text-lg font-bold text-ink-primary">What We Build &amp; Support</p>
                 </div>
 
                 <div className="rounded-control border border-[#CDD0C2] bg-[#EEF0E7]/60 p-4 transition-all hover:bg-[#EEF0E7]">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#8E4D14]">Primary Wedge</span>
+                    <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#8E4D14]">Field-Team Software</span>
                     <span className="rounded-full bg-[#8E4D14]/10 px-2 py-0.5 text-[10px] font-semibold text-[#8E4D14]">Live Mobile ERP</span>
                   </div>
                   <h3 className="mt-1 font-heading text-base font-bold text-[#1C2620]">Saurik Track</h3>
                   <p className="mt-1 text-xs text-[#4B5750]">
-                    GPS attendance + van-stock accounting. Stops WhatsApp guesswork with transparent shift manifests.
+                    GPS attendance + live van-stock tracking. Replaces WhatsApp guesswork with transparent, verified shift manifests.
                   </p>
                 </div>
 
                 <div className="rounded-control border border-border-subtle bg-canvas p-4 transition-all hover:border-accent-teal/40">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono font-bold uppercase tracking-wider text-accent-teal">Supporting Digital</span>
-                    <span className="rounded-full bg-accent-teal-light px-2 py-0.5 text-[10px] font-semibold text-accent-teal">Software &amp; AI</span>
+                    <span className="text-xs font-mono font-bold uppercase tracking-wider text-accent-teal">Software &amp; AI</span>
+                    <span className="rounded-full bg-accent-teal-light px-2 py-0.5 text-[10px] font-semibold text-accent-teal">Custom Systems</span>
                   </div>
-                  <h3 className="mt-1 font-heading text-base font-bold text-ink-primary">Custom Systems &amp; Analytics</h3>
+                  <h3 className="mt-1 font-heading text-base font-bold text-ink-primary">Web Applications &amp; Analytics</h3>
                   <p className="mt-1 text-xs text-ink-secondary">
-                    Operational dashboards, data pipelines, and scoped AI automation with human approval loops.
+                    Web portals, website development, data analytics, and scoped AI workflows with human review controls.
                   </p>
+                  <div className="mt-2.5 flex flex-wrap items-center gap-3 text-xs">
+                    <Link to="/services/website-development" className="text-accent-teal hover:underline font-semibold">
+                      Website Design (Tripura) →
+                    </Link>
+                    <Link to="/services/custom-software" className="text-accent-teal hover:underline font-semibold">
+                      Custom Software →
+                    </Link>
+                  </div>
                 </div>
 
                 <div className="rounded-control border border-border-subtle bg-canvas p-4 transition-all hover:border-accent-blue/40">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono font-bold uppercase tracking-wider text-accent-blue">Supporting Physical</span>
-                    <span className="rounded-full bg-accent-blue-light px-2 py-0.5 text-[10px] font-semibold text-accent-blue">Regional IT</span>
+                    <span className="text-xs font-mono font-bold uppercase tracking-wider text-accent-blue">Regional IT Hardware</span>
+                    <span className="rounded-full bg-accent-blue-light px-2 py-0.5 text-[10px] font-semibold text-accent-blue">Surveillance &amp; IT</span>
                   </div>
-                  <h3 className="mt-1 font-heading text-base font-bold text-ink-primary">Hardware &amp; Surveillance</h3>
+                  <h3 className="mt-1 font-heading text-base font-bold text-ink-primary">CCTV, Computers &amp; Servers</h3>
                   <p className="mt-1 text-xs text-ink-secondary">
-                    Commercial CCTV, business computing, and server installations across Tripura &amp; Northeast India.
+                    Commercial &amp; residential CCTV, business workstations, and server deployment across Tripura &amp; Northeast India.
                   </p>
+                  <div className="mt-2.5 flex flex-wrap items-center gap-3 text-xs">
+                    <Link to="/services/cctv-installation" className="text-accent-blue hover:underline font-semibold">
+                      CCTV Installation Guide →
+                    </Link>
+                    <Link to="/hardware#computers" className="text-ink-secondary hover:underline">
+                      Workstations →
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
@@ -179,14 +195,14 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ── Primary Wedge: Saurik Track ──────────────── */}
+      {/* ── Flagship Product: Saurik Track ──────────────── */}
       <section id="wedge-track" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-labelledby="wedge-track-heading">
         <div className="relative overflow-hidden rounded-panel bg-[#212F45] p-8 sm:p-12 text-white border border-[#CDD0C2]/30 shadow-card">
           <div className="relative z-10 grid gap-8 lg:grid-cols-12 lg:items-center">
             <div className="lg:col-span-8 space-y-4">
               <div className="inline-flex items-center gap-2 rounded-full bg-[#1C2620]/80 px-3.5 py-1 text-xs font-mono font-semibold text-[#E4AE70] border border-[#E4AE70]/40">
                 <span className="h-2 w-2 rounded-full bg-[#3E7C4C]" />
-                <span>PRIMARY OPERATIONAL WEDGE • MOBILE ERP</span>
+                <span>FLAGSHIP PRODUCT • FIELD WORKFORCE ERP</span>
               </div>
               
               <h2 id="wedge-track-heading" className="font-heading text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
@@ -229,7 +245,7 @@ const Home = () => {
                 to="/contact?topic=saurik_track"
                 className="inline-flex items-center justify-center gap-2 rounded-control bg-white/10 border border-white/20 hover:bg-white/20 px-6 py-3 text-xs font-semibold text-white transition-colors text-center"
               >
-                Start Free 30-Day Trial →
+                Request Free 30-Day Trial →
               </Link>
             </div>
           </div>

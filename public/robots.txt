@@ -3,4 +3,4 @@ Allow: /
 Allow: /track/
 Allow: /arthos/
 
-Sitemap: https://www.wwwsaurikit.com/sitemap.xml
+Sitemap: https://www.saurikit.in/sitemap.xml

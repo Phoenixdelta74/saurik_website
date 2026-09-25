@@ -1,52 +1,56 @@
 # SAURIK IT Website Architecture & Technical Design Principles
 
-**Version:** 1.5  
-**Last Updated:** 23 September 2026  
+**Version:** 1.6  
+**Last Updated:** 26 September 2026  
 **Status:** Living Technical Architecture Document  
 
 ---
 
 ## 1. Executive Architectural Overview
 
-The **SAURIK IT Private Limited** digital presence (`saurik-it-website`) combines a high-performance Single Page Application (SPA) for corporate service discovery with a dedicated, zero-JS static HTML/CSS landing page architecture for its flagship B2B field workforce & van-stock platform, **Saurik Track** (`/track`). A floating AI website assistant provides answers grounded in published content through a separate serverless API boundary.
-
-The system is constructed with a strict philosophy: **"Technology, Deliberately."** Every architectural decision prioritizes clarity of information, verifiable claims, lightning-fast Core Web Vitals, accessible interaction patterns (WCAG 2.2 AA), and complete separation between content datasets and presentation components.
+The **SAURIK IT Private Limited** digital presence (`https://www.saurikit.in`) operates as a statically prerendered (SSG) application built with React 18, Vite 6, and Tailwind CSS. Every public route—including the corporate pages, demand planning demos (`/use-cases`), dedicated priority service guides (`/services/*`), and flagship product pages (**Saurik Track** at `/track/` and **Arthos Invoice Studio** at `/arthos/`)—generates a physical HTML document in `dist/<route>/index.html` at build time with embedded pre-rendered markup, canonical URLs, and OpenGraph/JSON-LD metadata. Non-existent routes serve a branded `dist/404.html` with a true HTTP 404 status. A client-side hydration engine (`hydrateRoot`) mounts seamlessly for interactive widgets, while a floating AI voice & chat assistant is powered by native Web Speech APIs and grounded serverless LLM endpoints.
 
 ```mermaid
 graph TD
     User([Visitor / Crawler / Bot]) --> Gateway{Vercel Edge / CDN}
     
     Gateway -->|GET /track or /track/| StaticTrack[dist/track/index.html - Zero-JS Static SSR HTML]
-    Gateway -->|GET / og-image.png / robots.txt / sitemap.xml| StaticAssets[dist/ Public Static Assets]
+    Gateway -->|GET /arthos or /arthos/| StaticArthos[dist/arthos/index.html - Static Landing HTML]
+    Gateway -->|GET /services/*| StaticServices[dist/services/*/index.html - Prerendered Service Pages]
+    Gateway -->|GET /use-cases/*| StaticUseCases[dist/use-cases/*/index.html - Prerendered Demo Pages]
+    Gateway -->|GET /software, /hardware, etc.| StaticPages[dist/*/index.html - Prerendered Route HTML]
+    Gateway -->|GET unknown path| ErrorPage[dist/404.html - HTTP 404 Custom Error]
     Gateway -->|GET /api/*| ServerlessAPI[api/chat.js - Vercel Serverless Endpoint]
-    Gateway -->|All other routes| SpaIndex[dist/index.html - React 18 SPA Entry]
     
-    subgraph SPA Layer [React 18 / Vite 6 / React Router v6]
-        SpaIndex --> MainJSX[src/main.jsx]
+    subgraph Client Hydration Layer [React 18 / Vite 6 / React Router v6]
+        StaticPages --> MainJSX[src/main.jsx - hydrateRoot / createRoot]
         MainJSX --> AppShell[src/App.jsx Layout Shell]
         
-        AppShell --> Header[src/components/Header.jsx]
+        AppShell --> Header[src/components/Header.jsx - Desktop & Mobile Nav]
         AppShell --> RouterView[React Router Routes]
         AppShell --> WhatsApp[src/components/WhatsAppCTA.jsx]
-        AppShell --> ChatWidget[src/components/ChatWidget.jsx]
+        AppShell --> ChatWidget[src/components/ChatWidget.jsx - Dual-Panel Voice & Chat]
         AppShell --> Footer[src/components/Footer.jsx]
         
-        RouterView --> Home[/ Home]
+        RouterView --> Home[/ Home - Tripura & Northeast Focus]
         RouterView --> Software[/software Software & IT]
         RouterView --> Hardware[/hardware Hardware & IT]
+        RouterView --> WebDev[/services/website-development Website Dev Guide]
+        RouterView --> CctvService[/services/cctv-installation CCTV Installation Guide]
+        RouterView --> CustomSoft[/services/custom-software Custom Software Guide]
+        RouterView --> UseCases[/use-cases Demand Planning Demos]
         RouterView --> About[/about About & Story]
-        RouterView --> Contact[/contact Smart Enquiry]
-        RouterView --> TrackClient[/track React Route Component]
-        RouterView --> ArthosClient[/arthos React Route Component]
+        RouterView --> Contact[/contact Smart Enquiry with Track Trial Flow]
         RouterView --> Privacy[/privacy Data Policy]
         RouterView --> NotFound[* 404 Fallback]
     end
     
     subgraph Data & Content Layer [src/data/]
-        CompanyData[(companyData.js)]
+        CompanyData[(companyData.js - Phone: +91 98620 87157, contact@saurikit.in)]
         SoftwareData[(softwareData.js)]
         HardwareData[(hardwareData.js)]
         TrackData[(trackData.js)]
+        UseCaseData[(useCaseAnalytics.js)]
     end
     
     Home -.-> CompanyData

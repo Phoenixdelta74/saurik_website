@@ -80,13 +80,13 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/software#custom-apps" className="hover:text-ink-primary hover:underline transition-colors">
-                  Custom Web Applications
+                <Link to="/services/custom-software" className="hover:text-ink-primary hover:underline transition-colors font-medium">
+                  Custom Software Development
                 </Link>
               </li>
               <li>
-                <Link to="/software#web-design" className="hover:text-ink-primary hover:underline transition-colors">
-                  Website Design & Support
+                <Link to="/services/website-development" className="hover:text-ink-primary hover:underline transition-colors font-medium">
+                  Website Development &amp; Design (Tripura)
                 </Link>
               </li>
               <li>
@@ -105,8 +105,13 @@ const Footer = () => {
             </div>
             <ul className="space-y-2.5 text-sm">
               <li>
+                <Link to="/services/cctv-installation" className="hover:text-ink-primary hover:underline transition-colors font-medium">
+                  CCTV Installation &amp; Maintenance
+                </Link>
+              </li>
+              <li>
                 <Link to="/hardware#cctv" className="hover:text-ink-primary hover:underline transition-colors">
-                  CCTV Sales & Services (Home & Business)
+                  CCTV Sales &amp; Services (Home &amp; Business)
                 </Link>
               </li>
               <li>

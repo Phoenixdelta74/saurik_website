@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { ArrowRight, Menu, X, ChevronDown, Compass, Receipt, Sparkles } from 'lucide-react';
+import { ArrowRight, Menu, X, ChevronDown, Compass, Receipt, Sparkles, Globe, Camera, Layers } from 'lucide-react';
 import Logo from './Logo';
 
 const corporateLinks = [
@@ -12,28 +12,37 @@ const corporateLinks = [
 export default function Header() {
   const [open, setOpen] = useState(false);
   const [productsOpen, setProductsOpen] = useState(false);
+  const [servicesOpen, setServicesOpen] = useState(false);
   const dialog = useRef(null);
   const toggle = useRef(null);
   const dropdownRef = useRef(null);
+  const servicesDropdownRef = useRef(null);
   const location = useLocation();
 
   // Close menus on route or query change
   useEffect(() => {
     setOpen(false);
     setProductsOpen(false);
+    setServicesOpen(false);
   }, [location.pathname, location.search]);
 
-  // Click outside listener for desktop dropdown
+  // Click outside listener for desktop dropdowns
   useEffect(() => {
     const handleOutsideClick = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setProductsOpen(false);
       }
+      if (servicesDropdownRef.current && !servicesDropdownRef.current.contains(e.target)) {
+        setServicesOpen(false);
+      }
     };
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape') setProductsOpen(false);
+      if (e.key === 'Escape') {
+        setProductsOpen(false);
+        setServicesOpen(false);
+      }
     };
-    if (productsOpen) {
+    if (productsOpen || servicesOpen) {
       document.addEventListener('mousedown', handleOutsideClick);
       document.addEventListener('keydown', handleKeyDown);
     }
@@ -41,7 +50,7 @@ export default function Header() {
       document.removeEventListener('mousedown', handleOutsideClick);
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [productsOpen]);
+  }, [productsOpen, servicesOpen]);
 
   // Mobile modal dialog lifecycle
   useEffect(() => {
@@ -59,6 +68,7 @@ export default function Header() {
   const close = () => { setOpen(false); toggle.current?.focus(); };
 
   const isProductActive = location.pathname.startsWith('/track') || location.pathname.startsWith('/arthos');
+  const isServiceActive = location.pathname.startsWith('/services');
 
   return <>
     <header className="sticky top-0 z-40 bg-canvas/95 backdrop-blur-md border-b border-border-subtle">
@@ -147,6 +157,97 @@ export default function Header() {
             )}
           </div>
 
+          {/* Services Dropdown */}
+          <div className="relative" ref={servicesDropdownRef}>
+            <button
+              type="button"
+              onClick={() => setServicesOpen((prev) => !prev)}
+              aria-expanded={servicesOpen}
+              aria-haspopup="true"
+              className={`
+                px-3.5 py-2.5 rounded-control text-sm font-medium flex items-center gap-1.5 transition-colors whitespace-nowrap
+                ${isServiceActive || servicesOpen ? 'bg-white text-accent-teal shadow-subtle' : 'text-ink-secondary hover:text-ink-primary hover:bg-slate-100/60'}
+              `}
+            >
+              <span>Services</span>
+              <ChevronDown
+                size={14}
+                className={`transition-transform duration-200 ${servicesOpen ? 'rotate-180 text-accent-teal' : 'text-ink-muted'}`}
+                aria-hidden="true"
+              />
+            </button>
+
+            {/* Services Dropdown Popover */}
+            {servicesOpen && (
+              <div
+                className="absolute top-full left-0 mt-2 w-92 bg-white rounded-2xl shadow-xl border border-border-subtle p-2 z-50 animate-in fade-in zoom-in-95 duration-150"
+                role="menu"
+                aria-label="Services submenu"
+              >
+                <Link
+                  to="/services/website-development"
+                  onClick={() => setServicesOpen(false)}
+                  className="flex items-start gap-3.5 p-3 rounded-xl hover:bg-slate-50 transition-colors group"
+                  role="menuitem"
+                >
+                  <div className="p-2.5 rounded-lg bg-teal-50 text-accent-teal group-hover:bg-accent-teal group-hover:text-white transition-colors flex-shrink-0 mt-0.5">
+                    <Globe size={18} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <span className="text-sm font-bold text-ink-primary group-hover:text-accent-teal transition-colors whitespace-nowrap">
+                      Website Development
+                    </span>
+                    <p className="text-xs text-ink-secondary mt-0.5 leading-relaxed">
+                      Custom websites, portals &amp; local SEO for Tripura &amp; Northeast India.
+                    </p>
+                  </div>
+                </Link>
+
+                <div className="h-px bg-border-subtle/60 my-1 mx-2"></div>
+
+                <Link
+                  to="/services/cctv-installation"
+                  onClick={() => setServicesOpen(false)}
+                  className="flex items-start gap-3.5 p-3 rounded-xl hover:bg-slate-50 transition-colors group"
+                  role="menuitem"
+                >
+                  <div className="p-2.5 rounded-lg bg-blue-50 text-accent-blue group-hover:bg-accent-blue group-hover:text-white transition-colors flex-shrink-0 mt-0.5">
+                    <Camera size={18} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <span className="text-sm font-bold text-ink-primary group-hover:text-accent-blue transition-colors whitespace-nowrap">
+                      CCTV Installation &amp; Service
+                    </span>
+                    <p className="text-xs text-ink-secondary mt-0.5 leading-relaxed">
+                      Commercial &amp; residential IP surveillance, NVR calculations &amp; maintenance.
+                    </p>
+                  </div>
+                </Link>
+
+                <div className="h-px bg-border-subtle/60 my-1 mx-2"></div>
+
+                <Link
+                  to="/services/custom-software"
+                  onClick={() => setServicesOpen(false)}
+                  className="flex items-start gap-3.5 p-3 rounded-xl hover:bg-slate-50 transition-colors group"
+                  role="menuitem"
+                >
+                  <div className="p-2.5 rounded-lg bg-teal-50 text-accent-teal group-hover:bg-accent-teal group-hover:text-white transition-colors flex-shrink-0 mt-0.5">
+                    <Layers size={18} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <span className="text-sm font-bold text-ink-primary group-hover:text-accent-teal transition-colors whitespace-nowrap">
+                      Custom Software
+                    </span>
+                    <p className="text-xs text-ink-secondary mt-0.5 leading-relaxed">
+                      B2B portals, database architectures &amp; offline sync applications.
+                    </p>
+                  </div>
+                </Link>
+              </div>
+            )}
+          </div>
+
           {/* Corporate Links */}
           {corporateLinks.map(([to, label]) => (
             <NavLink
@@ -225,10 +326,52 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Corporate Services Group */}
-        <div className="space-y-1 pt-2">
+        {/* Priority Services Group */}
+        <div className="space-y-2 pt-1">
           <span className="text-[11px] font-mono font-bold text-ink-muted uppercase tracking-wider px-2">
-            Corporate Services
+            Priority Services
+          </span>
+          <div className="bg-white rounded-xl border border-border-subtle p-2 space-y-1">
+            <NavLink
+              to="/services/website-development"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-slate-50 transition-colors"
+            >
+              <Globe size={18} className="text-accent-teal flex-shrink-0" />
+              <div className="min-w-0">
+                <div className="font-semibold text-xs text-ink-primary">Website Development</div>
+                <div className="text-[11px] text-ink-secondary">Tripura &amp; Northeast India</div>
+              </div>
+            </NavLink>
+            <NavLink
+              to="/services/cctv-installation"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-slate-50 transition-colors"
+            >
+              <Camera size={18} className="text-accent-blue flex-shrink-0" />
+              <div className="min-w-0">
+                <div className="font-semibold text-xs text-ink-primary">CCTV Installation</div>
+                <div className="text-[11px] text-ink-secondary">Commercial &amp; residential</div>
+              </div>
+            </NavLink>
+            <NavLink
+              to="/services/custom-software"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-slate-50 transition-colors"
+            >
+              <Layers size={18} className="text-accent-teal flex-shrink-0" />
+              <div className="min-w-0">
+                <div className="font-semibold text-xs text-ink-primary">Custom Software</div>
+                <div className="text-[11px] text-ink-secondary">Portals, databases &amp; offline tools</div>
+              </div>
+            </NavLink>
+          </div>
+        </div>
+
+        {/* Corporate Services Group */}
+        <div className="space-y-1 pt-1">
+          <span className="text-[11px] font-mono font-bold text-ink-muted uppercase tracking-wider px-2">
+            Corporate Divisions
           </span>
           {corporateLinks.map(([to, label]) => (
             <NavLink

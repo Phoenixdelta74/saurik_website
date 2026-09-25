@@ -100,11 +100,24 @@ node test/verify_use_case_analytics.cjs
 - The route is registered at `/use-cases`, with industry addresses for FMCG, manufacturing, and apparel.
 - The headline leads with the planning decision. Software and the footer link to `/use-cases`. The sitemap lists all four addresses.
 
-### 2.9. Full Automated Test Suite Execution
+### 2.9. SEO & Static Prerender Verification Suite
+```bash
+node test/verify_seo_prerender.cjs
+```
+**Pass criteria:**
+- Verifies existence of all 16 prerendered static HTML files in `dist/` (`index.html`, `/software`, `/hardware`, `/about`, `/contact`, `/privacy`, `/use-cases`, 3 industry demos, 3 priority service pages, `/track/`, `/arthos/`, and `404.html`).
+- Validates that every static HTML artifact contains non-empty prerendered root markup and no stale `wwwsaurikit.com` domain references.
+- Validates canonical tags strictly targeting `https://www.saurikit.in`.
+- Validates `robots.txt` points to `https://www.saurikit.in/sitemap.xml` and `sitemap.xml` contains all public URLs including new priority services.
+- Confirms Contact page topic dropdown includes `saurik_track` with 30-day trial & pilot setup notice.
+- Confirms Homepage positioning highlights Agartala/Tripura & Northeast operations without internal strategy jargon.
+- Confirms `vercel.json` has `cleanUrls: true` and outputDirectory `dist`.
+
+### 2.10. Full Automated Test Suite Execution
 Run the complete automated gate:
 ```bash
 npm test
-# Equivalent to: node test/verify_track_spec_v3.cjs && node test/verify_track_e2e.cjs && node test/verify_arthos_spec.cjs && node test/verify_voice_assistant.cjs && node test/verify_chatbot.cjs && node test/verify_use_case_analytics.cjs
+# Runs: verify_track_spec_v3 && verify_track_e2e && verify_arthos_spec && verify_voice_assistant && verify_chatbot && verify_use_case_analytics && verify_seo_prerender
 ```
 
 ---

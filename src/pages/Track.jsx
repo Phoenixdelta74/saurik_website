@@ -301,7 +301,7 @@ const Track = () => {
             </div>
             <div className="privacy-links-row">
               <Link to="/privacy" className="privacy-link">Read our Privacy Policy</Link>
-              <a href="mailto:contact@wwwsaurikit.com" className="privacy-link">Contact support</a>
+              <a href="mailto:contact@saurikit.in" className="privacy-link">Contact support</a>
             </div>
           </div>
         </section>
@@ -395,7 +395,7 @@ const Track = () => {
               <li><Link to="/">Visit SAURIK IT</Link></li>
               <li><Link to="/privacy">Privacy Policy</Link></li>
             </ul>
-            <a href="mailto:contact@wwwsaurikit.com" className="footer-contact">contact@wwwsaurikit.com</a>
+            <a href="mailto:contact@saurikit.in" className="footer-contact">contact@saurikit.in</a>
           </div>
           <div className="footer-copy">
             <p>© 2026 SAURIK IT Private Limited. All rights reserved.</p>

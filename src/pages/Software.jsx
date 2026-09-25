@@ -91,7 +91,7 @@ const Software = () => {
             <div className="space-y-3 max-w-2xl">
               <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#1C2620]/80 border border-[#E4AE70]/40 text-[#E4AE70] text-xs font-mono uppercase tracking-wider">
                 <span className="w-2 h-2 rounded-full bg-[#3E7C4C]" />
-                Primary Operational Wedge • Mobile ERP
+                Field Workforce Platform • Mobile ERP
               </div>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-white font-heading tracking-tight">
                 Saurik Track: GPS Attendance &amp; Van-Stock Tracking
@@ -181,7 +181,7 @@ const Software = () => {
                   </div>
 
                   {/* Action Link */}
-                  <div className="pt-4 flex items-center gap-4">
+                  <div className="pt-4 flex flex-wrap items-center gap-3">
                     <Link
                       to={`/contact?topic=${cap.topicKey}`}
                       className="btn-primary text-xs py-2.5 px-5"
@@ -189,6 +189,22 @@ const Software = () => {
                       <span>Discuss {cap.title}</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
+                    {cap.topicKey === 'web_design' && (
+                      <Link
+                        to="/services/website-development"
+                        className="btn-secondary text-xs py-2.5 px-4"
+                      >
+                        Explore Website Service Details →
+                      </Link>
+                    )}
+                    {cap.topicKey === 'custom_apps' && (
+                      <Link
+                        to="/services/custom-software"
+                        className="btn-secondary text-xs py-2.5 px-4"
+                      >
+                        Explore Custom Software Details →
+                      </Link>
+                    )}
                   </div>
                 </div>
 

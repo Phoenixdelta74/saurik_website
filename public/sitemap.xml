@@ -1,74 +1,92 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://www.wwwsaurikit.com/</loc>
-    <lastmod>2026-09-24</lastmod>
+    <loc>https://www.saurikit.in/</loc>
+    <lastmod>2026-09-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://www.wwwsaurikit.com/track/</loc>
-    <lastmod>2026-09-24</lastmod>
+    <loc>https://www.saurikit.in/services/website-development</loc>
+    <lastmod>2026-09-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.saurikit.in/services/cctv-installation</loc>
+    <lastmod>2026-09-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.saurikit.in/services/custom-software</loc>
+    <lastmod>2026-09-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.saurikit.in/track/</loc>
+    <lastmod>2026-09-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.wwwsaurikit.com/arthos/</loc>
-    <lastmod>2026-09-24</lastmod>
+    <loc>https://www.saurikit.in/arthos/</loc>
+    <lastmod>2026-09-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.wwwsaurikit.com/software</loc>
-    <lastmod>2026-09-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.wwwsaurikit.com/hardware</loc>
-    <lastmod>2026-09-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.wwwsaurikit.com/about</loc>
-    <lastmod>2026-09-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.wwwsaurikit.com/contact</loc>
-    <lastmod>2026-09-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.wwwsaurikit.com/use-cases</loc>
+    <loc>https://www.saurikit.in/software</loc>
     <lastmod>2026-09-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.wwwsaurikit.com/use-cases/fmcg-demand-planning</loc>
+    <loc>https://www.saurikit.in/hardware</loc>
+    <lastmod>2026-09-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.saurikit.in/about</loc>
     <lastmod>2026-09-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.wwwsaurikit.com/use-cases/manufacturing-demand-planning</loc>
+    <loc>https://www.saurikit.in/contact</loc>
+    <lastmod>2026-09-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.saurikit.in/use-cases</loc>
+    <lastmod>2026-09-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.saurikit.in/use-cases/fmcg-demand-planning</loc>
     <lastmod>2026-09-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.wwwsaurikit.com/use-cases/apparel-demand-planning</loc>
+    <loc>https://www.saurikit.in/use-cases/manufacturing-demand-planning</loc>
     <lastmod>2026-09-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.wwwsaurikit.com/privacy</loc>
-    <lastmod>2026-09-24</lastmod>
+    <loc>https://www.saurikit.in/use-cases/apparel-demand-planning</loc>
+    <lastmod>2026-09-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.saurikit.in/privacy</loc>
+    <lastmod>2026-09-26</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>

@@ -75,6 +75,8 @@ const Contact = () => {
 
   const getTopicLabel = (val) => {
     const labels = {
+      saurik_track: 'Saurik Track — Field & Fleet ERP (Trial / Pilot Onboarding)',
+      arthos_early_access: 'Arthos Invoice Studio — Early Access',
       data_analytics: 'Data Analytics as a Service (Forecasting)',
       generative_ai: 'Generative AI Systems',
       agentic_ai: 'Agentic AI & Workflow Automation',
@@ -85,7 +87,6 @@ const Contact = () => {
       hardware_computers: 'Computer Sales & Workstations',
       hardware_servers: `Server ${formData.serverType === 'installation' ? 'Installation' : 'Servicing'}`,
       hardware_quote: 'General Hardware Quotation',
-      arthos_early_access: 'Arthos Invoice Studio — Early access',
       not_sure: 'Not sure yet / General enquiry',
     };
     return labels[val] || val;
@@ -372,25 +373,36 @@ const Contact = () => {
                     className="w-full px-4 py-3 rounded-control border border-border-subtle bg-canvas text-sm focus:outline-none focus:ring-2 focus:ring-accent-teal focus:border-accent-teal transition-all"
                   >
                     <option value="not_sure">Not sure yet / General discussion</option>
-                    <optgroup label="── Software & IT Division ──">
-                      <option value="data_analytics">Data Analytics as a Service (Predictive Forecasting)</option>
+                    <optgroup label="── Flagship Software Products ──">
+                      <option value="saurik_track">Saurik Track — Field & Fleet ERP (Trial / Pilot Onboarding)</option>
+                      <option value="arthos_early_access">Arthos Invoice Studio — Early Access</option>
+                    </optgroup>
+                    <optgroup label="── Software & IT Services ──">
+                      <option value="web_design">Website Design & Development</option>
+                      <option value="custom_apps">Custom Web Applications & Software</option>
+                      <option value="data_analytics">Data Analytics as a Service (Predictive Modelling)</option>
                       <option value="generative_ai">Generative AI Systems</option>
                       <option value="agentic_ai">Agentic AI & Workflow Automation</option>
-                      <option value="custom_apps">Custom Web Applications</option>
-                      <option value="web_design">Website Design & Support</option>
                       <option value="mobile_apps">Mobile App Development</option>
                     </optgroup>
-                    <optgroup label="── IT Hardware Division ──">
-                      <option value="hardware_cctv">CCTV Sales & Services</option>
-                      <option value="hardware_computers">Computer Sales & Workstations</option>
-                      <option value="hardware_servers">Server Installation & Service</option>
+                    <optgroup label="── IT Hardware & Infrastructure ──">
+                      <option value="hardware_cctv">CCTV Sales, Installation & Services</option>
+                      <option value="hardware_computers">Business Computers & Workstations</option>
+                      <option value="hardware_servers">Server Installation & Maintenance</option>
                       <option value="hardware_quote">General Hardware Quotation</option>
-                    </optgroup>
-                    <optgroup label="── Arthos Invoice Studio ──">
-                      <option value="arthos_early_access">Arthos Invoice Studio — Early access</option>
                     </optgroup>
                   </select>
                 </div>
+
+                {/* Dynamic Notice: Saurik Track Guided Onboarding */}
+                {formData.serviceTopic === 'saurik_track' && (
+                  <div className="p-4 bg-canvas rounded-control border border-border-subtle animate-in fade-in duration-200 text-xs text-ink-secondary space-y-1">
+                    <p className="font-semibold text-ink-primary">Saurik Track 30-Day Trial &amp; Pilot Setup</p>
+                    <p>
+                      Submitting prepares an enquiry draft via email or WhatsApp. An onboarding engineer will contact you to configure your team profile, routes, initial van inventory, and set up a guided 1–2 van pilot.
+                    </p>
+                  </div>
+                )}
 
                 {/* Dynamic Sub-Options: CCTV Residential vs Commercial */}
                 {formData.serviceTopic === 'hardware_cctv' && (

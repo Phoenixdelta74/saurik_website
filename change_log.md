@@ -4,9 +4,43 @@ All notable changes to the SAURIK IT Private Limited website codebase will be do
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.8.0] - 2026-09-26
 
 ### Added
+- **Dedicated Priority Service Pages:**
+  - Built `/services/website-development`: Full responsive guide with Tripura/Agartala focus, deliverables, 3 scope tiers, FAQs, and contact CTA.
+  - Built `/services/cctv-installation`: Commercial, retail, and residential surveillance, NVR calculations, technical boundaries, and quote CTA.
+  - Built `/services/custom-software`: B2B operational portals, database architecture, offline sync tools, and consultation CTA.
+- **Build-Time Static Prerendering (SSG) Pipeline (`scripts/prerender.js`, `src/entry-server.jsx`):**
+  - Generates physical `dist/<route>/index.html` for all routes at build time via React `renderToString` and Vite SSR.
+  - Generates custom `dist/404.html` with `noindex,follow` for real HTTP 404 error responses on unknown paths.
+  - Updated client entry `src/main.jsx` with `hydrateRoot` when pre-rendered DOM is present.
+- **Header & Mobile Navigation Services Integration (`Header.jsx`):**
+  - Added desktop "Services" dropdown popover with icons and summaries for the 3 priority services.
+  - Added "Priority Services" section to the mobile slide-out drawer.
+- **Automated SEO & Static Prerender Test Suite (`test/verify_seo_prerender.cjs`):**
+  - Validates 16 prerendered static HTML files in `dist/`, canonical URLs, meta tags, `robots.txt`, `sitemap.xml`, and clean Vercel config.
+
+### Changed
+- **Canonical Domain & Signal Alignment:**
+  - Aligned all signals strictly to `https://www.saurikit.in` across `index.html`, `public/sitemap.xml`, `public/robots.txt`, `public/track/index.html`, `public/arthos/index.html`, `PageMetadata.jsx`, and test suites.
+  - Aligned company email to `contact@saurikit.in` and phone to `+91 98620 87157`.
+- **Homepage Positioning & Clarity (`Home.jsx`):**
+  - Updated hero H1 to *"Software, Field-Team Tools and IT Services in Tripura"*.
+  - Replaced internal strategy labels ("PRIMARY WEDGE", "Supporting Digital", "Supporting Physical") with clear customer labels ("Field-Team Software", "Software & AI", "Regional IT Hardware").
+  - Linked overview cards directly to dedicated service guides.
+- **Cross-Service Navigation:**
+  - Added direct links to `/services/website-development` and `/services/custom-software` from `Software.jsx`.
+  - Added direct links to `/services/cctv-installation` from `CCTVSelector.jsx`.
+  - Added priority service links to `Footer.jsx`.
+
+### Fixed
+- **Direct Page Access & 404 Errors on Vercel (`vercel.json`, `dist/`):**
+  - Resolved Vercel 404 errors on direct visits and refreshes to `/software`, `/hardware`, `/about`, `/privacy`, and `/contact?topic=saurik_track` by outputting physical `dist/<route>/index.html` files.
+  - Nonexistent routes now return genuine HTTP 404 with custom `dist/404.html`.
+- **Product Enquiry Flow (`Contact.jsx`):**
+  - Added `saurik_track` option in enquiry dropdown, automatically preselected from `?topic=saurik_track`.
+  - Added dynamic 30-day trial and 1-2 van pilot setup guidance when Saurik Track is selected.
 - **Demand Planning AI Knowledge Base Grounding (`chatContext.js`, `api/chat.js`, `ChatWidget.jsx`):**
   - Grounded the new Demand Planning Use Case (`/use-cases` and dedicated industry routes for FMCG, manufacturing, and apparel) into the AI assistant's core knowledge base via `USE_CASES_KNOWLEDGE` and `USE_CASES_CHAT_SYSTEM_PROMPT`.
   - Added route detection (`isUseCases`) and tailored starter questions for `/use-cases` in `ChatWidget.jsx`, along with `mode === 'use-cases'` support in `api/chat.js`.

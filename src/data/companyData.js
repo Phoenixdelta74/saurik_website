@@ -4,7 +4,7 @@ export const COMPANY_INFO = {
   legalName: 'SAURIK IT Private Limited',
   tagline: 'Technology, Deliberately.',
   description: 'Data analytics, Generative and Agentic AI, custom web and mobile applications, website services, and IT hardware sales and services shaped around specific requirements.',
-  email: 'contact@wwwsaurikit.com',
+  email: 'contact@saurikit.in',
   phone: '98620 87157',
   phoneDisplay: '+91 98620 87157',
   whatsappNumber: '919862087157',

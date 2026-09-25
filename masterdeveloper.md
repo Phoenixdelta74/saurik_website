@@ -90,16 +90,24 @@ c:/Saurik/saurik_website/
     │   ├── CCTVSelector.jsx    # Interactive Residential vs Commercial CCTV toggle
     │   ├── AnalyticsChart.jsx  # Interactive predictive forecasting visualizer
     │   └── ProcessTimeline.jsx # 4-step delivery pipeline cards
+    ├── entry-server.jsx    # React SSR renderToString entrypoint
+    ├── main.jsx            # Client hydration (hydrateRoot / createRoot)
     └── pages/
-        ├── Home.jsx            # Hero, dual service paths, delivery flow, closing CTA
-        ├── Software.jsx        # 5 software deep dives, Agentic simulator, FAQs
-        ├── Hardware.jsx        # CCTV selector, computers, servers, FAQs
-        ├── About.jsx           # Company story, ethos, accountability
-        ├── Contact.jsx         # Dual-column form with topic preselection & WhatsApp
-        ├── Track.jsx           # React component rendering Saurik Track 10-section system
-        ├── Track.css           # Scoped styles for React Track component
-        ├── Privacy.jsx         # Plain-English enquiry handling policy
-        └── NotFound.jsx        # 404 handler with return links
+        ├── Home.jsx        # Hero, core capabilities, delivery flow, closing CTA
+        ├── Software.jsx    # Software capabilities, Agentic simulator, FAQs
+        ├── Hardware.jsx    # CCTV selector, computers, servers, FAQs
+        ├── About.jsx       # Company story, ethos, accountability
+        ├── Contact.jsx     # Dual-column form with topic preselection & WhatsApp
+        ├── Track.jsx       # React component rendering Saurik Track 10-section system
+        ├── Track.css       # Scoped styles for React Track component
+        ├── Arthos.jsx      # React component rendering Arthos Invoice Studio
+        ├── UseCases.jsx    # Demand planning predictive demo across 3 industries
+        ├── services/
+        │   ├── WebsiteDevelopment.jsx # Dedicated Website Development & Design guide
+        │   ├── CctvInstallation.jsx   # Dedicated CCTV Installation & Maintenance guide
+        │   └── CustomSoftware.jsx     # Dedicated Custom Software Development guide
+        ├── Privacy.jsx     # Plain-English enquiry handling policy
+        └── NotFound.jsx    # 404 handler with return links
 ```
 
 ---
@@ -164,15 +172,22 @@ For conversational website assistance:
 - **Hands-Free Call Mode**: Automatically restarts listening 450ms after speech ends to enable continuous phone-call-style back-and-forth dialogue.
 - **Interruption**: Speaking or tapping the mic button halts active audio playback instantly.
 
+### Pattern 7: Static Prerendering (SSG) & Route Hydration
+To guarantee HTTP 200 on direct visits/refreshes across Vercel and instant search crawlability:
+- `scripts/prerender.js` runs automatically during `npm run build` after Vite bundling.
+- Prerenders all routes using React 18 `renderToString` and Vite SSR, writing physical `dist/<route>/index.html` files.
+- Generates `dist/404.html` with real HTTP 404 status handling for genuinely non-existent URLs.
+- Client mounts via `ReactDOM.hydrateRoot` in `src/main.jsx` when pre-rendered DOM is detected.
+
 ---
 
 ## 4. Verification Checklist Before Committing
 
-- [ ] Ran `npm run build` and confirmed 0 errors.
-- [ ] Ran test suites: `node test/verify_track_spec.cjs` and `node test/verify_track_e2e.cjs`.
+- [ ] Ran `npm run build` and confirmed 0 errors with all 16 static HTML artifacts generated.
+- [ ] Ran automated test gate `npm test` (all 7 suites pass with 0 errors).
 - [ ] Verified `dist/track/index.html` contains H1 `"Know where your field team is. Know what's left in the van."`.
 - [ ] Checked that no UTF-8 BOM characters (`\uFEFF`) were introduced.
-- [ ] Confirmed that contact details match `contact@wwwsaurikit.com` and `98620 87157`.
+- [ ] Confirmed that contact details match `contact@saurikit.in` and `+91 98620 87157`.
 - [ ] Verified that internal navigation links use React Router `Link` or `NavLink`.
 - [ ] Verified responsive layout at 320px, 360px, 768px, and 1200px widths.
 - [ ] Updated `architecture.md` and `change_log.md` with a concise summary of the changes made.

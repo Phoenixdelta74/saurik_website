@@ -42,10 +42,10 @@ assert(html.includes(expectedTitle), `HTML must contain exact title: ${expectedT
 const expectedDesc = '<meta name="description" content="Privacy-transparent GPS attendance, field visits, reports, and van-stock management for sales, distribution, and service teams. Free 30-day trial.">';
 assert(html.includes(expectedDesc), 'HTML must contain verbatim v3 meta description');
 
-assert(html.includes('<link rel="canonical" href="https://www.wwwsaurikit.com/track/">'), 'Canonical link present');
+assert(html.includes('<link rel="canonical" href="https://www.saurikit.in/track/">'), 'Canonical link present');
 assert(html.includes('<meta property="og:title" content="Saurik Track | GPS attendance and van-stock for field teams">'), 'OG title present');
 assert(html.includes('<meta property="og:description" content="GPS attendance, field visits, reports, and van-stock management—with transparent tracking states and an audit trail.">'), 'OG description present');
-assert(html.includes('<meta property="og:image" content="https://www.wwwsaurikit.com/track/og-image.png">'), 'OG image present');
+assert(html.includes('<meta property="og:image" content="https://www.saurikit.in/track/og-image.png">'), 'OG image present');
 assert(html.includes('<meta property="og:image:width" content="1200">'), 'OG width present');
 assert(html.includes('<meta property="og:image:height" content="630">'), 'OG height present');
 assert(html.includes('<meta property="og:image:alt" content="Saurik Track — GPS attendance and van-stock for field teams">'), 'OG alt present');
@@ -59,7 +59,7 @@ assert(jsonLdMatch, 'JSON-LD script block must be present');
 const parsedJsonLd = JSON.parse(jsonLdMatch[1].trim());
 assert.strictEqual(parsedJsonLd['@type'], 'SoftwareApplication', '@type must be SoftwareApplication');
 assert.strictEqual(parsedJsonLd.name, 'Saurik Track', 'name must be Saurik Track');
-assert.strictEqual(parsedJsonLd.url, 'https://www.wwwsaurikit.com/track/', 'url must be canonical');
+assert.strictEqual(parsedJsonLd.url, 'https://www.saurikit.in/track/', 'url must be canonical');
 assert.strictEqual(parsedJsonLd.publisher.name, 'SAURIK IT Private Limited', 'publisher name must match');
 assert(Array.isArray(parsedJsonLd.featureList) && parsedJsonLd.featureList.length === 5, 'featureList must have 5 items');
 console.log('  ✔ JSON-LD valid and parsed successfully.');
@@ -162,7 +162,7 @@ const verbatimSnippets = [
   // Footer
   'A product of SAURIK IT Private Limited',
   'Visit SAURIK IT',
-  'contact@wwwsaurikit.com',
+  'contact@saurikit.in',
   '© 2026 SAURIK IT Private Limited. All rights reserved.'
 ];
 
