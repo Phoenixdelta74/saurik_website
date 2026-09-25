@@ -65,6 +65,11 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
+                <Link to="/use-cases" className="hover:text-ink-primary hover:underline transition-colors">
+                  Demand planning demo
+                </Link>
+              </li>
+              <li>
                 <Link to="/software#generative-ai" className="hover:text-ink-primary hover:underline transition-colors">
                   Generative AI Systems
                 </Link>

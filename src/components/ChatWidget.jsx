@@ -29,8 +29,9 @@ const ChatWidget = () => {
   const location = useLocation();
   const isTrack = location.pathname.startsWith('/track');
   const isArthos = location.pathname.startsWith('/arthos');
+  const isUseCases = location.pathname.startsWith('/use-cases');
 
-  const pageMode = isTrack ? 'track' : isArthos ? 'arthos' : undefined;
+  const pageMode = isTrack ? 'track' : isArthos ? 'arthos' : isUseCases ? 'use-cases' : undefined;
 
   const currentQuestions = useMemo(() => {
     if (isArthos) {
@@ -53,13 +54,23 @@ const ChatWidget = () => {
         "₹699 billing & license flexibility?",
       ];
     }
+    if (isUseCases) {
+      return [
+        "How is the 3-month baseline forecast calculated?",
+        "Can you connect models to our real sales data?",
+        "What algorithms do you use for demand planning?",
+        "How do the FMCG sample decisions work?",
+        "What data is required to start a forecasting pilot?",
+      ];
+    }
     return [
+      "How does the demand planning demo on /use-cases work?",
       "Can Saurik Track work without internet?",
       "What is Arthos Invoice Studio?",
       "What custom software & AI agents do you build?",
       "Tell me about on-premise IT infrastructure",
     ];
-  }, [isTrack, isArthos]);
+  }, [isTrack, isArthos, isUseCases]);
 
   const [isOpen, setIsOpen] = useState(false);
   const [activeMobileTab, setActiveMobileTab] = useState('chat'); // 'chat' | 'voice'

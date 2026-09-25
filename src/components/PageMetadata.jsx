@@ -1,7 +1,13 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { USE_CASE_PAGES } from '../data/useCaseAnalytics';
+
+const useCaseMeta = Object.fromEntries(
+  Object.entries(USE_CASE_PAGES).map(([path, page]) => [path, [page.title, page.description]])
+);
 
 const pages = {
+  ...useCaseMeta,
   '/': [
     'Operational Technology & Field Workflows',
     'Replace operational guesswork with visible, controlled field workflows. SAURIK IT delivers field operations software (Saurik Track), custom digital systems, and regional IT hardware infrastructure across Tripura and Northeast India.'

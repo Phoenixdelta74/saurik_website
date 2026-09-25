@@ -71,4 +71,13 @@ const arthosPageContent = fs.readFileSync(arthosPagePath, 'utf8');
 assert(!arthosPageContent.includes('<ArthosInlineChat'), 'Arthos.jsx must not have duplicate inline chat box');
 console.log('✔ Test 7: Unified Arthos Invoice Studio Assistant knowledge grounded in global chat and clean page verified.');
 
+// 8. Check Demand Planning Use Case grounding in global chatContext & ChatWidget
+assert(contextContent.includes('USE_CASES_CHAT_SYSTEM_PROMPT'), 'chatContext must export USE_CASES_CHAT_SYSTEM_PROMPT');
+assert(contextContent.includes('USE_CASES_KNOWLEDGE'), 'chatContext must export USE_CASES_KNOWLEDGE');
+assert(contextContent.includes('FOUNDER-VERIFIED SPECIFICATIONS FOR DEMAND PLANNING USE CASE (/use-cases)'), 'chatContext must include use-cases groundings');
+assert(apiChat.includes("mode === 'use-cases'"), 'api/chat.js must check mode === "use-cases"');
+assert(apiChat.includes('USE_CASES_CHAT_SYSTEM_PROMPT'), 'api/chat.js must reference USE_CASES_CHAT_SYSTEM_PROMPT');
+assert(widgetContent.includes('isUseCases'), 'ChatWidget must detect isUseCases');
+console.log('✔ Test 8: Demand Planning Use Case (/use-cases) knowledge grounded in global chat & ChatWidget verified.');
+
 console.log('\n=== ALL CHATBOT TESTS PASSED SUCCESSFULLY! ===\n');

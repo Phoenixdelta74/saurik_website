@@ -231,7 +231,16 @@ const Software = () => {
                 </div>
               </div>
 
-              {cap.topicKey === 'data_analytics' && <AnalyticsChart />}
+              {cap.topicKey === 'data_analytics' && (
+                <>
+                  <AnalyticsChart />
+                  <p className="mt-4">
+                    <Link to="/use-cases" className="text-sm font-semibold text-accent-teal hover:underline">
+                      Try the sample demand-planning demo
+                    </Link>
+                  </p>
+                </>
+              )}
               {cap.topicKey === 'agentic_ai' && <AgenticWorkflow />}
             </React.Fragment>
           );

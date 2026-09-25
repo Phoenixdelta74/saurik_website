@@ -15,6 +15,7 @@ import Privacy from './pages/Privacy';
 import NotFound from './pages/NotFound';
 import Track from './pages/Track';
 import Arthos from './pages/Arthos';
+import UseCases from './pages/UseCases';
 
 // Helper component to handle scrolling on route change or hash change
 const ScrollToTop = () => {
@@ -84,6 +85,10 @@ const AppContent = () => {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/privacy" element={<Privacy />} />
+          <Route path="/use-cases" element={<UseCases />} />
+          <Route path="/use-cases/fmcg-demand-planning" element={<UseCases />} />
+          <Route path="/use-cases/manufacturing-demand-planning" element={<UseCases />} />
+          <Route path="/use-cases/apparel-demand-planning" element={<UseCases />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

@@ -177,6 +177,8 @@ Following `SAURIK-TRACK-LANDING-SPEC-v3.md`, Saurik Track operates under strict 
 - `/track` : Saurik Track flagship mobile ERP landing page (accessible via Products dropdown and dedicated route)
 - `/arthos` : Arthos Invoice Studio product landing page (accessible via Products dropdown and dedicated route)
 - `/privacy` : Plain-English data handling and enquiry policy
+- `/use-cases` : Demand-planning sample demo for FMCG, manufacturing, and apparel. Linked from the Software data-analytics section and the footer. The header menu does not add an item.
+- `/use-cases/fmcg-demand-planning`, `/use-cases/manufacturing-demand-planning`, `/use-cases/apparel-demand-planning` : The same demo with that industry preselected, each with its own title and opening paragraph.
 - `*` : Catch-all 404 page
 
 The global `Header` component organizes top-level navigation into clean, single-line items (`whitespace-nowrap`) to eliminate text wrapping and vertical height jitter across display sizes:
@@ -237,8 +239,8 @@ The application provides two purpose-built AI conversation experiences powered b
      - **Shift-based privacy:** Tracks strictly between check-in and checkout; zero off-the-clock tracking with employee transparency views.
      - **Pricing & Pilots:** ₹699/user/month standard flexibility with 1–2 van pilot onboarding.
 
-3. **Serverless Architecture & Dual-Mode API (`POST /api/chat`):**
-   - `api/chat.js` supports `mode: 'general'` (default) and `mode: 'track'`.
+3. **Serverless Architecture & Multi-Mode API (`POST /api/chat`):**
+   - `api/chat.js` supports contextual system prompt routing: `mode: 'general'` (default), `mode: 'track'`, `mode: 'arthos'`, and `mode: 'use-cases'`.
    - Forwarding is limited to the last 20 messages.
    - Zero LLM API credentials or private environment variables are ever leaked to the browser.
    - Supported backend providers: Anthropic (Claude 3.5 Sonnet), OpenAI (GPT-4o), OpenRouter, and local Ollama.
