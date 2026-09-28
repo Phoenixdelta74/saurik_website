@@ -36,7 +36,7 @@ const TrackHeader = ({ onOpenPilot, onOpenDemo, currency = 'USD', onCurrencyChan
             <span>SAURIK IT</span>
           </Link>
 
-          <Link to="/track" className="flex items-center gap-3 group focus:outline-none">
+          <Link to="/track/" className="flex items-center gap-3 group focus:outline-none">
             {/* S-Constellation Mark */}
             <img
               src="/logo-mark.png"

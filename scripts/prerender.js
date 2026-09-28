@@ -73,6 +73,8 @@ async function prerender() {
       html = html.replace(/<meta property="og:title" content=".*?"\s*\/?>/, `<meta property="og:title" content="${title}" />`);
       html = html.replace(/<meta property="og:description" content=".*?"\s*\/?>/, `<meta property="og:description" content="${description}" />`);
       html = html.replace(/<meta property="og:url" content=".*?"\s*\/?>/, `<meta property="og:url" content="${canonical}" />`);
+      html = html.replace(/<meta property="og:locale" content=".*?"\s*\/?>/, `<meta property="og:locale" content="en_IN" />`);
+      html = html.replace(/<meta name="twitter:url" content=".*?"\s*\/?>/, `<meta name="twitter:url" content="${canonical}" />`);
       html = html.replace(/<meta name="twitter:title" content=".*?"\s*\/?>/, `<meta name="twitter:title" content="${title}" />`);
       html = html.replace(/<meta name="twitter:description" content=".*?"\s*\/?>/, `<meta name="twitter:description" content="${description}" />`);
 

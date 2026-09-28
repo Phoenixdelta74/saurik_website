@@ -105,7 +105,7 @@ export default function Header() {
                 aria-label="Products submenu"
               >
                 <Link
-                  to="/track"
+                  to="/track/"
                   onClick={() => setProductsOpen(false)}
                   className="flex items-start gap-3.5 p-3 rounded-xl hover:bg-slate-50 transition-colors group"
                   role="menuitem"
@@ -131,7 +131,7 @@ export default function Header() {
                 <div className="h-px bg-border-subtle/60 my-1 mx-2"></div>
 
                 <Link
-                  to="/arthos"
+                  to="/arthos/"
                   onClick={() => setProductsOpen(false)}
                   className="flex items-start gap-3.5 p-3 rounded-xl hover:bg-slate-50 transition-colors group"
                   role="menuitem"
@@ -297,13 +297,13 @@ export default function Header() {
           </span>
           <div className="bg-white rounded-xl border border-border-subtle p-2 space-y-1">
             <NavLink
-              to="/track"
+              to="/track/"
               onClick={() => setOpen(false)}
               className="flex items-center justify-between p-3 rounded-lg hover:bg-slate-50 transition-colors"
             >
               <div className="flex items-center gap-3">
-                <Compass size={18} className="text-accent-teal" />
-                <span className="font-semibold text-sm text-ink-primary">Saurik Track</span>
+                 <Compass size={18} className="text-accent-teal" />
+                 <span className="font-semibold text-sm text-ink-primary">Saurik Track</span>
               </div>
               <span className="px-2 py-0.5 text-[10px] font-mono font-bold rounded bg-emerald-100 text-emerald-800 border border-emerald-300">
                 LIVE ERP
@@ -311,7 +311,7 @@ export default function Header() {
             </NavLink>
 
             <NavLink
-              to="/arthos"
+              to="/arthos/"
               onClick={() => setOpen(false)}
               className="flex items-center justify-between p-3 rounded-lg hover:bg-slate-50 transition-colors"
             >

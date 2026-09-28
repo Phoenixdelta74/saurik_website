@@ -4,6 +4,17 @@ All notable changes to the SAURIK IT Private Limited website codebase will be do
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.0] - 2026-09-29
+
+### Fixed
+- **SEO Audit Bug Fixes (Pre-Productization Baseline):**
+  - **Phone Link RFC Compliance (`companyData.js`, `Footer.jsx`, `Contact.jsx`):** Removed internal space in `COMPANY_INFO.phone` (`'9862087157'`) ensuring all `href="tel:..."` links generate valid `tel:+919862087157` URIs without spaces while preserving readable formatting in `phoneDisplay` (`'+91 98620 87157'`).
+  - **Locale Alignment (`index.html`, `PageMetadata.jsx`, `scripts/prerender.js`):** Corrected `og:locale` from `en_US` to `en_IN` across HTML head templates and SSR prerendering.
+  - **Twitter Meta URL Alignment (`scripts/prerender.js`, `PageMetadata.jsx`):** Added dynamic `twitter:url` tag injection matching the page's canonical URL, fixing `/contact` (and other inner routes) from falsely displaying the homepage root URL.
+  - **Trailing Slash Consistency for Product Landings (`Header.jsx`, `Footer.jsx`, `Home.jsx`, `Software.jsx`, `TrackHeader.jsx`):** Standardized all internal product navigation links to `/track/` and `/arthos/` to strictly match the canonical URLs and `sitemap.xml`.
+- **Automated Verification Test Suite (`test/verify_seo_prerender.cjs`):**
+  - Added Test 7 asserting valid `tel:+919862087157`, `og:locale=en_IN`, `/contact` twitter URL, and trailing-slash internal links.
+
 ## [1.8.0] - 2026-09-26
 
 ### Added

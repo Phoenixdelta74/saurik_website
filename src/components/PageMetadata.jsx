@@ -87,6 +87,9 @@ export default function PageMetadata() {
     // Trailing slash consistency: /track/ and /arthos/ have trailing slashes; other pages don't
     const cleanPath = (pathname === '/track' || pathname === '/track/') ? '/track/' : (pathname === '/arthos' || pathname === '/arthos/') ? '/arthos/' : pathname;
     canonical.href = `https://www.saurikit.in${cleanPath}`;
+    meta('og:url', canonical.href, 'property');
+    meta('og:locale', 'en_IN', 'property');
+    meta('twitter:url', canonical.href);
   }, [pathname]);
   return null;
 }

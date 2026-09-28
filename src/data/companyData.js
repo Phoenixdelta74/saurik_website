@@ -5,7 +5,7 @@ export const COMPANY_INFO = {
   tagline: 'Technology, Deliberately.',
   description: 'Data analytics, Generative and Agentic AI, custom web and mobile applications, website services, and IT hardware sales and services shaped around specific requirements.',
   email: 'contact@saurikit.in',
-  phone: '98620 87157',
+  phone: '9862087157',
   phoneDisplay: '+91 98620 87157',
   whatsappNumber: '919862087157',
   whatsappLink: 'https://wa.me/919862087157?text=Hello%20Saurik%20IT%2C%20I%20would%20like%20to%20discuss%20a%20requirement.',

@@ -106,4 +106,29 @@ assert.equal(vercel.cleanUrls, true, 'vercel.json must have cleanUrls enabled');
 assert.equal(vercel.outputDirectory, 'dist', 'vercel.json outputDirectory must be dist');
 console.log('  ✔ vercel.json routing verified.');
 
+// 7. Check the 4 SEO audit fixes
+console.log('7. Checking SEO audit bug fixes (phone link, og:locale, twitter:url, trailing slashes)...');
+const contactPrerender = fs.readFileSync(path.join(dist, 'contact/index.html'), 'utf8');
+const indexPrerender = fs.readFileSync(path.join(dist, 'index.html'), 'utf8');
+
+// Bug 1: Phone link space
+assert.equal(contactPrerender.includes('tel:+9198620 87157'), false, 'Contact HTML must not have spaces in tel: URI');
+assert.equal(contactPrerender.includes('tel:+919862087157'), true, 'Contact HTML must have valid tel:+919862087157 link');
+
+// Bug 2: og:locale en_IN
+assert.equal(contactPrerender.includes('property="og:locale" content="en_IN"'), true, 'Contact HTML must have og:locale en_IN');
+assert.equal(indexPrerender.includes('property="og:locale" content="en_IN"'), true, 'Index HTML must have og:locale en_IN');
+
+// Bug 3: twitter:url on /contact
+assert.equal(contactPrerender.includes('name="twitter:url" content="https://www.saurikit.in/contact"'), true, 'Contact HTML must have twitter:url matching /contact');
+
+// Bug 4: /track/ and /arthos/ trailing slash alignment
+const headerSrc = fs.readFileSync(path.join(root, 'src/components/Header.jsx'), 'utf8');
+const footerSrc = fs.readFileSync(path.join(root, 'src/components/Footer.jsx'), 'utf8');
+assert.equal(headerSrc.includes('to="/track/"'), true, 'Header must link to canonical /track/');
+assert.equal(headerSrc.includes('to="/arthos/"'), true, 'Header must link to canonical /arthos/');
+assert.equal(footerSrc.includes('to="/track/"'), true, 'Footer must link to canonical /track/');
+assert.equal(footerSrc.includes('to="/arthos/"'), true, 'Footer must link to canonical /arthos/');
+console.log('  ✔ All 4 SEO audit fixes verified with zero regressions.');
+
 console.log('\n=== ALL SEO & STATIC PRERENDER VERIFICATIONS PASSED SUCCESSFULLY! ===\n');

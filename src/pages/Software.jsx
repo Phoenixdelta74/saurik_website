@@ -107,7 +107,7 @@ const Software = () => {
             </div>
             <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto flex-shrink-0">
               <Link
-                to="/track"
+                to="/track/"
                 className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-control bg-[#C57A2E] text-white font-bold text-sm shadow-md hover:bg-[#A9631F] transition-all text-center"
               >
                 <span>Explore Saurik Track</span>

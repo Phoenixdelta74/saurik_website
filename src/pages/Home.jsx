@@ -109,7 +109,7 @@ const Home = () => {
                 <span>Discuss your requirement</span>
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
               </Link>
-              <Link to="/track" className="btn-secondary px-6 py-3.5 text-base">
+              <Link to="/track/" className="btn-secondary px-6 py-3.5 text-base">
                 Explore Saurik Track
               </Link>
             </div>
@@ -235,7 +235,7 @@ const Home = () => {
 
             <div className="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col gap-3 justify-center">
               <Link
-                to="/track"
+                to="/track/"
                 className="inline-flex items-center justify-center gap-2 rounded-control bg-[#C57A2E] px-6 py-3.5 text-sm font-bold text-white hover:bg-[#A9631F] transition-all shadow-md text-center"
               >
                 <span>Explore Saurik Track</span>

@@ -37,10 +37,10 @@ assert.equal(appContent.includes('Route path="/arthos" element={<Arthos />}'), t
 
 const headerPath = path.join(root, 'src/components/Header.jsx');
 const headerContent = fs.readFileSync(headerPath, 'utf8');
-assert.equal(headerContent.includes('to="/arthos"'), true, 'Header.jsx must link to /arthos');
+assert.equal(headerContent.includes('to="/arthos/"') || headerContent.includes('to="/arthos"'), true, 'Header.jsx must link to /arthos');
 
 const footerPath = path.join(root, 'src/components/Footer.jsx');
 const footerContent = fs.readFileSync(footerPath, 'utf8');
-assert.equal(footerContent.includes('to="/arthos"'), true, 'Footer.jsx must link to /arthos');
+assert.equal(footerContent.includes('to="/arthos/"') || footerContent.includes('to="/arthos"'), true, 'Footer.jsx must link to /arthos');
 
 console.log('Arthos v2 structure, launch state, metadata, asset, React SPA parity, and claim checks passed.');

@@ -49,13 +49,13 @@ const Footer = () => {
             </div>
             <ul className="space-y-2.5 text-sm">
               <li>
-                <Link to="/track" className="hover:text-ink-primary hover:underline transition-colors flex items-center gap-1.5 text-accent-teal font-semibold">
+                <Link to="/track/" className="hover:text-ink-primary hover:underline transition-colors flex items-center gap-1.5 text-accent-teal font-semibold">
                   <span>Saurik Track (Field & Fleet ERP)</span>
                   <span className="px-1.5 py-0.2 text-[9px] font-mono font-bold rounded bg-emerald-100 text-emerald-800 border border-emerald-300">LIVE</span>
                 </Link>
               </li>
               <li>
-                <Link to="/arthos" className="hover:text-ink-primary hover:underline transition-colors">
+                <Link to="/arthos/" className="hover:text-ink-primary hover:underline transition-colors">
                   Arthos Invoice Studio (GST Invoicing)
                 </Link>
               </li>

@@ -112,6 +112,7 @@ node test/verify_seo_prerender.cjs
 - Confirms Contact page topic dropdown includes `saurik_track` with 30-day trial & pilot setup notice.
 - Confirms Homepage positioning highlights Agartala/Tripura & Northeast operations without internal strategy jargon.
 - Confirms `vercel.json` has `cleanUrls: true` and outputDirectory `dist`.
+- Validates the 4 SEO audit fixes: valid RFC-compliant `tel:+919862087157` URIs (no space), `og:locale` set to `en_IN` across pages, `twitter:url` matching page canonical on `/contact`, and trailing-slash consistency for `/track/` and `/arthos/` internal links.
 
 ### 2.10. Full Automated Test Suite Execution
 Run the complete automated gate:
