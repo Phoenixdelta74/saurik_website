@@ -18,8 +18,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - Self-contained vanilla JS widget (<15 KB) encapsulated in open Shadow Root to prevent host CSS reset collisions.
   - Instant WhatsApp human handoff button (`wa.me`) with prefilled lead context.
   - Client-native Web Speech STT/TTS toggle conforming strictly to the Zero-Cost Native Voice Engine Rule.
-- **Automated Verification Suite (`test/verify_backend_engine.cjs`):**
-  - 5-stage automated test verifying database schemas, RLS policies, RAG services, crawler, Shadow-DOM widget, and zero-cost voice compliance. Integrated into `npm test` pipeline.
+- **One-Command Client Onboarding CLI (`services/chatbot_engine/ingestion/onboard.py`):**
+  - Instant 3-minute Done-for-You onboarding: creates tenant, registers bot and allowed origins, generates unique public key (`pk_live_...`), crawls and chunks client website/PDFs, and stores embeddings in `pgvector`.
+  - Outputs copy-paste client `<script>` embed tag and auto-generates standalone preview test HTML file.
+- **Automated Verification Suite (`test/verify_backend_engine.cjs`, `test/verify_onboard_cli.cjs`):**
+  - 5-stage automated test verifying database schemas, RLS policies, RAG services, crawler, Shadow-DOM widget, and zero-cost voice compliance.
+  - Added dedicated Onboarding CLI test suite (`test/verify_onboard_cli.cjs`) into `npm test` gate.
 
 ## [1.10.0] - 2026-10-02
 

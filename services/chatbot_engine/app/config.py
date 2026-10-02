@@ -1,9 +1,16 @@
-"""
-SAURIK IT — Chatbot Engine Configuration
-"""
-
 import os
-from pydantic_settings import BaseSettings
+try:
+    from pydantic_settings import BaseSettings
+except ImportError:
+    from pydantic import BaseModel
+    class BaseSettings(BaseModel):
+        def __init__(self, **data):
+            super().__init__(**data)
+            for field_name in self.model_fields.keys():
+                env_val = os.getenv(field_name)
+                if env_val is not None:
+                    setattr(self, field_name, env_val)
+
 from pydantic import Field
 
 

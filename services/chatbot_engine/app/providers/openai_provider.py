@@ -10,7 +10,7 @@ from ..config import settings
 
 class OpenAIProvider(BaseLLMProvider):
     def __init__(self, api_key: Optional[str] = None, base_url: Optional[str] = None):
-        self.api_key = api_key or settings.OPENAI_API_KEY
+        self.api_key = api_key or settings.OPENAI_API_KEY or "sk-dummy-unconfigured-key"
         self.client = AsyncOpenAI(api_key=self.api_key, base_url=base_url)
 
     async def chat(

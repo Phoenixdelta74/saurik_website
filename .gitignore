@@ -89,3 +89,11 @@ Desktop.ini
 # Crash dumps
 *.stackdump
 *.dmp
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
