@@ -4,6 +4,27 @@ All notable changes to the SAURIK IT Private Limited website codebase will be do
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.12.0] - 2026-10-02
+
+### Added
+- **Terms of Service Page (`src/pages/Terms.jsx`, route `/terms`):**
+  - Comprehensive business terms covering Saurik Track, Arthos Invoice Studio, Saurik AI Chatbot subscriptions, custom software, and regional hardware delivery.
+  - Dedicated AI terms: Grounding guarantees, strict RAG retrieval bounds, human review requirements, origin allowlisting, and acceptable use policies.
+  - 18% GST terms (9% CGST + 9% SGST for Tripura, 18% IGST interstate) and liability caps under Indian law.
+- **Cancellation & Refund Policy Page (`src/pages/RefundPolicy.jsx`, route `/refund-policy`):**
+  - Full compliance with Razorpay payment gateway activation requirements and Indian consumer protection norms.
+  - Transparent 14-day evaluation periods, monthly cancellation rules, annual plan pro-rata terms, and setup fee refund guidelines (100% refundable prior to work commencement).
+  - 5 to 7 banking working days refund timeline via Razorpay.
+- **India DPDP Rules 2025 Privacy Policy Upgrade (`src/pages/Privacy.jsx`):**
+  - Formal role classification under India's Digital Personal Data Protection Act 2023: SAURIK IT as Data Fiduciary for website visitors and Data Processor for customer chatbot widget deployments.
+  - Multi-tenant PostgreSQL Row-Level Security (RLS) data isolation disclosure.
+  - Data retention schedules: 90-day auto-purge for chat transcripts.
+  - Designated named Grievance Redressal Officer in Agartala, Tripura with SLA response commitments.
+- **SSG Prerendering & SEO Alignment:**
+  - Registered `/terms` and `/refund-policy` in `src/entry-server.jsx`, `scripts/prerender.js` (19 physical HTML artifacts total), and `public/sitemap.xml`.
+  - Added company footer links in `src/components/Footer.jsx` and metadata in `src/components/PageMetadata.jsx`.
+  - Updated `test/verify_seo_prerender.cjs` asserting all 19 static HTML artifacts and canonical tags.
+
 ## [1.11.0] - 2026-10-02
 
 ### Added

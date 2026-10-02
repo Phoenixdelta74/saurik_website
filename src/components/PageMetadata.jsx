@@ -29,8 +29,16 @@ export const PAGE_METADATA = {
     'Prepare an email enquiry or open WhatsApp to discuss your field operations, custom software, CCTV, or hardware requirement.'
   ],
   '/privacy': [
-    'Privacy & enquiry information',
-    'Understand how email and WhatsApp enquiry drafts work and where to ask about information handling.'
+    'Privacy Policy & DPDP 2025 Notice',
+    "Understand how SAURIK IT handles personal data, multi-tenant AI RAG isolation, and rights under India's Digital Personal Data Protection Act."
+  ],
+  '/terms': [
+    'Terms of Service & Business Terms',
+    'Terms and conditions governing SAURIK IT software platforms, Saurik AI Chatbot subscriptions, IT hardware sales, and engineering services.'
+  ],
+  '/refund-policy': [
+    'Cancellation & Refund Policy',
+    'Transparent cancellation, refund processing, and warranty terms for SAURIK IT SaaS subscriptions, AI setup packages, and hardware sales.'
   ],
   '/track': [
     'Saurik Track — GPS Attendance & Van-Stock Tracking for Field Teams',

@@ -22,6 +22,8 @@ import WebsiteDevelopment from './pages/services/WebsiteDevelopment';
 import CctvInstallation from './pages/services/CctvInstallation';
 import CustomSoftware from './pages/services/CustomSoftware';
 import AiChatbot from './pages/AiChatbot';
+import Terms from './pages/Terms';
+import RefundPolicy from './pages/RefundPolicy';
 
 export function render(url) {
   const isTrackPage = url === '/track' || url === '/track/';
@@ -74,6 +76,8 @@ export function render(url) {
             <Route path="/services/cctv-installation" element={<CctvInstallation />} />
             <Route path="/services/custom-software" element={<CustomSoftware />} />
             <Route path="/ai-chatbot" element={<AiChatbot />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/refund-policy" element={<RefundPolicy />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>

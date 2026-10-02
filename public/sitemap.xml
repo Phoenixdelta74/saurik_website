@@ -92,8 +92,20 @@
   </url>
   <url>
     <loc>https://www.saurikit.in/privacy</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>yearly</changefreq>
+    <lastmod>2026-10-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.saurikit.in/terms</loc>
+    <lastmod>2026-10-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.saurikit.in/refund-policy</loc>
+    <lastmod>2026-10-02</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 </urlset>

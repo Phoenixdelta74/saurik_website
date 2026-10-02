@@ -1,6 +1,6 @@
 # SAURIK IT Website Architecture & Technical Design Principles
 
-**Version:** 1.7  
+**Version:** 1.8  
 **Last Updated:** 02 October 2026  
 **Status:** Living Technical Architecture Document  
 
@@ -8,7 +8,7 @@
 
 ## 1. Executive Architectural Overview
 
-The **SAURIK IT Private Limited** digital presence (`https://www.saurikit.in`) operates as a statically prerendered (SSG) application built with React 18, Vite 6, and Tailwind CSS. Every public route—including corporate pages, demand planning demos (`/use-cases`), dedicated priority service guides (`/services/*`), the **Saurik AI Chatbot** product landing (`/ai-chatbot`), and flagship product pages (**Saurik Track** at `/track/` and **Arthos Invoice Studio** at `/arthos/`)—generates a physical HTML document in `dist/<route>/index.html` at build time with embedded pre-rendered markup, canonical URLs, and OpenGraph/JSON-LD metadata. Non-existent routes serve a branded `dist/404.html` with a true HTTP 404 status. A client-side hydration engine (`hydrateRoot`) mounts seamlessly for interactive widgets, while a floating AI voice & chat assistant is powered by native Web Speech APIs and grounded serverless LLM endpoints.
+The **SAURIK IT Private Limited** digital presence (`https://www.saurikit.in`) operates as a statically prerendered (SSG) application built with React 18, Vite 6, and Tailwind CSS. Every public route—including corporate pages, demand planning demos (`/use-cases`), dedicated priority service guides (`/services/*`), the **Saurik AI Chatbot** product landing (`/ai-chatbot`), legal compliance pages (`/terms`, `/refund-policy`, `/privacy`), and flagship product pages (**Saurik Track** at `/track/` and **Arthos Invoice Studio** at `/arthos/`)—generates a physical HTML document in `dist/<route>/index.html` at build time with embedded pre-rendered markup, canonical URLs, and OpenGraph/JSON-LD metadata. Non-existent routes serve a branded `dist/404.html` with a true HTTP 404 status. A client-side hydration engine (`hydrateRoot`) mounts seamlessly for interactive widgets, while a floating AI voice & chat assistant is powered by native Web Speech APIs and grounded serverless LLM endpoints.
 
 ```mermaid
 graph TD
@@ -17,6 +17,7 @@ graph TD
     Gateway -->|GET /track or /track/| StaticTrack[dist/track/index.html - Zero-JS Static SSR HTML]
     Gateway -->|GET /arthos or /arthos/| StaticArthos[dist/arthos/index.html - Static Landing HTML]
     Gateway -->|GET /ai-chatbot| StaticAiChatbot[dist/ai-chatbot/index.html - Prerendered Product Landing]
+    Gateway -->|GET /terms, /refund-policy| StaticCompliance[dist/terms, dist/refund-policy - Static Compliance HTML]
     Gateway -->|GET /services/*| StaticServices[dist/services/*/index.html - Prerendered Service Pages]
     Gateway -->|GET /use-cases/*| StaticUseCases[dist/use-cases/*/index.html - Prerendered Demo Pages]
     Gateway -->|GET /software, /hardware, etc.| StaticPages[dist/*/index.html - Prerendered Route HTML]
@@ -43,7 +44,9 @@ graph TD
         RouterView --> UseCases[/use-cases Demand Planning Demos]
         RouterView --> About[/about About & Story]
         RouterView --> Contact[/contact Smart Enquiry with Track Trial Flow]
-        RouterView --> Privacy[/privacy Data Policy]
+        RouterView --> Privacy[/privacy DPDP 2025 Data Notice]
+        RouterView --> Terms[/terms Terms of Service]
+        RouterView --> RefundPolicy[/refund-policy Cancellation & Refunds]
         RouterView --> NotFound[* 404 Fallback]
     end
     

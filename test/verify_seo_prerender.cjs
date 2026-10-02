@@ -24,6 +24,8 @@ const expectedHtmlFiles = [
   'services/cctv-installation/index.html',
   'services/custom-software/index.html',
   'ai-chatbot/index.html',
+  'terms/index.html',
+  'refund-policy/index.html',
   'track/index.html',
   'arthos/index.html',
   '404.html'
@@ -48,6 +50,8 @@ const canonicalChecks = [
   ['about/index.html', 'https://www.saurikit.in/about'],
   ['contact/index.html', 'https://www.saurikit.in/contact'],
   ['privacy/index.html', 'https://www.saurikit.in/privacy'],
+  ['terms/index.html', 'https://www.saurikit.in/terms'],
+  ['refund-policy/index.html', 'https://www.saurikit.in/refund-policy'],
   ['use-cases/index.html', 'https://www.saurikit.in/use-cases'],
   ['services/website-development/index.html', 'https://www.saurikit.in/services/website-development'],
   ['services/cctv-installation/index.html', 'https://www.saurikit.in/services/cctv-installation'],
@@ -82,6 +86,8 @@ assert.equal(sitemap.includes('https://www.saurikit.in/services/custom-software'
 assert.equal(sitemap.includes('https://www.saurikit.in/track/'), true);
 assert.equal(sitemap.includes('https://www.saurikit.in/arthos/'), true);
 assert.equal(sitemap.includes('https://www.saurikit.in/ai-chatbot'), true);
+assert.equal(sitemap.includes('https://www.saurikit.in/terms'), true);
+assert.equal(sitemap.includes('https://www.saurikit.in/refund-policy'), true);
 console.log('  ✔ robots.txt and sitemap.xml verified.');
 
 // 4. Check Contact page topic flow

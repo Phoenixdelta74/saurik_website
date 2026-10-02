@@ -23,6 +23,8 @@ const routes = [
   '/services/cctv-installation',
   '/services/custom-software',
   '/ai-chatbot',
+  '/terms',
+  '/refund-policy',
   '/404',
 ];
 

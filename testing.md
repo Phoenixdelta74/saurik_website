@@ -106,10 +106,10 @@ node test/verify_use_case_analytics.cjs
 node test/verify_seo_prerender.cjs
 ```
 **Pass criteria:**
-- Verifies existence of all 17 prerendered static HTML files in `dist/` (`index.html`, `/software`, `/hardware`, `/about`, `/contact`, `/privacy`, `/use-cases`, 3 industry demos, 3 priority service pages, `/ai-chatbot`, `/track/`, `/arthos/`, and `404.html`).
+- Verifies existence of all 19 prerendered static HTML files in `dist/` (`index.html`, `/software`, `/hardware`, `/about`, `/contact`, `/privacy`, `/terms`, `/refund-policy`, `/use-cases`, 3 industry demos, 3 priority service pages, `/ai-chatbot`, `/track/`, `/arthos/`, and `404.html`).
 - Validates that every static HTML artifact contains non-empty prerendered root markup and no stale `wwwsaurikit.com` domain references.
 - Validates canonical tags strictly targeting `https://www.saurikit.in`.
-- Validates `robots.txt` points to `https://www.saurikit.in/sitemap.xml` and `sitemap.xml` contains all public URLs including new priority services and `/ai-chatbot`.
+- Validates `robots.txt` points to `https://www.saurikit.in/sitemap.xml` and `sitemap.xml` contains all public URLs including new priority services, `/ai-chatbot`, `/terms`, and `/refund-policy`.
 - Confirms Contact page topic dropdown includes `saurik_track` and `ai_chatbot` with custom demo & pilot preparation notices.
 - Confirms Homepage positioning highlights Agartala/Tripura & Northeast operations without internal strategy jargon.
 - Confirms `vercel.json` has `cleanUrls: true` and outputDirectory `dist`.
@@ -119,7 +119,7 @@ node test/verify_seo_prerender.cjs
 Run the complete automated gate:
 ```bash
 npm test
-# Runs: verify_track_spec_v3 && verify_track_e2e && verify_arthos_spec && verify_voice_assistant && verify_chatbot && verify_use_case_analytics && verify_seo_prerender
+# Runs: verify_track_spec_v3 && verify_track_e2e && verify_arthos_spec && verify_voice_assistant && verify_chatbot && verify_use_case_analytics && verify_seo_prerender && verify_backend_engine && verify_onboard_cli
 ```
 
 ---

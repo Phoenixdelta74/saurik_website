@@ -154,6 +154,12 @@ const Footer = () => {
               <li>
                 <Link to="/privacy" className="hover:text-ink-primary transition-colors">Privacy Policy</Link>
               </li>
+              <li>
+                <Link to="/terms" className="hover:text-ink-primary transition-colors">Terms of Service</Link>
+              </li>
+              <li>
+                <Link to="/refund-policy" className="hover:text-ink-primary transition-colors">Refund Policy</Link>
+              </li>
             </ul>
             
           </div>
@@ -165,9 +171,11 @@ const Footer = () => {
           <div>
             © {new Date().getFullYear()} {COMPANY_INFO.legalName}. All rights reserved.
           </div>
-          <div className="flex items-center gap-6">
+          <div className="flex flex-wrap items-center gap-4 sm:gap-6">
             <span>{COMPANY_INFO.availability}</span>
-            <Link to="/privacy" className="hover:text-ink-primary underline underline-offset-2">Privacy & Enquiries</Link>
+            <Link to="/privacy" className="hover:text-ink-primary underline underline-offset-2">Privacy</Link>
+            <Link to="/terms" className="hover:text-ink-primary underline underline-offset-2">Terms</Link>
+            <Link to="/refund-policy" className="hover:text-ink-primary underline underline-offset-2">Refunds</Link>
           </div>
         </div>
 
