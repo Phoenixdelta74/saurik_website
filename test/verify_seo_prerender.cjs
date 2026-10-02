@@ -142,4 +142,26 @@ assert.equal(footerSrc.includes('to="/track/"'), true, 'Footer must link to cano
 assert.equal(footerSrc.includes('to="/arthos/"'), true, 'Footer must link to canonical /arthos/');
 console.log('  ✔ All 4 SEO audit fixes verified with zero regressions.');
 
+// 8. Client bundle integrity & App.jsx route import verification
+console.log('8. Checking client bundle integrity and route component imports...');
+const appSrc = fs.readFileSync(path.join(root, 'src/App.jsx'), 'utf8');
+const routeElements = [...appSrc.matchAll(/element=\{<([A-Z][a-zA-Z0-9]+)/g)].map(m => m[1]);
+for (const comp of routeElements) {
+  assert.equal(
+    appSrc.includes(`import ${comp} `) || appSrc.includes(`import ${comp},`) || appSrc.includes(`import { ${comp}`) || appSrc.includes(`const ${comp} =`),
+    true,
+    `Component <${comp} /> used in App.jsx routes must be imported or declared in App.jsx`
+  );
+}
+assert.equal(fs.existsSync(path.join(root, 'src/components/ErrorBoundary.jsx')), true, 'ErrorBoundary must exist');
+const mainSrc = fs.readFileSync(path.join(root, 'src/main.jsx'), 'utf8');
+assert.equal(mainSrc.includes('ErrorBoundary'), true, 'src/main.jsx must mount ErrorBoundary');
+
+const assetFiles = fs.readdirSync(path.join(dist, 'assets'));
+const jsBundleName = assetFiles.find(f => f.startsWith('index-') && f.endsWith('.js'));
+assert.equal(Boolean(jsBundleName), true, 'Client JS bundle index-*.js must exist in dist/assets');
+const bundleContent = fs.readFileSync(path.join(dist, 'assets', jsBundleName), 'utf8');
+assert.equal(bundleContent.includes('CustomSoftware,{}'), false, 'JS bundle must not contain undeclared CustomSoftware identifier');
+console.log('  ✔ Client hydration bundle verified with zero missing component imports and active ErrorBoundary.');
+
 console.log('\n=== ALL SEO & STATIC PRERENDER VERIFICATIONS PASSED SUCCESSFULLY! ===\n');

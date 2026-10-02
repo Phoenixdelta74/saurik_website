@@ -18,6 +18,7 @@ import Arthos from './pages/Arthos';
 import UseCases from './pages/UseCases';
 import WebsiteDevelopment from './pages/services/WebsiteDevelopment';
 import CctvInstallation from './pages/services/CctvInstallation';
+import CustomSoftware from './pages/services/CustomSoftware';
 import AiChatbot from './pages/AiChatbot';
 import Terms from './pages/Terms';
 import RefundPolicy from './pages/RefundPolicy';

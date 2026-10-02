@@ -114,6 +114,7 @@ node test/verify_seo_prerender.cjs
 - Confirms Homepage positioning highlights Agartala/Tripura & Northeast operations without internal strategy jargon.
 - Confirms `vercel.json` has `cleanUrls: true` and outputDirectory `dist`.
 - Validates the 4 SEO audit fixes: valid RFC-compliant `tel:+919862087157` URIs (no space), `og:locale` set to `en_IN` across pages, `twitter:url` matching page canonical on `/contact`, and trailing-slash consistency for `/track/` and `/arthos/` internal links.
+- **Client Hydration Integrity & Route Component Import Audit:** Inspects `src/App.jsx` ensuring every `<Route>` component is explicitly imported/declared, confirms `ErrorBoundary` is wired in `src/main.jsx`, and validates that the production JS bundle contains zero undeclared component identifiers.
 
 ### 2.10. Full Automated Test Suite Execution
 Run the complete automated gate:

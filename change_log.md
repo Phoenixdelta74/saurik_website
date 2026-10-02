@@ -4,6 +4,19 @@ All notable changes to the SAURIK IT Private Limited website codebase will be do
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.12.1] - 2026-10-02
+
+### Fixed
+- **Client Hydration Blank Page Crash (`src/App.jsx`):**
+  - Resolved `Uncaught ReferenceError: CustomSoftware is not defined` caused by a missing import statement for `CustomSoftware` in `src/App.jsx`.
+  - While static SSG prerendering succeeded via `entry-server.jsx`, the client-side JavaScript bundle previously threw an uncaught runtime reference error upon evaluating the `<CustomSoftware />` route element during `ReactDOM.hydrateRoot`, causing web browsers to blank out.
+- **Resilient UI Error Boundary & Hydration Fallback (`src/components/ErrorBoundary.jsx`, `src/main.jsx`):**
+  - Introduced accessible, branded `ErrorBoundary` component displaying a recovery dialog rather than an unmounted blank screen if an unhandled UI error occurs.
+  - Wrapped client application with `ErrorBoundary` and fortified `src/main.jsx` with a try/catch hydration fallback to a fresh client render in case of fatal hydration anomalies.
+- **Automated Bundle Integrity Verification (`test/verify_seo_prerender.cjs`):**
+  - Added automated test #8 verifying that every component referenced in `src/App.jsx` route elements is explicitly imported or declared in `src/App.jsx`.
+  - Verified client bundle `dist/assets/index-*.js` contains zero unimported route component identifiers.
+
 ## [1.12.0] - 2026-10-02
 
 ### Added

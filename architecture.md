@@ -1,6 +1,6 @@
 # SAURIK IT Website Architecture & Technical Design Principles
 
-**Version:** 1.8  
+**Version:** 1.9  
 **Last Updated:** 02 October 2026  
 **Status:** Living Technical Architecture Document  
 
@@ -8,7 +8,7 @@
 
 ## 1. Executive Architectural Overview
 
-The **SAURIK IT Private Limited** digital presence (`https://www.saurikit.in`) operates as a statically prerendered (SSG) application built with React 18, Vite 6, and Tailwind CSS. Every public route—including corporate pages, demand planning demos (`/use-cases`), dedicated priority service guides (`/services/*`), the **Saurik AI Chatbot** product landing (`/ai-chatbot`), legal compliance pages (`/terms`, `/refund-policy`, `/privacy`), and flagship product pages (**Saurik Track** at `/track/` and **Arthos Invoice Studio** at `/arthos/`)—generates a physical HTML document in `dist/<route>/index.html` at build time with embedded pre-rendered markup, canonical URLs, and OpenGraph/JSON-LD metadata. Non-existent routes serve a branded `dist/404.html` with a true HTTP 404 status. A client-side hydration engine (`hydrateRoot`) mounts seamlessly for interactive widgets, while a floating AI voice & chat assistant is powered by native Web Speech APIs and grounded serverless LLM endpoints.
+The **SAURIK IT Private Limited** digital presence (`https://www.saurikit.in`) operates as a statically prerendered (SSG) application built with React 18, Vite 6, and Tailwind CSS. Every public route—including corporate pages, demand planning demos (`/use-cases`), dedicated priority service guides (`/services/*`), the **Saurik AI Chatbot** product landing (`/ai-chatbot`), legal compliance pages (`/terms`, `/refund-policy`, `/privacy`), and flagship product pages (**Saurik Track** at `/track/` and **Arthos Invoice Studio** at `/arthos/`)—generates a physical HTML document in `dist/<route>/index.html` at build time with embedded pre-rendered markup, canonical URLs, and OpenGraph/JSON-LD metadata. Non-existent routes serve a branded `dist/404.html` with a true HTTP 404 status. A client-side hydration engine (`hydrateRoot`) mounts within an `ErrorBoundary` wrapper with automatic client-render fallback, while a floating AI voice & chat assistant is powered by native Web Speech APIs and grounded serverless LLM endpoints.
 
 ```mermaid
 graph TD
@@ -26,7 +26,8 @@ graph TD
     
     subgraph Client Hydration Layer [React 18 / Vite 6 / React Router v6]
         StaticPages --> MainJSX[src/main.jsx - hydrateRoot / createRoot]
-        MainJSX --> AppShell[src/App.jsx Layout Shell]
+        MainJSX --> ErrorBoundary[src/components/ErrorBoundary.jsx]
+        ErrorBoundary --> AppShell[src/App.jsx Layout Shell]
         
         AppShell --> Header[src/components/Header.jsx - Desktop & Mobile Nav]
         AppShell --> RouterView[React Router Routes]
