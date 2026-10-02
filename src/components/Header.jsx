@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { ArrowRight, Menu, X, ChevronDown, Compass, Receipt, Sparkles, Globe, Camera, Layers } from 'lucide-react';
+import { ArrowRight, Menu, X, ChevronDown, Compass, Receipt, Sparkles, Globe, Camera, Layers, Bot } from 'lucide-react';
 import Logo from './Logo';
 
 const corporateLinks = [
@@ -150,6 +150,32 @@ export default function Header() {
                     </div>
                     <p className="text-xs text-ink-secondary mt-0.5 leading-relaxed">
                       GST-aware billing, collections &amp; Business Health.
+                    </p>
+                  </div>
+                </Link>
+
+                <div className="h-px bg-border-subtle/60 my-1 mx-2"></div>
+
+                <Link
+                  to="/ai-chatbot"
+                  onClick={() => setProductsOpen(false)}
+                  className="flex items-start gap-3.5 p-3 rounded-xl hover:bg-slate-50 transition-colors group"
+                  role="menuitem"
+                >
+                  <div className="p-2.5 rounded-lg bg-teal-50 text-accent-teal group-hover:bg-accent-teal group-hover:text-white transition-colors flex-shrink-0 mt-0.5">
+                    <Bot size={20} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-bold text-ink-primary group-hover:text-accent-teal transition-colors whitespace-nowrap">
+                        Saurik AI Chatbot
+                      </span>
+                      <span className="px-1.5 py-0.5 text-[9px] font-mono font-bold rounded bg-teal-100 text-teal-800 border border-teal-300">
+                        NEW
+                      </span>
+                    </div>
+                    <p className="text-xs text-ink-secondary mt-0.5 leading-relaxed">
+                      Website assistant &amp; lead capture.
                     </p>
                   </div>
                 </Link>
@@ -321,6 +347,20 @@ export default function Header() {
               </div>
               <span className="px-2 py-0.5 text-[10px] font-mono font-bold rounded bg-blue-100 text-blue-800 border border-blue-300">
                 INVOICING
+              </span>
+            </NavLink>
+
+            <NavLink
+              to="/ai-chatbot"
+              onClick={() => setOpen(false)}
+              className="flex items-center justify-between p-3 rounded-lg hover:bg-slate-50 transition-colors"
+            >
+              <div className="flex items-center gap-3">
+                <Bot size={18} className="text-accent-teal" />
+                <span className="font-semibold text-sm text-ink-primary">Saurik AI Chatbot</span>
+              </div>
+              <span className="px-2 py-0.5 text-[10px] font-mono font-bold rounded bg-teal-100 text-teal-800 border border-teal-300">
+                NEW
               </span>
             </NavLink>
           </div>

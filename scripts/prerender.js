@@ -22,6 +22,7 @@ const routes = [
   '/services/website-development',
   '/services/cctv-installation',
   '/services/custom-software',
+  '/ai-chatbot',
   '/404',
 ];
 

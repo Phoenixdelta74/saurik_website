@@ -19,6 +19,7 @@ import UseCases from './pages/UseCases';
 import WebsiteDevelopment from './pages/services/WebsiteDevelopment';
 import CctvInstallation from './pages/services/CctvInstallation';
 import CustomSoftware from './pages/services/CustomSoftware';
+import AiChatbot from './pages/AiChatbot';
 
 // Helper component to handle scrolling on route change or hash change
 const ScrollToTop = () => {
@@ -95,6 +96,7 @@ const AppContent = () => {
           <Route path="/services/website-development" element={<WebsiteDevelopment />} />
           <Route path="/services/cctv-installation" element={<CctvInstallation />} />
           <Route path="/services/custom-software" element={<CustomSoftware />} />
+          <Route path="/ai-chatbot" element={<AiChatbot />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

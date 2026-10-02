@@ -4,6 +4,33 @@ All notable changes to the SAURIK IT Private Limited website codebase will be do
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.10.0] - 2026-10-02
+
+### Added
+- **Saurik AI Chatbot Product Landing Page (`/ai-chatbot`):**
+  - Built dedicated B2B conversion page `src/pages/AiChatbot.jsx` featuring high-converting value propositions for Tripura & Northeast India SMBs.
+  - Interactive RAG simulator demonstrating real-time knowledge grounding, verified citations, and instant fallback logic.
+  - Regional industry use-case cards: Healthcare Clinics, Tourism & Homestays, Coaching Institutes, and Retail/Wholesale Distribution.
+  - Transparent pricing grid (Starter ₹1,499/mo, Growth ₹3,999/mo, Pro ₹7,999/mo) and Done-For-You Setup package (₹4,999 one-time).
+  - 4-step delivery process (Understand, Plan, Deliver, Support) and comprehensive FAQ accordion.
+  - Embedded JSON-LD structured data schemas (`SoftwareApplication`, `BreadcrumbList`, and `FAQPage`).
+- **Contact & Inquiry Routing (`src/pages/Contact.jsx`):**
+  - Added `ai_chatbot` topic to service selector and URL query parameter preselection (`/contact?topic=ai_chatbot`).
+  - Added dedicated dynamic trial & demo preparation card with custom dataset guidelines.
+- **Site-Wide Navigation & SEO Integrations:**
+  - Added "Saurik AI Chatbot" with "NEW" badge to desktop products popover and mobile drawer in `src/components/Header.jsx`.
+  - Added to software services list in `src/components/Footer.jsx` and feature links in `src/pages/Home.jsx`.
+  - Registered route in client router `src/App.jsx` and static prerenderer `src/entry-server.jsx` and `scripts/prerender.js`.
+  - Added `https://www.saurikit.in/ai-chatbot` to `public/sitemap.xml` with priority 0.9.
+  - Added metadata definitions to `src/components/PageMetadata.jsx`.
+- **Chatbot Knowledge Grounding & Mode Routing (`src/data/chatContext.js`, `api/chat.js`, `src/components/ChatWidget.jsx`):**
+  - Added `AI_CHATBOT_KNOWLEDGE` to `GROUNDING_CONTEXT` and created `AI_CHATBOT_CHAT_SYSTEM_PROMPT`.
+  - Configured `api/chat.js` to route system prompt on `mode === 'ai-chatbot'`.
+  - Updated `src/components/ChatWidget.jsx` to detect `/ai-chatbot` route, pass mode to API, and provide 6 contextual prompt pills.
+- **Automated Verification Test Suites:**
+  - Updated `test/verify_seo_prerender.cjs` to assert `dist/ai-chatbot/index.html` (17 SSG artifacts total), sitemap, and contact form handling.
+  - Updated `test/verify_chatbot.cjs` with Test 9 verifying grounding, mode forwarding, and widget contextual prompts.
+
 ## [1.9.0] - 2026-09-29
 
 ### Fixed

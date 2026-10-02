@@ -218,6 +218,25 @@ export const USE_CASES_KNOWLEDGE = `FOUNDER-VERIFIED SPECIFICATIONS FOR DEMAND P
 - Mandatory Safeguard: We never guarantee forecast accuracy or 100% precision. Analytical outputs assist human planners; they do not replace human judgment.
 - Enquiries for custom analytics pipelines can be submitted via /contact?topic=data_analytics or email contact@saurikit.in.`;
 
+export const AI_CHATBOT_KNOWLEDGE = `FOUNDER-VERIFIED SPECIFICATIONS FOR SAURIK AI CHATBOT (/ai-chatbot):
+
+1. PRODUCT OVERVIEW & VALUE PROPOSITION:
+- Saurik AI Chatbot is an embeddable website assistant engineered specifically for businesses across Tripura and Northeast India.
+- Answers visitor questions strictly from approved client documents (website pages, PDF catalogs, brochures, price sheets, FAQs) with verifiable source citations.
+- Built-in lead capture: collects visitor name, phone number, and requirement, delivering instant email notifications to the business.
+- Zero-cost human handoff: features an instant "Chat on WhatsApp" button (wa.me) connecting visitors directly to business owners.
+- Zero hallucinations: strictly bounded by Retrieval-Augmented Generation (RAG); if a query is outside approved documentation, it politely explains that it does not have verified information and offers human WhatsApp handoff rather than guessing.
+- Installs with a single <script> tag on WordPress, Wix, Shopify, Squarespace, React, PHP, or custom HTML websites.
+- Fluently supports English and Hindi out of the box.
+
+2. COMMERCIAL PRICING PLANS (ALL PRICES +18% GST):
+- Starter: ₹1,499/month — 1 website, up to 50 pages / 20 documents, 500 conversations/month, email lead capture, strict RAG citations.
+- Growth (Most Popular): ₹3,999/month — 2 websites, up to 200 pages / 100 documents, 2,000 conversations/month, WhatsApp handoff button, CSV lead export, bilingual English & Hindi support.
+- Pro: ₹7,999/month — Up to 5 websites, up to 500 pages / 250 documents, 5,000 conversations/month, priority SLA, WhatsApp Cloud API readiness.
+- Done-For-You Setup (Optional): ₹4,999 one-time — Content collection, boilerplate cleanup, boundary tuning, installation, and 30 days of active monitoring.
+- Annual billing offers 2 months free (10 months payment). Soft usage warnings at 80% with zero surprise overages.
+- Prospective clients can test a custom demo on their own content by submitting an enquiry at /contact?topic=ai_chatbot or emailing contact@saurikit.in.`;
+
 const GROUNDING_CONTEXT = [
   renderCompanySection(),
   renderSoftwareSection(),
@@ -227,6 +246,7 @@ const GROUNDING_CONTEXT = [
   renderArthosSection(),
   ARTHOS_OPERATIONS_KNOWLEDGE,
   USE_CASES_KNOWLEDGE,
+  AI_CHATBOT_KNOWLEDGE,
 ].join('\n\n');
 
 const SAFETY_RULES = `RULES
@@ -308,6 +328,24 @@ Your communication style:
 - Offer to connect them to discuss their analytics and forecasting requirements via /contact?topic=data_analytics or email contact@saurikit.in.
 
 ${USE_CASES_KNOWLEDGE}
+
+${SAFETY_RULES}`;
+
+export const AI_CHATBOT_CHAT_SYSTEM_PROMPT = `You are the specialized Saurik AI Chatbot Product & Technical Specialist for ${COMPANY_INFO.name}.
+You speak directly with business owners, clinic administrators, hotel operators, coaching institute directors, and web developers exploring the Saurik AI Chatbot (/ai-chatbot).
+
+PRODUCT SUMMARY:
+Saurik AI Chatbot is a grounded website assistant that answers customer questions strictly from approved documents, provides verified source citations, captures phone leads, and escalates to human WhatsApp with zero hallucinations.
+
+Your communication style:
+- Empathetic, practical, trustworthy, technically crisp, and transparent.
+- Clearly emphasize that the assistant NEVER hallucinates or guesses; it is strictly bounded to approved client documents.
+- Explain the transparent pricing tiers (Starter ₹1,499/mo, Growth ₹3,999/mo, Pro ₹7,999/mo, and Done-For-You setup ₹4,999 one-time).
+- Highlight the single-script installation and bilingual English/Hindi capability.
+- Keep your answers concise, direct, and conversational (2 to 3 sentences for spoken voice clarity, or 1-2 focused paragraphs for text).
+- Always offer to help them test a free demo on their own website content via /contact?topic=ai_chatbot or email contact@saurikit.in.
+
+${AI_CHATBOT_KNOWLEDGE}
 
 ${SAFETY_RULES}`;
 

@@ -30,10 +30,21 @@ const ChatWidget = () => {
   const isTrack = location.pathname.startsWith('/track');
   const isArthos = location.pathname.startsWith('/arthos');
   const isUseCases = location.pathname.startsWith('/use-cases');
+  const isAiChatbot = location.pathname.startsWith('/ai-chatbot');
 
-  const pageMode = isTrack ? 'track' : isArthos ? 'arthos' : isUseCases ? 'use-cases' : undefined;
+  const pageMode = isTrack ? 'track' : isArthos ? 'arthos' : isUseCases ? 'use-cases' : isAiChatbot ? 'ai-chatbot' : undefined;
 
   const currentQuestions = useMemo(() => {
+    if (isAiChatbot) {
+      return [
+        "How do you guarantee zero hallucinations?",
+        "What is included in the ₹1,499 Starter plan?",
+        "How does the single-line script installation work?",
+        "Can you build a live demo on my company's catalog?",
+        "How does the WhatsApp human handoff work?",
+        "What languages are supported out of the box?",
+      ];
+    }
     if (isArthos) {
       return [
         "What is the difference between Desktop and Cloud?",

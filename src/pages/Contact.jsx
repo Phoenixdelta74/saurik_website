@@ -75,6 +75,7 @@ const Contact = () => {
 
   const getTopicLabel = (val) => {
     const labels = {
+      ai_chatbot: 'Saurik AI Chatbot — Website Assistant & Lead Capture',
       saurik_track: 'Saurik Track — Field & Fleet ERP (Trial / Pilot Onboarding)',
       arthos_early_access: 'Arthos Invoice Studio — Early Access',
       data_analytics: 'Data Analytics as a Service (Forecasting)',
@@ -374,7 +375,8 @@ const Contact = () => {
                   >
                     <option value="not_sure">Not sure yet / General discussion</option>
                     <optgroup label="── Flagship Software Products ──">
-                      <option value="saurik_track">Saurik Track — Field & Fleet ERP (Trial / Pilot Onboarding)</option>
+                      <option value="ai_chatbot">Saurik AI Chatbot — Website Assistant &amp; Lead Capture</option>
+                      <option value="saurik_track">Saurik Track — Field &amp; Fleet ERP (Trial / Pilot Onboarding)</option>
                       <option value="arthos_early_access">Arthos Invoice Studio — Early Access</option>
                     </optgroup>
                     <optgroup label="── Software & IT Services ──">
@@ -393,6 +395,16 @@ const Contact = () => {
                     </optgroup>
                   </select>
                 </div>
+
+                {/* Dynamic Notice: Saurik AI Chatbot Demo & Onboarding */}
+                {formData.serviceTopic === 'ai_chatbot' && (
+                  <div className="p-4 bg-teal-50/60 rounded-control border border-teal-200/80 animate-in fade-in duration-200 text-xs text-ink-secondary space-y-1">
+                    <p className="font-semibold text-ink-primary">Saurik AI Chatbot — Custom Demo &amp; Setup</p>
+                    <p>
+                      Submitting prepares an enquiry draft via email or WhatsApp. Share your website URL, product catalog, or business FAQs below. Our team will index your approved content and prepare a live, grounded demo widget for your review before installation.
+                    </p>
+                  </div>
+                )}
 
                 {/* Dynamic Notice: Saurik Track Guided Onboarding */}
                 {formData.serviceTopic === 'saurik_track' && (

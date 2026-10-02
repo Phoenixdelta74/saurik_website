@@ -162,8 +162,13 @@ const Home = () => {
                     Web portals, website development, data analytics, and scoped AI workflows with human review controls.
                   </p>
                   <div className="mt-2.5 flex flex-wrap items-center gap-3 text-xs">
+                    <Link to="/ai-chatbot" className="text-accent-teal hover:underline font-semibold flex items-center gap-1">
+                      <span>Saurik AI Chatbot</span>
+                      <span className="px-1.5 py-0.2 text-[9px] font-mono font-bold rounded bg-teal-100 text-teal-800 border border-teal-300">NEW</span>
+                      <span>→</span>
+                    </Link>
                     <Link to="/services/website-development" className="text-accent-teal hover:underline font-semibold">
-                      Website Design (Tripura) →
+                      Website Design →
                     </Link>
                     <Link to="/services/custom-software" className="text-accent-teal hover:underline font-semibold">
                       Custom Software →

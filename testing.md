@@ -74,11 +74,12 @@ node test/verify_voice_assistant.cjs
 node test/verify_chatbot.cjs
 ```
 **Pass Criteria:**
-- `api/chat.js` endpoint validation and dynamic mode router (`mode: 'track'`, `mode: 'arthos'`).
+- `api/chat.js` endpoint validation and dynamic mode router (`mode: 'track'`, `mode: 'arthos'`, `mode: 'ai-chatbot'`).
 - Multi-provider engine (Anthropic, OpenAI, OpenRouter, Ollama) with source routing.
 - Grounded context and system prompt structure (`chatContext.js`).
 - Specialized Saurik Track Operations Assistant grounding, mode router, and inline mounting.
 - Specialized Arthos Invoice Studio Assistant grounding, mode router, and inline mounting (`ArthosInlineChat.jsx`).
+- Specialized Saurik AI Chatbot Product Assistant grounding (`AI_CHATBOT_KNOWLEDGE`), contextual prompt pills, and `/ai-chatbot` mode routing.
 
 ### 2.7. Arthos Invoice Studio Spec Verification
 ```bash
@@ -105,11 +106,11 @@ node test/verify_use_case_analytics.cjs
 node test/verify_seo_prerender.cjs
 ```
 **Pass criteria:**
-- Verifies existence of all 16 prerendered static HTML files in `dist/` (`index.html`, `/software`, `/hardware`, `/about`, `/contact`, `/privacy`, `/use-cases`, 3 industry demos, 3 priority service pages, `/track/`, `/arthos/`, and `404.html`).
+- Verifies existence of all 17 prerendered static HTML files in `dist/` (`index.html`, `/software`, `/hardware`, `/about`, `/contact`, `/privacy`, `/use-cases`, 3 industry demos, 3 priority service pages, `/ai-chatbot`, `/track/`, `/arthos/`, and `404.html`).
 - Validates that every static HTML artifact contains non-empty prerendered root markup and no stale `wwwsaurikit.com` domain references.
 - Validates canonical tags strictly targeting `https://www.saurikit.in`.
-- Validates `robots.txt` points to `https://www.saurikit.in/sitemap.xml` and `sitemap.xml` contains all public URLs including new priority services.
-- Confirms Contact page topic dropdown includes `saurik_track` with 30-day trial & pilot setup notice.
+- Validates `robots.txt` points to `https://www.saurikit.in/sitemap.xml` and `sitemap.xml` contains all public URLs including new priority services and `/ai-chatbot`.
+- Confirms Contact page topic dropdown includes `saurik_track` and `ai_chatbot` with custom demo & pilot preparation notices.
 - Confirms Homepage positioning highlights Agartala/Tripura & Northeast operations without internal strategy jargon.
 - Confirms `vercel.json` has `cleanUrls: true` and outputDirectory `dist`.
 - Validates the 4 SEO audit fixes: valid RFC-compliant `tel:+919862087157` URIs (no space), `og:locale` set to `en_IN` across pages, `twitter:url` matching page canonical on `/contact`, and trailing-slash consistency for `/track/` and `/arthos/` internal links.

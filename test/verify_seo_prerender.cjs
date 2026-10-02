@@ -23,6 +23,7 @@ const expectedHtmlFiles = [
   'services/website-development/index.html',
   'services/cctv-installation/index.html',
   'services/custom-software/index.html',
+  'ai-chatbot/index.html',
   'track/index.html',
   'arthos/index.html',
   '404.html'
@@ -36,7 +37,7 @@ for (const relPath of expectedHtmlFiles) {
   assert.equal(content.includes('<div id="root"></div>'), false, `dist/${relPath} root div must not be empty`);
   assert.equal(content.includes('wwwsaurikit.com'), false, `dist/${relPath} must not contain stale wwwsaurikit.com domain`);
 }
-console.log('  ✔ All 16 static HTML artifacts exist and contain pre-rendered markup.');
+console.log(`  ✔ All ${expectedHtmlFiles.length} static HTML artifacts exist and contain pre-rendered markup.`);
 
 // 2. Check canonical domains and metadata on key pages
 console.log('2. Checking canonical URLs and metadata...');
@@ -51,6 +52,7 @@ const canonicalChecks = [
   ['services/website-development/index.html', 'https://www.saurikit.in/services/website-development'],
   ['services/cctv-installation/index.html', 'https://www.saurikit.in/services/cctv-installation'],
   ['services/custom-software/index.html', 'https://www.saurikit.in/services/custom-software'],
+  ['ai-chatbot/index.html', 'https://www.saurikit.in/ai-chatbot'],
   ['track/index.html', 'https://www.saurikit.in/track/'],
   ['arthos/index.html', 'https://www.saurikit.in/arthos/'],
   ['404.html', 'https://www.saurikit.in/404']
@@ -79,6 +81,7 @@ assert.equal(sitemap.includes('https://www.saurikit.in/services/cctv-installatio
 assert.equal(sitemap.includes('https://www.saurikit.in/services/custom-software'), true);
 assert.equal(sitemap.includes('https://www.saurikit.in/track/'), true);
 assert.equal(sitemap.includes('https://www.saurikit.in/arthos/'), true);
+assert.equal(sitemap.includes('https://www.saurikit.in/ai-chatbot'), true);
 console.log('  ✔ robots.txt and sitemap.xml verified.');
 
 // 4. Check Contact page topic flow
@@ -87,7 +90,9 @@ const contactSrc = fs.readFileSync(path.join(root, 'src/pages/Contact.jsx'), 'ut
 assert.equal(contactSrc.includes('saurik_track'), true, 'Contact.jsx must handle saurik_track topic');
 assert.equal(contactSrc.includes('Saurik Track — Field & Fleet ERP'), true, 'Contact.jsx must display Track in dropdown');
 assert.equal(contactSrc.includes('30-Day Trial'), true, 'Contact.jsx must describe 30-day trial for Track');
-console.log('  ✔ Contact page topic flow and trial notice verified.');
+assert.equal(contactSrc.includes('ai_chatbot'), true, 'Contact.jsx must handle ai_chatbot topic');
+assert.equal(contactSrc.includes('Saurik AI Chatbot'), true, 'Contact.jsx must display AI Chatbot in dropdown');
+console.log('  ✔ Contact page topic flow, trial notice, and AI chatbot topic verified.');
 
 // 5. Check Home page copy
 console.log('5. Checking Homepage positioning...');

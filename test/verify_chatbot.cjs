@@ -80,4 +80,13 @@ assert(apiChat.includes('USE_CASES_CHAT_SYSTEM_PROMPT'), 'api/chat.js must refer
 assert(widgetContent.includes('isUseCases'), 'ChatWidget must detect isUseCases');
 console.log('✔ Test 8: Demand Planning Use Case (/use-cases) knowledge grounded in global chat & ChatWidget verified.');
 
+// 9. Check Saurik AI Chatbot product grounding in global chatContext & ChatWidget
+assert(contextContent.includes('AI_CHATBOT_CHAT_SYSTEM_PROMPT'), 'chatContext must export AI_CHATBOT_CHAT_SYSTEM_PROMPT');
+assert(contextContent.includes('AI_CHATBOT_KNOWLEDGE'), 'chatContext must export AI_CHATBOT_KNOWLEDGE');
+assert(contextContent.includes('FOUNDER-VERIFIED SPECIFICATIONS FOR SAURIK AI CHATBOT (/ai-chatbot)'), 'chatContext must include ai-chatbot groundings');
+assert(apiChat.includes("mode === 'ai-chatbot'"), 'api/chat.js must check mode === "ai-chatbot"');
+assert(apiChat.includes('AI_CHATBOT_CHAT_SYSTEM_PROMPT'), 'api/chat.js must reference AI_CHATBOT_CHAT_SYSTEM_PROMPT');
+assert(widgetContent.includes('isAiChatbot'), 'ChatWidget must detect isAiChatbot');
+console.log('✔ Test 9: Saurik AI Chatbot product (/ai-chatbot) knowledge grounded in global chat & ChatWidget verified.');
+
 console.log('\n=== ALL CHATBOT TESTS PASSED SUCCESSFULLY! ===\n');

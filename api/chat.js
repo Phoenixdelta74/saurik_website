@@ -1,4 +1,10 @@
-import { CHAT_SYSTEM_PROMPT, TRACK_CHAT_SYSTEM_PROMPT, ARTHOS_CHAT_SYSTEM_PROMPT, USE_CASES_CHAT_SYSTEM_PROMPT } from '../src/data/chatContext.js';
+import { 
+  CHAT_SYSTEM_PROMPT, 
+  TRACK_CHAT_SYSTEM_PROMPT, 
+  ARTHOS_CHAT_SYSTEM_PROMPT, 
+  USE_CASES_CHAT_SYSTEM_PROMPT,
+  AI_CHATBOT_CHAT_SYSTEM_PROMPT 
+} from '../src/data/chatContext.js';
 import { getChatReply, ProviderConfigError } from './_lib/llmProviders.js';
 
 const MAX_HISTORY_MESSAGES = 20;
@@ -30,6 +36,8 @@ export default async function handler(req, res) {
       systemPrompt = ARTHOS_CHAT_SYSTEM_PROMPT;
     } else if (mode === 'use-cases') {
       systemPrompt = USE_CASES_CHAT_SYSTEM_PROMPT;
+    } else if (mode === 'ai-chatbot') {
+      systemPrompt = AI_CHATBOT_CHAT_SYSTEM_PROMPT;
     }
 
     const reply = await getChatReply(

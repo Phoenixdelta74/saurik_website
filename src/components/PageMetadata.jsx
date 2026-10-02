@@ -60,6 +60,10 @@ export const PAGE_METADATA = {
     'Custom Software Development in Tripura',
     'Custom web applications, operational portals, inventory tracking, and workflow automation built for businesses across Tripura and Northeast India.'
   ],
+  '/ai-chatbot': [
+    'AI Chatbot for Business Websites in Tripura',
+    'AI assistant trained strictly on your approved business content. Answers customer questions 24/7 with verified citations, captures leads, and hands off to WhatsApp.'
+  ],
 };
 
 export default function PageMetadata() {

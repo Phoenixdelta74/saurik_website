@@ -60,6 +60,12 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
+                <Link to="/ai-chatbot" className="hover:text-ink-primary hover:underline transition-colors flex items-center gap-1.5 text-accent-teal font-semibold">
+                  <span>Saurik AI Chatbot (Website Assistant)</span>
+                  <span className="px-1.5 py-0.2 text-[9px] font-mono font-bold rounded bg-teal-100 text-teal-800 border border-teal-300">NEW</span>
+                </Link>
+              </li>
+              <li>
                 <Link to="/software#data-analytics" className="hover:text-ink-primary hover:underline transition-colors">
                   Data Analytics as a Service
                 </Link>
