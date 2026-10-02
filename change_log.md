@@ -4,6 +4,23 @@ All notable changes to the SAURIK IT Private Limited website codebase will be do
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.11.0] - 2026-10-02
+
+### Added
+- **Multi-Tenant AI Chatbot Backend Engine (`services/chatbot_engine/`):**
+  - **Database & Row-Level Security DDL (`db/migrations/001_initial_schema.sql`):** 16 PostgreSQL tables with `pgvector` support, HNSW cosine vector index, and Row-Level Security (RLS) policies on every tenant table keyed to `current_setting('app.tenant_id')`.
+  - **FastAPI Core Application (`app/main.py`):** Origin validation against `bot_domains`, JWT visitor session issuance (`/v1/widget/session`), RAG chat completion (`/v1/chat`), and visitor lead capture (`/v1/leads`).
+  - **RAG Grounding & Anti-Hallucination Service (`app/services/rag_service.py`):** Embeds query, performs cosine similarity search, enforces `<SOURCE>` context delimiters, and guarantees zero-guess fallback with instant WhatsApp handoff if similarity < threshold.
+  - **Lead Capture & Consent Logging (`app/services/lead_service.py`):** 10-digit mobile number validation, optional email, need description, and timestamped consent logging.
+  - **Ingestion Pipeline (`ingestion/`):** Domain-scoped web crawler (`crawler.py`), document parser with HTML comment stripping and PDF extraction (`parser.py`), and 600-word sliding window chunker with SHA-256 deduplication (`chunker.py`).
+  - **Provider Adapter Architecture (`app/providers/`):** Pluggable adapters for OpenAI and OpenRouter with token count metering and cost calculation.
+- **Embeddable Shadow-DOM Widget (`public/widget/widget.js`):**
+  - Self-contained vanilla JS widget (<15 KB) encapsulated in open Shadow Root to prevent host CSS reset collisions.
+  - Instant WhatsApp human handoff button (`wa.me`) with prefilled lead context.
+  - Client-native Web Speech STT/TTS toggle conforming strictly to the Zero-Cost Native Voice Engine Rule.
+- **Automated Verification Suite (`test/verify_backend_engine.cjs`):**
+  - 5-stage automated test verifying database schemas, RLS policies, RAG services, crawler, Shadow-DOM widget, and zero-cost voice compliance. Integrated into `npm test` pipeline.
+
 ## [1.10.0] - 2026-10-02
 
 ### Added
