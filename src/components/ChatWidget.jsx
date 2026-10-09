@@ -81,7 +81,7 @@ const ChatWidget = () => {
       "What custom software & AI agents do you build?",
       "Tell me about on-premise IT infrastructure",
     ];
-  }, [isTrack, isArthos, isUseCases]);
+  }, [isTrack, isArthos, isUseCases, isAiChatbot]);
 
   const [isOpen, setIsOpen] = useState(false);
   const [activeMobileTab, setActiveMobileTab] = useState('chat'); // 'chat' | 'voice'
@@ -94,6 +94,12 @@ const ChatWidget = () => {
   const inputRef = useRef(null);
   const logRef = useRef(null);
   const selectedLangRef = useRef('en-IN');
+  const pageModeRef = useRef(pageMode);
+  const voiceAgentRef = useRef(null);
+
+  useEffect(() => {
+    pageModeRef.current = pageMode;
+  }, [pageMode]);
 
   // Send message to LLM Brain
   const sendToAssistant = useCallback(
@@ -110,7 +116,7 @@ const ChatWidget = () => {
             messages: nextMessages.slice(-10),
             source,
             lang: customLang || selectedLangRef.current || 'en-IN',
-            mode: pageMode,
+            mode: pageModeRef.current,
           }),
         });
 
@@ -156,12 +162,13 @@ const ChatWidget = () => {
     isMuted,
   });
 
-  // Keep selectedLangRef in sync with voiceAgent.selectedLanguage
+  // Keep selectedLangRef and voiceAgentRef in sync
   useEffect(() => {
+    voiceAgentRef.current = voiceAgent;
     if (voiceAgent?.selectedLanguage) {
       selectedLangRef.current = voiceAgent.selectedLanguage;
     }
-  }, [voiceAgent?.selectedLanguage]);
+  }, [voiceAgent]);
 
   // Focus management
   useEffect(() => {

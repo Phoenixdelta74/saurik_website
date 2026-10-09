@@ -249,10 +249,10 @@ CREATE POLICY tenant_members_isolation ON tenant_members
     USING (tenant_id = NULLIF(current_setting('app.tenant_id', true), '')::uuid OR current_setting('app.bypass_rls', true) = '1');
 
 CREATE POLICY bots_isolation ON bots
-    USING (tenant_id = NULLIF(current_setting('app.tenant_id', true), '')::uuid OR current_setting('app.bypass_rls', true) = '1');
+    USING (tenant_id = NULLIF(current_setting('app.tenant_id', true), '')::uuid OR current_setting('app.bypass_rls', true) = '1' OR status = 'active');
 
 CREATE POLICY bot_domains_isolation ON bot_domains
-    USING (tenant_id = NULLIF(current_setting('app.tenant_id', true), '')::uuid OR current_setting('app.bypass_rls', true) = '1');
+    USING (tenant_id = NULLIF(current_setting('app.tenant_id', true), '')::uuid OR current_setting('app.bypass_rls', true) = '1' OR EXISTS (SELECT 1 FROM bots WHERE bots.id = bot_domains.bot_id AND bots.status = 'active'));
 
 CREATE POLICY sources_isolation ON sources
     USING (tenant_id = NULLIF(current_setting('app.tenant_id', true), '')::uuid OR current_setting('app.bypass_rls', true) = '1');

@@ -137,7 +137,11 @@ async def init_widget_session(
     # Origin check (bypass only if origin list is empty / localhost development)
     allowed_origins = row.allowed_origins
     if allowed_origins and clean_origin:
-        if not any(clean_origin.startswith(allowed.rstrip("/")) for allowed in allowed_origins):
+        is_allowed = any(
+            clean_origin == allowed.rstrip("/") or clean_origin.startswith(f"{allowed.rstrip('/')}/")
+            for allowed in allowed_origins
+        )
+        if not is_allowed:
             raise HTTPException(
                 status_code=403,
                 detail=f"Origin '{clean_origin}' is not authorized to embed this chatbot."

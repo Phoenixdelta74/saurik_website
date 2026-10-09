@@ -18,7 +18,7 @@ class DocumentParser:
         soup = BeautifulSoup(html_content, "html.parser")
 
         # 1. Strip prompt injection vectors: remove all HTML comments
-        for comment in soup.find_all(text=lambda text: isinstance(text, Comment)):
+        for comment in soup.find_all(string=lambda s: isinstance(s, Comment)):
             comment.extract()
 
         # 2. Extract page title

@@ -57,7 +57,7 @@
 
     speechRecognition.onresult = (event) => {
       const transcript = event.results[0][0].transcript;
-      sendMessage(transcript);
+      sendMessage(transcript, true);
       toggleVoice(false);
     };
 
@@ -430,7 +430,7 @@
   }
 
   // Send Message
-  async function sendMessage(overrideText) {
+  async function sendMessage(overrideText, isVoice = false) {
     const textToSend = (overrideText || inputBox.value).trim();
     if (!textToSend) return;
 
@@ -471,7 +471,7 @@
       renderBotMessage(data.answer, data.citations);
 
       // Optional TTS Readout if user asked via voice
-      if (isListening && 'speechSynthesis' in window) {
+      if (isVoice && 'speechSynthesis' in window) {
         const utterance = new SpeechSynthesisUtterance(data.answer);
         utterance.lang = 'en-IN';
         window.speechSynthesis.speak(utterance);

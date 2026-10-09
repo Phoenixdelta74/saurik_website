@@ -72,7 +72,7 @@ function callOpenRouter(systemPrompt, messages) {
     baseURL: 'https://openrouter.ai/api/v1',
     model: process.env.OPENROUTER_MODEL || 'google/gemini-2.5-pro',
     defaultHeaders: {
-      'HTTP-Referer': process.env.SITE_URL || 'https://wwwsaurikit.com',
+      'HTTP-Referer': process.env.SITE_URL || 'https://www.saurikit.in',
       'X-Title': 'SAURIK IT Website Assistant',
     },
     systemPrompt,

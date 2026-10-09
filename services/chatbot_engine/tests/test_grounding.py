@@ -28,7 +28,7 @@ class MockLLMProvider(BaseLLMProvider):
         )
 
 
-@pytest.mark.asyncio
+@pytest.mark.anyio
 async def test_out_of_scope_query_triggers_fallback_handoff():
     """
     Asserts that queries with zero vector chunk matches return a polite fallback
@@ -62,7 +62,7 @@ async def test_out_of_scope_query_triggers_fallback_handoff():
     assert mock_provider.chat.call_count == 0
 
 
-@pytest.mark.asyncio
+@pytest.mark.anyio
 async def test_in_scope_query_returns_citations():
     """
     Asserts that grounded queries return citations matching retrieved documents.

@@ -30,7 +30,7 @@ class MockEmbeddingProvider(BaseLLMProvider):
         )
 
 
-@pytest.mark.asyncio
+@pytest.mark.anyio
 async def test_tenant_isolation_zero_leakage():
     """
     Asserts that RAG retrieval strictly isolates Tenant A from Tenant B.

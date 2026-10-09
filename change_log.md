@@ -4,6 +4,18 @@ All notable changes to the SAURIK IT Private Limited website codebase will be do
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.12.2] - 2026-10-09
+
+### Fixed
+- **Chatbot AI Comprehensive Audit & Quality Hardening:**
+  - **Dynamic Route Mode & Dependency Synchronization (`src/components/ChatWidget.jsx`):** Eliminated `pageMode` stale closure by referencing route mode via ref and added missing `isAiChatbot` to `currentQuestions` `useMemo` dependency array, ensuring suggested prompts update across all route transitions.
+  - **Embeddable Widget Voice Readout Activation (`public/widget/widget.js`, `services/chatbot_engine/widget/widget.js`):** Resolved dead code condition in Web Speech synthesis by passing `isVoice` input origin flag into `sendMessage()`, allowing the chatbot to speak answers aloud when queried by voice.
+  - **Provider Header Verification (`api/_lib/llmProviders.js`):** Corrected OpenRouter default `HTTP-Referer` fallback domain to `https://www.saurikit.in`.
+  - **PostgreSQL RLS Public Key Session Resolution (`001_initial_schema.sql`):** Added public `SELECT` policy for active bots and associated domains, preventing session lookup lockouts on clean multi-tenant databases.
+  - **Origin Prefix Hijacking Prevention (`services/chatbot_engine/app/main.py`):** Replaced loose `.startswith()` origin comparison with exact hostname and slash-delimited path validation.
+  - **HTML Parser Deprecation Cleanup (`services/chatbot_engine/ingestion/parser.py`):** Replaced deprecated `text=` argument with `string=` in BeautifulSoup comment extraction.
+  - **Async Test Framework Configuration (`services/chatbot_engine/tests/`):** Added AnyIO test fixture (`conftest.py`) and updated test marks to guarantee 100% test execution (4/4 passed).
+
 ## [1.12.1] - 2026-10-02
 
 ### Fixed
