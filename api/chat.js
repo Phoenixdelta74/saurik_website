@@ -6,8 +6,11 @@ import {
   AI_CHATBOT_CHAT_SYSTEM_PROMPT 
 } from '../src/data/chatContext.js';
 import { getChatReply, ProviderConfigError } from './_lib/llmProviders.js';
+import { guardRequest } from './_lib/requestGuard.js';
 
 const MAX_HISTORY_MESSAGES = 20;
+const ALLOWED_SOURCES = ['text', 'voice'];
+const ALLOWED_LANGS = ['en-IN', 'hi-IN', 'bn-IN'];
 
 const isValidMessage = (message) =>
   message &&
@@ -22,9 +25,18 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed.' });
   }
 
+  if (!guardRequest(req, res, { name: 'chat', limit: 20 })) return undefined;
+
   const { messages, mode, source = 'text', lang } = req.body || {};
 
-  if (!Array.isArray(messages) || messages.length === 0 || !messages.every(isValidMessage)) {
+  if (
+    !Array.isArray(messages) ||
+    messages.length === 0 ||
+    messages.length > 50 ||
+    !messages.every(isValidMessage) ||
+    !ALLOWED_SOURCES.includes(source) ||
+    (lang !== undefined && !ALLOWED_LANGS.includes(lang))
+  ) {
     return res.status(400).json({ error: 'Invalid request.' });
   }
 

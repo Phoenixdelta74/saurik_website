@@ -42,7 +42,7 @@ assert(widgetCode.includes('VoiceAgentPanel'), 'ChatWidget must embed VoiceAgent
 assert(widgetCode.includes('activeMobileTab'), 'ChatWidget must support responsive mobile tabs');
 assert(widgetCode.includes('selectedLanguage'), 'ChatWidget must pass selectedLanguage to panel');
 assert(widgetCode.includes('isContinuousMode'), 'ChatWidget must pass isContinuousMode to panel');
-assert(widgetCode.includes('voiceAgent.speak'), 'ChatWidget must invoke voiceAgent.speak on replies');
+assert(widgetCode.includes('.speak(data.reply'), 'ChatWidget must invoke voiceAgent speak on voice replies');
 console.log('✔ ChatWidget verified with side-by-side dual-panel, language selection, and continuous mode.');
 
 // 5. Verify Implementation Rules in AGENTS.md & masterdeveloper.md

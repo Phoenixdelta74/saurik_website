@@ -37,7 +37,7 @@ const ChatWidget = () => {
   const currentQuestions = useMemo(() => {
     if (isAiChatbot) {
       return [
-        "How do you guarantee zero hallucinations?",
+        "How does it avoid made-up answers?",
         "What is included in the ₹1,499 Starter plan?",
         "How does the single-line script installation work?",
         "Can you build a live demo on my company's catalog?",
@@ -93,67 +93,71 @@ const ChatWidget = () => {
   const toggleButtonRef = useRef(null);
   const inputRef = useRef(null);
   const logRef = useRef(null);
-  const selectedLangRef = useRef('en-IN');
   const pageModeRef = useRef(pageMode);
+  const messagesRef = useRef(messages);
   const voiceAgentRef = useRef(null);
 
   useEffect(() => {
     pageModeRef.current = pageMode;
   }, [pageMode]);
 
-  // Send message to LLM Brain
-  const sendToAssistant = useCallback(
-    async (userInput, currentMessages, shouldSpeak = false, source = 'text', customLang = null) => {
-      const nextMessages = [...currentMessages, { role: 'user', content: userInput }];
-      setMessages(nextMessages);
-      setStatus('sending');
+  useEffect(() => {
+    messagesRef.current = messages;
+  }, [messages]);
 
-      try {
-        const response = await fetch('/api/chat', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            messages: nextMessages.slice(-10),
-            source,
-            lang: customLang || selectedLangRef.current || 'en-IN',
-            mode: pageModeRef.current,
-          }),
-        });
+  // Send message to LLM Brain. Only voice turns are spoken aloud and pinned to the selected
+  // voice language; typed turns let the assistant mirror whatever language the visitor writes in.
+  const sendToAssistant = useCallback(async (userInput, source = 'text', lang = null) => {
+    const shouldSpeak = source === 'voice';
+    const nextMessages = [...messagesRef.current, { role: 'user', content: userInput }];
+    messagesRef.current = nextMessages;
+    setMessages(nextMessages);
+    setStatus('sending');
 
-        if (!response.ok) {
-          throw new Error('Request failed');
-        }
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: nextMessages.slice(-10),
+          source,
+          ...(lang ? { lang } : {}),
+          mode: pageModeRef.current,
+        }),
+      });
 
-        const data = await response.json();
-        if (!data.reply) {
-          throw new Error('Empty response');
-        }
-
-        setMessages((prev) => [...prev, { role: 'assistant', content: data.reply }]);
-        setStatus('idle');
-
-        if (shouldSpeak && !isMuted) {
-          voiceAgent.speak(data.reply);
-        }
-      } catch (error) {
-        console.error('Chat error:', error);
-        setMessages((prev) => [...prev, { role: 'assistant', content: FALLBACK_MESSAGE }]);
-        setStatus('error');
-        if (shouldSpeak && !isMuted) {
-          voiceAgent.speak(FALLBACK_MESSAGE);
-        }
+      if (!response.ok) {
+        throw new Error('Request failed');
       }
-    },
-    [isMuted]
-  );
+
+      const data = await response.json();
+      if (!data.reply) {
+        throw new Error('Empty response');
+      }
+
+      setMessages((prev) => [...prev, { role: 'assistant', content: data.reply }]);
+      setStatus('idle');
+
+      if (shouldSpeak) {
+        voiceAgentRef.current?.speak(data.reply, lang);
+      }
+    } catch (error) {
+      console.error('Chat error:', error);
+      setMessages((prev) => [...prev, { role: 'assistant', content: FALLBACK_MESSAGE }]);
+      setStatus('error');
+      if (shouldSpeak) {
+        voiceAgentRef.current?.speak(FALLBACK_MESSAGE, 'en-IN');
+      }
+    }
+  }, []);
 
   // Speech Recognition Callback
   const handleSpeechRecognized = useCallback(
-    (spokenText) => {
+    (spokenText, lang) => {
       if (!spokenText.trim()) return;
-      sendToAssistant(spokenText, messages, true, 'voice', selectedLangRef.current);
+      sendToAssistant(spokenText, 'voice', lang);
     },
-    [messages, sendToAssistant]
+    [sendToAssistant]
   );
 
   // Initialize Voice Agent Engine
@@ -162,12 +166,8 @@ const ChatWidget = () => {
     isMuted,
   });
 
-  // Keep selectedLangRef and voiceAgentRef in sync
   useEffect(() => {
     voiceAgentRef.current = voiceAgent;
-    if (voiceAgent?.selectedLanguage) {
-      selectedLangRef.current = voiceAgent.selectedLanguage;
-    }
   }, [voiceAgent]);
 
   // Focus management
@@ -199,8 +199,8 @@ const ChatWidget = () => {
   }, [isOpen]);
 
   const handleClose = () => {
-    voiceAgent.cancelSpeech();
-    voiceAgent.stopListening();
+    // End any hands-free call so the microphone can never reopen while the assistant is closed
+    voiceAgent.endCall();
     setIsOpen(false);
     toggleButtonRef.current?.focus();
   };
@@ -211,14 +211,41 @@ const ChatWidget = () => {
     if (!trimmed || status === 'sending') return;
 
     setInput('');
-    // Speak response if user is on mobile voice tab or sound is unmuted
-    const shouldSpeak = activeMobileTab === 'voice' || !isMuted;
-    sendToAssistant(trimmed, messages, shouldSpeak, 'text', selectedLangRef.current);
+    sendToAssistant(trimmed, 'text');
   };
 
   const handleQuickQuestion = (question) => {
     if (status === 'sending') return;
-    sendToAssistant(question, messages, !isMuted, 'text', selectedLangRef.current);
+    sendToAssistant(question, 'text');
+  };
+
+  const handleToggleMute = () => {
+    if (!isMuted && voiceAgent.isSpeaking) {
+      // Muting mid-reply stops the audio; a hands-free call moves straight back to listening
+      if (voiceAgent.isContinuousMode) {
+        voiceAgent.startListening();
+      } else {
+        voiceAgent.cancelSpeech();
+      }
+    }
+    setIsMuted((prev) => !prev);
+  };
+
+  // In a hands-free call, interrupting hands the turn straight back to the visitor
+  const handleInterrupt = () => {
+    if (voiceAgent.isContinuousMode) {
+      voiceAgent.startListening();
+    } else {
+      voiceAgent.cancelSpeech();
+    }
+  };
+
+  const handleToggleContinuousMode = () => {
+    if (voiceAgent.isContinuousMode) {
+      voiceAgent.endCall();
+    } else {
+      voiceAgent.setIsContinuousMode(true);
+    }
   };
 
   const panelAnimationClass = prefersReducedMotion()
@@ -344,10 +371,7 @@ const ChatWidget = () => {
               <div className="flex items-center gap-1 sm:gap-2">
                 <button
                   type="button"
-                  onClick={() => {
-                    if (!isMuted) voiceAgent.cancelSpeech();
-                    setIsMuted((prev) => !prev);
-                  }}
+                  onClick={handleToggleMute}
                   className={`p-1.5 rounded-xl border text-xs transition-all hidden sm:flex items-center gap-1 ${
                     isMuted
                       ? 'bg-rose-50 border-rose-200 text-rose-600'
@@ -499,19 +523,17 @@ const ChatWidget = () => {
                   isSpeaking={voiceAgent.isSpeaking}
                   interimTranscript={voiceAgent.interimTranscript}
                   permissionError={voiceAgent.permissionError}
+                  speechNotice={voiceAgent.speechNotice}
                   status={status}
                   selectedLanguage={voiceAgent.selectedLanguage}
                   onSelectLanguage={voiceAgent.setSelectedLanguage}
                   isContinuousMode={voiceAgent.isContinuousMode}
-                  onToggleContinuousMode={() => voiceAgent.setIsContinuousMode((prev) => !prev)}
+                  onToggleContinuousMode={handleToggleContinuousMode}
                   onStartListening={voiceAgent.startListening}
-                  onStopListening={voiceAgent.stopListening}
-                  onCancelSpeech={voiceAgent.cancelSpeech}
+                  onStopListening={voiceAgent.isContinuousMode ? voiceAgent.endCall : voiceAgent.stopListening}
+                  onCancelSpeech={handleInterrupt}
                   isMuted={isMuted}
-                  onToggleMute={() => {
-                    if (!isMuted) voiceAgent.cancelSpeech();
-                    setIsMuted((prev) => !prev);
-                  }}
+                  onToggleMute={handleToggleMute}
                   bgClass="bg-white/15 backdrop-blur-2xl"
                 />
               </div>

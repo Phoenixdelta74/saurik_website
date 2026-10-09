@@ -22,6 +22,7 @@ const VoiceAgentPanel = ({
   isSpeaking,
   interimTranscript,
   permissionError,
+  speechNotice,
   status,
   selectedLanguage,
   onSelectLanguage,
@@ -198,7 +199,11 @@ const VoiceAgentPanel = ({
         <VoiceVisualizer isListening={isListening} isSpeaking={isSpeaking} status={status} />
 
         {/* Live Interim Transcript or Helpful Guidance */}
-        <div className="w-full max-w-sm mt-3 min-h-[60px] flex items-center justify-center text-center">
+        <div
+          className="w-full max-w-sm mt-3 min-h-[60px] flex items-center justify-center text-center"
+          role="status"
+          aria-live="polite"
+        >
           {interimTranscript ? (
             <div className="p-2.5 rounded-xl bg-white/90 backdrop-blur-md border border-accent-teal/40 text-accent-teal text-xs font-mono animate-pulse shadow-subtle">
               "{interimTranscript}"
@@ -210,7 +215,7 @@ const VoiceAgentPanel = ({
             </div>
           ) : isListening ? (
             <div className="text-xs text-amber-600 font-semibold animate-pulse">
-              {isContinuousMode ? '📞 Call active: Listening to you…' : 'Listening to you… speak now'}
+              {isContinuousMode ? 'Call active: listening to you…' : 'Listening to you… speak now'}
             </div>
           ) : status === 'sending' ? (
             <div className="text-xs text-accent-teal font-mono animate-pulse">
@@ -218,16 +223,29 @@ const VoiceAgentPanel = ({
             </div>
           ) : (
             <p className="text-xs text-ink-muted max-w-[280px]">
-              Tap below to talk. Ask about <strong className="text-ink-primary">Saurik Track</strong>, custom software, or cloud.
+              Tap below to talk. Ask about <strong className="text-ink-primary">Saurik Track</strong>, Arthos, custom software, or IT hardware.
             </p>
           )}
         </div>
 
         {/* Mic Permission Error Alert */}
         {permissionError && (
-          <div className="mt-3 flex items-start gap-2 p-2.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs w-full max-w-sm">
+          <div
+            role="alert"
+            className="mt-3 flex items-start gap-2 p-2.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs w-full max-w-sm"
+          >
             <AlertCircle className="w-4 h-4 shrink-0 text-rose-500 mt-0.5" />
             <span>{permissionError}</span>
+          </div>
+        )}
+
+        {speechNotice && !permissionError && (
+          <div
+            role="status"
+            className="mt-3 flex items-start gap-2 p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs w-full max-w-sm"
+          >
+            <AlertCircle className="w-4 h-4 shrink-0 text-amber-600 mt-0.5" />
+            <span>{speechNotice}</span>
           </div>
         )}
 
@@ -260,6 +278,7 @@ const VoiceAgentPanel = ({
           <button
             type="button"
             role="switch"
+            aria-label="Hands-free call mode"
             aria-checked={isContinuousMode}
             onClick={onToggleContinuousMode}
             className={`w-9 h-5 rounded-full transition-colors relative focus:outline-none focus:ring-2 focus:ring-accent-teal ${
@@ -291,7 +310,7 @@ const VoiceAgentPanel = ({
             className="w-full py-3 px-4 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-rose-600/30 transition-all active:scale-95 animate-pulse"
           >
             <MicOff className="w-4 h-4" />
-            <span>{isContinuousMode ? 'Pause Listening' : 'Done Speaking (Submit)'}</span>
+            <span>{isContinuousMode ? 'End Hands-Free Call' : 'Done Speaking (Submit)'}</span>
           </button>
         ) : (
           <button

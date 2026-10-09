@@ -347,7 +347,7 @@ sequenceDiagram
    - **Continuous Hands-Free Call Mode**: Automatically triggers `startListening()` 450ms after speech playback concludes, providing a seamless phone-call-style back-and-forth experience without clicking.
    - **Full Duplex Interruption**: Speaking or tapping the mic button halts speech synthesis playback instantly.
 3. **Multi-Model Source Routing & Language Mirroring (`api/chat.js`, `api/_lib/llmProviders.js`):**
-   - **Source-Based Model Routing**: Voice queries (`source === 'voice'`) are routed directly to OpenAI GPT (`gpt-4o-mini` / `OPENAI_MODEL`) for optimal low-latency spoken reasoning; text typing queries (`source === 'text'`) run on OpenRouter (`google/gemini-2.5-pro` / `OPENROUTER_MODEL`), with seamless fallback if only one key is configured.
+   - **Source-Based Model Routing**: Voice queries (`source === 'voice'`) are routed directly to OpenAI GPT (`gpt-4o-mini` / `OPENAI_MODEL`) for optimal low-latency spoken reasoning; text typing queries (`source === 'text'`) run on OpenRouter (`google/gemini-2.5-flash` default with low reasoning / `OPENROUTER_MODEL`), with seamless fallback if only one key is configured.
    - **Language Mirroring Mandate**: Injects strict prompt directives ensuring inquiries spoken or written in Hindi or Bengali receive responses completely in authentic Hindi (Devanagari) or Bengali script, preventing accidental English translations and ensuring regional audio synthesis.
 4. **Voice Studio Visuals (`VoiceVisualizer.jsx`, `VoiceAgentPanel.jsx`):**
    - Concentric animated waveform orb reacting dynamically to speaking, listening, and thinking states.

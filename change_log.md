@@ -4,6 +4,21 @@ All notable changes to the SAURIK IT Private Limited website codebase will be do
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.12.3] - 2026-10-09
+
+### Fixed
+- **Voice Agent Reliability (`src/hooks/useVoiceAgent.js`, `src/components/ChatWidget.jsx`, `src/components/voice/VoiceAgentPanel.jsx`):**
+  - Speech recognition is created once instead of being torn down on every message, removing the spurious "Microphone notice: aborted" error; raw error codes are replaced with plain-language messages.
+  - Voice selection waits for `voiceschanged`, only uses a voice that matches the reply language, and detects the language from the reply script; when the device has no matching voice (typically Bengali) it falls back to `/api/tts`, or shows a text-only notice.
+  - Replies are spoken in sentence-sized chunks with live utterance references, fixing Chrome's ~15s cut-off and stuck "Speaking…" state.
+  - Hands-free mode retries after silence, keeps going when muted, and ends fully on close/end-call so the microphone cannot reopen after the assistant is closed; iOS speech is unlocked on the first tap.
+  - Typed and quick-topic replies are no longer read aloud; only voice turns are spoken.
+- **Language Handling (`api/_lib/llmProviders.js`, `src/components/ChatWidget.jsx`):** The voice language is sent only for voice turns, so typed Hindi/Bengali is answered in the same language instead of being forced to English.
+- **Chatbot Model & Prompts (`api/_lib/llmProviders.js`, `src/data/chatContext.js`):** OpenRouter default switched to `google/gemini-2.5-flash` with low, hidden reasoning to avoid slow or empty replies; prompts now forbid markdown/emoji, no longer push the model to add facts beyond its sources, resolve the conflicting length rules, and replace absolute "zero hallucination" claims with described safeguards.
+- **API Abuse Protection (`api/_lib/requestGuard.js`, `api/chat.js`, `api/tts.js`):** Origin allow-list (same host, saurikit.in, localhost, plus `ALLOWED_ORIGINS`) and best-effort per-instance rate limits (chat 20/min, TTS 10/min per IP); stricter `source`/`lang`/history validation.
+- **Embeddable Widget (`public/widget/widget.js`, `services/chatbot_engine/widget/widget.js`):** Citation links are built as DOM nodes with http(s)-only URLs (fixes XSS via crawled titles/URLs); voice language from `data-lang` or `<html lang>`; reply speech language detected from script; history capped; failed turns removed; error message now visible on non-200 responses; guarded `localStorage` and `recognition.start()`.
+- **RAG Engine (`services/chatbot_engine/app/`):** Grounded replies (including the no-answer reply) follow the visitor's language; the no-answer fallback is localised for Hindi/Bengali; retrieval uses the last two user turns for follow-ups; session creation now requires an Origin header when a bot has an allowed-domain list.
+
 ## [1.12.2] - 2026-10-09
 
 ### Fixed

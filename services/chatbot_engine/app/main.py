@@ -134,10 +134,12 @@ async def init_widget_session(
     if not row:
         raise HTTPException(status_code=404, detail="Active chatbot not found for the provided key.")
 
-    # Origin check (bypass only if origin list is empty / localhost development)
+    # Origin check (bypass only if origin list is empty / localhost development).
+    # Browsers always send Origin on the widget's cross-site POST, so a missing header means a
+    # non-browser caller and is rejected once the bot has an allow-list.
     allowed_origins = row.allowed_origins
-    if allowed_origins and clean_origin:
-        is_allowed = any(
+    if allowed_origins:
+        is_allowed = bool(clean_origin) and any(
             clean_origin == allowed.rstrip("/") or clean_origin.startswith(f"{allowed.rstrip('/')}/")
             for allowed in allowed_origins
         )
