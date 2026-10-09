@@ -14,6 +14,13 @@ const ENABLE_CLOUD_TTS_FALLBACK = true;
 const RELISTEN_DELAY_MS = 450;
 // How many silent listening rounds hands-free mode tolerates before pausing the call
 const MAX_SILENT_RETRIES = 2;
+// Pause length that ends a spoken question in continuous recognition
+const END_OF_SPEECH_SILENCE_MS = 1800;
+
+// Desktop browsers keep listening through short pauses so long questions are not cut off.
+// Mobile engines repeat or drop results in continuous mode, so they keep single-phrase mode.
+const supportsContinuousRecognition = () =>
+  typeof navigator !== 'undefined' && !/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
 const LANGUAGE_NAMES = { 'en-IN': 'English', 'hi-IN': 'Hindi', 'bn-IN': 'Bengali' };
 
@@ -109,7 +116,11 @@ export function useVoiceAgent({ onSpeechRecognized, isMuted = false }) {
   // Holds live utterances so Chrome does not garbage-collect them before onend fires
   const activeUtterancesRef = useRef([]);
   const audioRef = useRef(null);
-  const recognizedThisRoundRef = useRef(false);
+  // Final transcript collected during the current listening round; submitted when it ends
+  const transcriptBufferRef = useRef('');
+  // Set when listening is cancelled (close, end call) so the collected words are not submitted
+  const discardTranscriptRef = useRef(false);
+  const silenceTimerRef = useRef(null);
   const silentRetriesRef = useRef(0);
   const retryAfterSilenceRef = useRef(false);
   const speechPrimedRef = useRef(false);
@@ -209,8 +220,17 @@ export function useVoiceAgent({ onSpeechRecognized, isMuted = false }) {
     startListeningRef.current = startListening;
   }, [startListening]);
 
+  const clearSilenceTimer = () => {
+    if (silenceTimerRef.current) {
+      clearTimeout(silenceTimerRef.current);
+      silenceTimerRef.current = null;
+    }
+  };
+
+  // Finishes the current round; whatever was heard is submitted from onend
   const stopListening = useCallback(() => {
     clearRestartTimer();
+    clearSilenceTimer();
     if (recognitionRef.current) {
       try {
         recognitionRef.current.stop();
@@ -226,6 +246,8 @@ export function useVoiceAgent({ onSpeechRecognized, isMuted = false }) {
     setIsContinuousMode(false);
     isContinuousRef.current = false;
     cancelSpeech();
+    clearSilenceTimer();
+    discardTranscriptRef.current = true;
     if (recognitionRef.current) {
       try {
         recognitionRef.current.abort();
@@ -249,12 +271,14 @@ export function useVoiceAgent({ onSpeechRecognized, isMuted = false }) {
 
     setIsSupported(true);
     const recognition = new SpeechRecognition();
-    recognition.continuous = false;
+    const isContinuousRecognition = supportsContinuousRecognition();
+    recognition.continuous = isContinuousRecognition;
     recognition.interimResults = true;
     recognition.lang = selectedLangRef.current;
 
     recognition.onstart = () => {
-      recognizedThisRoundRef.current = false;
+      transcriptBufferRef.current = '';
+      discardTranscriptRef.current = false;
       retryAfterSilenceRef.current = false;
       setIsListening(true);
       setPermissionError(null);
@@ -263,36 +287,41 @@ export function useVoiceAgent({ onSpeechRecognized, isMuted = false }) {
 
     recognition.onresult = (event) => {
       let interim = '';
-      let final = '';
 
       for (let i = event.resultIndex; i < event.results.length; i++) {
         const transcript = event.results[i][0].transcript;
         if (event.results[i].isFinal) {
-          final += transcript;
+          transcriptBufferRef.current = `${transcriptBufferRef.current} ${transcript}`.trim();
         } else {
           interim += transcript;
         }
       }
 
-      if (interim) {
-        setInterimTranscript(interim);
-      }
+      setInterimTranscript(`${transcriptBufferRef.current} ${interim}`.trim());
 
-      if (final && final.trim() && !recognizedThisRoundRef.current) {
-        recognizedThisRoundRef.current = true;
-        silentRetriesRef.current = 0;
-        setInterimTranscript('');
-        setIsListening(false);
-        onSpeechRecognizedRef.current?.(final.trim(), selectedLangRef.current);
+      // In continuous mode the browser never ends the round itself; a pause does
+      if (isContinuousRecognition) {
+        clearSilenceTimer();
+        silenceTimerRef.current = setTimeout(() => {
+          silenceTimerRef.current = null;
+          try {
+            recognition.stop();
+          } catch (e) {
+            // ignore
+          }
+        }, END_OF_SPEECH_SILENCE_MS);
       }
     };
 
     recognition.onerror = (event) => {
+      clearSilenceTimer();
       setIsListening(false);
-      setInterimTranscript('');
 
       // 'aborted' is our own stop/abort; it is not a user-facing problem
-      if (event.error === 'aborted') return;
+      if (event.error === 'aborted') {
+        discardTranscriptRef.current = true;
+        return;
+      }
 
       if (event.error === 'no-speech') {
         if (isContinuousRef.current && silentRetriesRef.current < MAX_SILENT_RETRIES) {
@@ -317,7 +346,19 @@ export function useVoiceAgent({ onSpeechRecognized, isMuted = false }) {
     };
 
     recognition.onend = () => {
+      clearSilenceTimer();
       setIsListening(false);
+      setInterimTranscript('');
+
+      const heard = transcriptBufferRef.current.trim();
+      transcriptBufferRef.current = '';
+      if (heard && !discardTranscriptRef.current) {
+        silentRetriesRef.current = 0;
+        retryAfterSilenceRef.current = false;
+        onSpeechRecognizedRef.current?.(heard, selectedLangRef.current);
+        return;
+      }
+
       if (retryAfterSilenceRef.current) {
         retryAfterSilenceRef.current = false;
         scheduleRelisten();
@@ -327,6 +368,7 @@ export function useVoiceAgent({ onSpeechRecognized, isMuted = false }) {
     recognitionRef.current = recognition;
 
     return () => {
+      clearSilenceTimer();
       recognition.onresult = null;
       recognition.onerror = null;
       recognition.onend = null;

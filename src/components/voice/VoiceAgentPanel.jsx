@@ -36,31 +36,80 @@ const VoiceAgentPanel = ({
   bgClass = 'bg-white/25 backdrop-blur-2xl',
 }) => {
   const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
+  const [focusedOptionIndex, setFocusedOptionIndex] = useState(-1);
   const langDropdownRef = useRef(null);
+  const langTriggerRef = useRef(null);
+  const optionRefs = useRef([]);
 
-  // Close dropdown when clicking outside or pressing Escape
+  // Close dropdown when clicking outside
   useEffect(() => {
     const handleOutsideClick = (e) => {
       if (langDropdownRef.current && !langDropdownRef.current.contains(e.target)) {
         setIsLangDropdownOpen(false);
       }
     };
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape') {
-        setIsLangDropdownOpen(false);
-      }
-    };
 
     document.addEventListener('mousedown', handleOutsideClick);
-    document.addEventListener('keydown', handleKeyDown);
-    return () => {
-      document.removeEventListener('mousedown', handleOutsideClick);
-      document.removeEventListener('keydown', handleKeyDown);
-    };
+    return () => document.removeEventListener('mousedown', handleOutsideClick);
   }, []);
+
+  // Move keyboard focus to the active option while the menu is open
+  useEffect(() => {
+    if (isLangDropdownOpen && focusedOptionIndex >= 0) {
+      optionRefs.current[focusedOptionIndex]?.focus();
+    }
+  }, [isLangDropdownOpen, focusedOptionIndex]);
 
   const currentLang =
     SUPPORTED_LANGUAGES.find((lang) => lang.code === selectedLanguage) || SUPPORTED_LANGUAGES[0];
+  const selectedIndex = Math.max(
+    0,
+    SUPPORTED_LANGUAGES.findIndex((lang) => lang.code === selectedLanguage)
+  );
+
+  const openLangMenu = (index = selectedIndex) => {
+    setFocusedOptionIndex(index);
+    setIsLangDropdownOpen(true);
+  };
+
+  const closeLangMenu = ({ restoreFocus = false } = {}) => {
+    setIsLangDropdownOpen(false);
+    setFocusedOptionIndex(-1);
+    if (restoreFocus) langTriggerRef.current?.focus();
+  };
+
+  const handleTriggerKeyDown = (e) => {
+    if (['ArrowDown', 'ArrowUp', 'Enter', ' '].includes(e.key)) {
+      e.preventDefault();
+      openLangMenu(e.key === 'ArrowUp' ? SUPPORTED_LANGUAGES.length - 1 : selectedIndex);
+    }
+  };
+
+  const handleMenuKeyDown = (e) => {
+    if (!isLangDropdownOpen) return;
+    const last = SUPPORTED_LANGUAGES.length - 1;
+
+    if (e.key === 'Escape') {
+      // Keep Escape from also closing the whole assistant dialog
+      e.preventDefault();
+      e.stopPropagation();
+      closeLangMenu({ restoreFocus: true });
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setFocusedOptionIndex((i) => (i >= last ? 0 : i + 1));
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setFocusedOptionIndex((i) => (i <= 0 ? last : i - 1));
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      setFocusedOptionIndex(0);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      setFocusedOptionIndex(last);
+    } else if (e.key === 'Tab') {
+      closeLangMenu();
+    }
+  };
 
   return (
     <div className={`flex flex-col h-full text-ink-primary p-5 justify-between relative overflow-hidden transition-all duration-300 ${bgClass}`}>
@@ -84,11 +133,13 @@ const VoiceAgentPanel = ({
         {/* Top Controls: Sleek Custom Language Dropdown & Sound */}
         <div className="flex items-center gap-2">
           {/* Premium Custom Language Dropdown */}
-          <div className="relative" ref={langDropdownRef}>
+          <div className="relative" ref={langDropdownRef} onKeyDown={handleMenuKeyDown}>
             <button
               type="button"
-              onClick={() => setIsLangDropdownOpen((prev) => !prev)}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-white/80 hover:bg-white border border-slate-200/80 hover:border-accent-teal shadow-subtle transition-all focus:outline-none focus:ring-1 focus:ring-accent-teal group"
+              ref={langTriggerRef}
+              onClick={() => (isLangDropdownOpen ? closeLangMenu() : openLangMenu())}
+              onKeyDown={handleTriggerKeyDown}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 min-h-[44px] rounded-xl bg-white/80 hover:bg-white border border-slate-200/80 hover:border-accent-teal shadow-subtle transition-all focus:outline-none focus:ring-1 focus:ring-accent-teal group"
               aria-label="Select voice language"
               aria-haspopup="listbox"
               aria-expanded={isLangDropdownOpen}
@@ -127,24 +178,29 @@ const VoiceAgentPanel = ({
             {isLangDropdownOpen && (
               <div
                 role="listbox"
+                aria-label="Voice language"
                 className="absolute top-full right-0 mt-1.5 z-50 min-w-[210px] bg-white/95 backdrop-blur-2xl border border-slate-200 shadow-2xl rounded-2xl p-1.5 space-y-1 animate-in fade-in zoom-in-95 duration-150 ring-1 ring-black/5"
               >
                 <div className="px-2.5 py-1 text-[10px] font-mono uppercase text-ink-muted tracking-wider border-b border-slate-100">
                   Select Language
                 </div>
-                {SUPPORTED_LANGUAGES.map((lang) => {
+                {SUPPORTED_LANGUAGES.map((lang, index) => {
                   const isSelected = lang.code === selectedLanguage;
                   return (
                     <button
                       key={lang.code}
+                      ref={(el) => {
+                        optionRefs.current[index] = el;
+                      }}
                       type="button"
                       role="option"
                       aria-selected={isSelected}
+                      tabIndex={index === focusedOptionIndex ? 0 : -1}
                       onClick={() => {
                         onSelectLanguage(lang.code);
-                        setIsLangDropdownOpen(false);
+                        closeLangMenu({ restoreFocus: true });
                       }}
-                      className={`w-full flex items-center justify-between px-2.5 py-2 rounded-xl text-xs transition-all ${
+                      className={`w-full min-h-[44px] flex items-center justify-between px-2.5 py-2 rounded-xl text-xs transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-teal ${
                         isSelected
                           ? 'bg-accent-teal-light text-accent-teal font-semibold border border-accent-teal/20'
                           : 'text-ink-secondary hover:text-ink-primary hover:bg-slate-50 border border-transparent'
@@ -181,7 +237,7 @@ const VoiceAgentPanel = ({
           <button
             type="button"
             onClick={onToggleMute}
-            className={`p-1.5 rounded-xl border text-xs transition-all flex items-center gap-1 ${
+            className={`min-w-[44px] min-h-[44px] p-1.5 rounded-xl border text-xs transition-all flex items-center justify-center gap-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-teal ${
               isMuted
                 ? 'bg-rose-50 border-rose-200 text-rose-600'
                 : 'bg-white/80 hover:bg-white border-slate-200/80 text-ink-secondary hover:text-ink-primary shadow-subtle'
@@ -281,7 +337,7 @@ const VoiceAgentPanel = ({
             aria-label="Hands-free call mode"
             aria-checked={isContinuousMode}
             onClick={onToggleContinuousMode}
-            className={`w-9 h-5 rounded-full transition-colors relative focus:outline-none focus:ring-2 focus:ring-accent-teal ${
+            className={`w-9 h-5 rounded-full transition-colors relative after:absolute after:-inset-3 after:content-[''] focus:outline-none focus:ring-2 focus:ring-accent-teal ${
               isContinuousMode ? 'bg-accent-teal' : 'bg-slate-300'
             }`}
           >

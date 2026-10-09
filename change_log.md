@@ -4,6 +4,13 @@ All notable changes to the SAURIK IT Private Limited website codebase will be do
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.12.4] - 2026-10-09
+
+### Fixed
+- **Long Spoken Questions (`src/hooks/useVoiceAgent.js`):** Desktop browsers now use continuous recognition and submit after a ~1.8s pause (or "Done Speaking"), so long questions are no longer cut off at the first breath. Android/iOS keep single-phrase mode because their continuous mode repeats or drops results. Cancelled rounds (close / end call) are discarded instead of submitted.
+- **Accuracy Claims (`src/pages/AiChatbot.jsx`):** Replaced "Zero Hallucinations" headings, chip, and "guarantee" FAQ wording with descriptions of the grounding and handoff safeguards.
+- **Voice/Chat Accessibility (`src/components/voice/VoiceAgentPanel.jsx`, `src/components/ChatWidget.jsx`):** Language listbox supports Arrow/Home/End/Escape/Tab with focus return, and Escape no longer closes the whole dialog while the menu is open; the assistant dialog traps Tab focus; mobile Chat/Voice tabs expose `aria-pressed`; header, mute, language, and tab controls meet the 44px touch target, and the hands-free switch has an enlarged hit area.
+
 ## [1.12.3] - 2026-10-09
 
 ### Fixed
