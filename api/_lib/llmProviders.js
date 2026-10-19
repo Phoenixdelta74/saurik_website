@@ -45,13 +45,14 @@ async function callAnthropic(systemPrompt, messages) {
   return textBlock?.text ?? null;
 }
 
-async function callOpenAICompatible({ apiKey, baseURL, model, defaultHeaders, systemPrompt, messages }) {
+async function callOpenAICompatible({ apiKey, baseURL, model, defaultHeaders, extraBody, systemPrompt, messages }) {
   const client = new OpenAI({ apiKey, baseURL, defaultHeaders });
 
   const response = await client.chat.completions.create({
     model,
     max_tokens: 1024,
     messages: [{ role: 'system', content: systemPrompt }, ...messages],
+    ...extraBody,
   });
 
   return response.choices?.[0]?.message?.content ?? null;
@@ -70,11 +71,14 @@ function callOpenRouter(systemPrompt, messages) {
   return callOpenAICompatible({
     apiKey: requireEnv('OPENROUTER_API_KEY'),
     baseURL: 'https://openrouter.ai/api/v1',
-    model: process.env.OPENROUTER_MODEL || 'google/gemini-2.5-pro',
+    model: process.env.OPENROUTER_MODEL || 'google/gemini-2.5-flash',
     defaultHeaders: {
       'HTTP-Referer': process.env.SITE_URL || 'https://www.saurikit.in',
       'X-Title': 'SAURIK IT Website Assistant',
     },
+    // Thinking models (e.g. Gemini 2.5) spend output tokens on reasoning first; keep it light so
+    // short chat answers are fast and are not starved into empty replies by max_tokens.
+    extraBody: { reasoning: { effort: 'low', exclude: true } },
     systemPrompt,
     messages,
   });
@@ -108,11 +112,12 @@ export async function getChatReply(systemPrompt, messages, { source = 'text', la
     );
   }
 
-  // Prepend strict language mirroring instructions based on selected language and user input
+  // A fixed language is only sent for voice turns (it is the speech-recognition language).
+  // Typed turns omit it so the reply mirrors whatever language the visitor writes in.
   let enrichedSystemPrompt = systemPrompt;
   if (lang === 'en-IN') {
     enrichedSystemPrompt +=
-      '\n\nCRITICAL LANGUAGE MANDATE: The user has selected English. You MUST generate your response completely in clear, natural, professional English. Do NOT answer in Hindi or any other language unless explicitly requested by the user.';
+      '\n\nCRITICAL LANGUAGE MANDATE: The user is speaking English. You MUST generate your response completely in clear, natural, professional English. Do NOT answer in Hindi or any other language unless explicitly requested by the user.';
   } else if (lang === 'hi-IN') {
     enrichedSystemPrompt +=
       '\n\nCRITICAL LANGUAGE MANDATE: The user is communicating in Hindi. You MUST generate your response completely in authentic, natural Hindi (using proper Devanagari script). Do NOT answer in English. Do NOT apologize in English.';

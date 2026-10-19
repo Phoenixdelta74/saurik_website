@@ -71,8 +71,8 @@ const AiChatbot = () => {
 
   const features = [
     {
-      title: 'Zero Hallucinations (Strict Grounding)',
-      desc: 'The assistant only answers from documents, URLs, price sheets, and FAQs you explicitly approve. It never makes up false policies, discounts, or inventory claims.',
+      title: 'Strictly Grounded Answers',
+      desc: 'The assistant only answers from documents, URLs, price sheets, and FAQs you explicitly approve. When the approved material does not cover a question, it says so and offers a human handoff instead of guessing at policies, discounts, or stock.',
       icon: ShieldCheck,
     },
     {
@@ -215,7 +215,7 @@ const AiChatbot = () => {
       a: 'Installation requires copying a single line of JavaScript (<script src="..."></script>) into your website\'s HTML template before the closing </body> tag. It works seamlessly with WordPress, Wix, Shopify, Squarespace, custom HTML5/PHP sites, and modern React/Next.js frameworks. If you prefer, our team can install it for you during Done-For-You setup.'
     },
     {
-      q: 'How do you guarantee the chatbot will not invent incorrect prices or false policies?',
+      q: 'How do you stop the chatbot from inventing incorrect prices or false policies?',
       a: 'We use strict Retrieval-Augmented Generation (RAG) with conservative confidence thresholds. The system is explicitly instructed to retrieve facts exclusively from your approved documents (website URLs, PDFs, catalogs, FAQs). If a visitor asks something outside your verified documentation, the bot will never guess—it politely explains that it does not have verified information and offers to connect the visitor directly with your human team on WhatsApp.'
     },
     {
@@ -343,7 +343,7 @@ const AiChatbot = () => {
             <div className="pt-4 flex flex-wrap gap-x-6 gap-y-2 text-xs font-medium text-ink-muted">
               <span className="flex items-center gap-1.5 text-ink-secondary">
                 <CheckCircle2 className="w-4 h-4 text-accent-teal flex-shrink-0" />
-                Zero Hallucinations (Strict RAG)
+                Grounded in Your Documents (RAG)
               </span>
               <span className="flex items-center gap-1.5 text-ink-secondary">
                 <CheckCircle2 className="w-4 h-4 text-accent-teal flex-shrink-0" />

@@ -1,5 +1,8 @@
 import OpenAI from 'openai';
+import { guardRequest } from './_lib/requestGuard.js';
 
+// Fallback only: the voice agent calls this when the visitor's device has no installed voice
+// for the reply language (typically Bengali). Browser speech remains the primary engine.
 const MAX_TTS_CHARS = 1000;
 const ALLOWED_VOICES = ['nova', 'alloy', 'echo', 'fable', 'onyx', 'shimmer'];
 
@@ -8,6 +11,8 @@ export default async function handler(req, res) {
     res.setHeader('Allow', 'POST');
     return res.status(405).json({ error: 'Method not allowed.' });
   }
+
+  if (!guardRequest(req, res, { name: 'tts', limit: 10 })) return undefined;
 
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {

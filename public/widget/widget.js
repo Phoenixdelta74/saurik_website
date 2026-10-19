@@ -19,12 +19,46 @@
 
   const botKey = scriptTag.getAttribute('data-bot-key');
   const apiBase = scriptTag.getAttribute('data-api-base') || 'https://api.saurikit.in';
+  // Voice input language: explicit data-lang, else the host page's <html lang>, else Indian English
+  const voiceLang = scriptTag.getAttribute('data-lang') || document.documentElement.lang || 'en-IN';
+  const MAX_HISTORY_MESSAGES = 20;
 
-  // Generate or retrieve persistent visitor ID
-  let visitorId = localStorage.getItem('saurik_visitor_id');
+  // Generate or retrieve persistent visitor ID (storage can be blocked in private mode / iframes)
+  let visitorId = null;
+  try {
+    visitorId = localStorage.getItem('saurik_visitor_id');
+  } catch (e) {}
   if (!visitorId) {
     visitorId = 'vis_' + Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
-    localStorage.setItem('saurik_visitor_id', visitorId);
+    try {
+      localStorage.setItem('saurik_visitor_id', visitorId);
+    } catch (e) {}
+  }
+
+  // Pick the speech language from the script used in the answer
+  function detectSpeechLang(text) {
+    if (/[ঀ-৿]/.test(text)) return 'bn-IN';
+    if (/[ऀ-ॿ]/.test(text)) return 'hi-IN';
+    return /^en/i.test(voiceLang) ? voiceLang : 'en-IN';
+  }
+
+  function cleanTextForSpeech(text) {
+    return String(text || '')
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+      .replace(/https?:\/\/\S+/g, '')
+      .replace(/^\s*(?:[-*•]|\d+[.)])\s+/gm, '')
+      .replace(/[*_#`>]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  function isSafeHttpUrl(value) {
+    try {
+      const url = new URL(value, window.location.href);
+      return url.protocol === 'http:' || url.protocol === 'https:';
+    } catch (e) {
+      return false;
+    }
   }
 
   // Create Host Container with Shadow Root
@@ -53,7 +87,7 @@
     speechRecognition = new SpeechRec();
     speechRecognition.continuous = false;
     speechRecognition.interimResults = false;
-    speechRecognition.lang = 'en-IN';
+    speechRecognition.lang = voiceLang;
 
     speechRecognition.onresult = (event) => {
       const transcript = event.results[0][0].transcript;
@@ -362,7 +396,12 @@
     if (start) {
       isListening = true;
       if (micBtn) micBtn.classList.add('active');
-      speechRecognition.start();
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      try {
+        speechRecognition.start();
+      } catch (e) {
+        // Already listening; keep the current session
+      }
     } else {
       isListening = false;
       if (micBtn) micBtn.classList.remove('active');
@@ -408,7 +447,19 @@
     if (citations && citations.length > 0) {
       const citEl = document.createElement('div');
       citEl.className = 'saurik-citations';
-      citEl.innerHTML = '<strong>Sources:</strong> ' + citations.map(c => `<a href="${c.url || '#'}" target="_blank" rel="noopener noreferrer">${c.title}</a>`).join('');
+      // Citation titles/URLs come from crawled content, so build nodes instead of HTML strings
+      const label = document.createElement('strong');
+      label.textContent = 'Sources: ';
+      citEl.appendChild(label);
+      citations.forEach((c) => {
+        if (!c || !isSafeHttpUrl(c.url)) return;
+        const link = document.createElement('a');
+        link.href = c.url;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.textContent = c.title || c.url;
+        citEl.appendChild(link);
+      });
       el.appendChild(citEl);
     }
 
@@ -444,6 +495,7 @@
     msgContainer.scrollTop = msgContainer.scrollHeight;
 
     messages.push({ role: 'user', content: textToSend });
+    messages = messages.slice(-MAX_HISTORY_MESSAGES);
 
     // Show typing placeholder
     const typingEl = document.createElement('div');
@@ -472,12 +524,21 @@
 
       // Optional TTS Readout if user asked via voice
       if (isVoice && 'speechSynthesis' in window) {
-        const utterance = new SpeechSynthesisUtterance(data.answer);
-        utterance.lang = 'en-IN';
-        window.speechSynthesis.speak(utterance);
+        const spoken = cleanTextForSpeech(data.answer);
+        if (spoken) {
+          const utterance = new SpeechSynthesisUtterance(spoken);
+          utterance.lang = detectSpeechLang(spoken);
+          window.speechSynthesis.cancel();
+          window.speechSynthesis.speak(utterance);
+        }
       }
     } catch (err) {
+      // Drop the unanswered question so the next request does not carry two user turns in a row
+      if (messages.length && messages[messages.length - 1].role === 'user') messages.pop();
       typingEl.textContent = 'I am currently unable to reach the server. Please feel free to message us on WhatsApp.';
+      // typingEl is already removed when the server answered with an error status
+      if (!typingEl.isConnected) msgContainer.appendChild(typingEl);
+      msgContainer.scrollTop = msgContainer.scrollHeight;
     }
   }
 })();

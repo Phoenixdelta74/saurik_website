@@ -37,7 +37,7 @@ const ChatWidget = () => {
   const currentQuestions = useMemo(() => {
     if (isAiChatbot) {
       return [
-        "How do you guarantee zero hallucinations?",
+        "How does it avoid made-up answers?",
         "What is included in the ₹1,499 Starter plan?",
         "How does the single-line script installation work?",
         "Can you build a live demo on my company's catalog?",
@@ -93,67 +93,72 @@ const ChatWidget = () => {
   const toggleButtonRef = useRef(null);
   const inputRef = useRef(null);
   const logRef = useRef(null);
-  const selectedLangRef = useRef('en-IN');
+  const dialogRef = useRef(null);
   const pageModeRef = useRef(pageMode);
+  const messagesRef = useRef(messages);
   const voiceAgentRef = useRef(null);
 
   useEffect(() => {
     pageModeRef.current = pageMode;
   }, [pageMode]);
 
-  // Send message to LLM Brain
-  const sendToAssistant = useCallback(
-    async (userInput, currentMessages, shouldSpeak = false, source = 'text', customLang = null) => {
-      const nextMessages = [...currentMessages, { role: 'user', content: userInput }];
-      setMessages(nextMessages);
-      setStatus('sending');
+  useEffect(() => {
+    messagesRef.current = messages;
+  }, [messages]);
 
-      try {
-        const response = await fetch('/api/chat', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            messages: nextMessages.slice(-10),
-            source,
-            lang: customLang || selectedLangRef.current || 'en-IN',
-            mode: pageModeRef.current,
-          }),
-        });
+  // Send message to LLM Brain. Only voice turns are spoken aloud and pinned to the selected
+  // voice language; typed turns let the assistant mirror whatever language the visitor writes in.
+  const sendToAssistant = useCallback(async (userInput, source = 'text', lang = null) => {
+    const shouldSpeak = source === 'voice';
+    const nextMessages = [...messagesRef.current, { role: 'user', content: userInput }];
+    messagesRef.current = nextMessages;
+    setMessages(nextMessages);
+    setStatus('sending');
 
-        if (!response.ok) {
-          throw new Error('Request failed');
-        }
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: nextMessages.slice(-10),
+          source,
+          ...(lang ? { lang } : {}),
+          mode: pageModeRef.current,
+        }),
+      });
 
-        const data = await response.json();
-        if (!data.reply) {
-          throw new Error('Empty response');
-        }
-
-        setMessages((prev) => [...prev, { role: 'assistant', content: data.reply }]);
-        setStatus('idle');
-
-        if (shouldSpeak && !isMuted) {
-          voiceAgent.speak(data.reply);
-        }
-      } catch (error) {
-        console.error('Chat error:', error);
-        setMessages((prev) => [...prev, { role: 'assistant', content: FALLBACK_MESSAGE }]);
-        setStatus('error');
-        if (shouldSpeak && !isMuted) {
-          voiceAgent.speak(FALLBACK_MESSAGE);
-        }
+      if (!response.ok) {
+        throw new Error('Request failed');
       }
-    },
-    [isMuted]
-  );
+
+      const data = await response.json();
+      if (!data.reply) {
+        throw new Error('Empty response');
+      }
+
+      setMessages((prev) => [...prev, { role: 'assistant', content: data.reply }]);
+      setStatus('idle');
+
+      if (shouldSpeak) {
+        voiceAgentRef.current?.speak(data.reply, lang);
+      }
+    } catch (error) {
+      console.error('Chat error:', error);
+      setMessages((prev) => [...prev, { role: 'assistant', content: FALLBACK_MESSAGE }]);
+      setStatus('error');
+      if (shouldSpeak) {
+        voiceAgentRef.current?.speak(FALLBACK_MESSAGE, 'en-IN');
+      }
+    }
+  }, []);
 
   // Speech Recognition Callback
   const handleSpeechRecognized = useCallback(
-    (spokenText) => {
+    (spokenText, lang) => {
       if (!spokenText.trim()) return;
-      sendToAssistant(spokenText, messages, true, 'voice', selectedLangRef.current);
+      sendToAssistant(spokenText, 'voice', lang);
     },
-    [messages, sendToAssistant]
+    [sendToAssistant]
   );
 
   // Initialize Voice Agent Engine
@@ -162,12 +167,8 @@ const ChatWidget = () => {
     isMuted,
   });
 
-  // Keep selectedLangRef and voiceAgentRef in sync
   useEffect(() => {
     voiceAgentRef.current = voiceAgent;
-    if (voiceAgent?.selectedLanguage) {
-      selectedLangRef.current = voiceAgent.selectedLanguage;
-    }
   }, [voiceAgent]);
 
   // Focus management
@@ -184,13 +185,34 @@ const ChatWidget = () => {
     }
   }, [messages, status]);
 
-  // Handle ESC key to close modal
+  // Handle ESC key to close modal and keep Tab focus inside the dialog
   useEffect(() => {
     if (!isOpen) return undefined;
 
     const handleKeyDown = (event) => {
       if (event.key === 'Escape') {
         handleClose();
+        return;
+      }
+      if (event.key !== 'Tab' || !dialogRef.current) return;
+
+      const focusable = Array.from(
+        dialogRef.current.querySelectorAll(
+          'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        )
+      ).filter((el) => el.offsetParent !== null);
+      if (focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      const active = document.activeElement;
+
+      if (event.shiftKey && (active === first || !dialogRef.current.contains(active))) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && (active === last || !dialogRef.current.contains(active))) {
+        event.preventDefault();
+        first.focus();
       }
     };
 
@@ -199,8 +221,8 @@ const ChatWidget = () => {
   }, [isOpen]);
 
   const handleClose = () => {
-    voiceAgent.cancelSpeech();
-    voiceAgent.stopListening();
+    // End any hands-free call so the microphone can never reopen while the assistant is closed
+    voiceAgent.endCall();
     setIsOpen(false);
     toggleButtonRef.current?.focus();
   };
@@ -211,14 +233,41 @@ const ChatWidget = () => {
     if (!trimmed || status === 'sending') return;
 
     setInput('');
-    // Speak response if user is on mobile voice tab or sound is unmuted
-    const shouldSpeak = activeMobileTab === 'voice' || !isMuted;
-    sendToAssistant(trimmed, messages, shouldSpeak, 'text', selectedLangRef.current);
+    sendToAssistant(trimmed, 'text');
   };
 
   const handleQuickQuestion = (question) => {
     if (status === 'sending') return;
-    sendToAssistant(question, messages, !isMuted, 'text', selectedLangRef.current);
+    sendToAssistant(question, 'text');
+  };
+
+  const handleToggleMute = () => {
+    if (!isMuted && voiceAgent.isSpeaking) {
+      // Muting mid-reply stops the audio; a hands-free call moves straight back to listening
+      if (voiceAgent.isContinuousMode) {
+        voiceAgent.startListening();
+      } else {
+        voiceAgent.cancelSpeech();
+      }
+    }
+    setIsMuted((prev) => !prev);
+  };
+
+  // In a hands-free call, interrupting hands the turn straight back to the visitor
+  const handleInterrupt = () => {
+    if (voiceAgent.isContinuousMode) {
+      voiceAgent.startListening();
+    } else {
+      voiceAgent.cancelSpeech();
+    }
+  };
+
+  const handleToggleContinuousMode = () => {
+    if (voiceAgent.isContinuousMode) {
+      voiceAgent.endCall();
+    } else {
+      voiceAgent.setIsContinuousMode(true);
+    }
   };
 
   const panelAnimationClass = prefersReducedMotion()
@@ -286,6 +335,7 @@ const ChatWidget = () => {
       {isOpen && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-900/35 backdrop-blur-sm print:hidden"
+          ref={dialogRef}
           role="dialog"
           aria-modal="true"
           aria-label="Saurik AI Advisor"
@@ -294,7 +344,7 @@ const ChatWidget = () => {
             className={`w-full max-w-4xl h-[90vh] max-h-[660px] bg-white/65 backdrop-blur-3xl border border-white/90 shadow-[0_30px_70px_-12px_rgba(16,42,67,0.26),0_0_0_1px_rgba(255,255,255,0.7)] ring-1 ring-white/60 rounded-3xl flex flex-col overflow-hidden transition-all duration-300 ${panelAnimationClass}`}
           >
             {/* Top Shared Header */}
-            <div className="flex items-center justify-between px-4 sm:px-5 py-3.5 bg-white/50 backdrop-blur-2xl border-b border-white/60 text-ink-primary shrink-0 gap-2">
+            <div className="flex items-center justify-between px-4 sm:px-5 py-2 bg-white/50 backdrop-blur-2xl border-b border-white/60 text-ink-primary shrink-0 gap-2">
               <div className="flex items-center gap-2.5 shrink-0">
                 <span className="relative flex h-2.5 w-2.5">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-teal opacity-75" />
@@ -314,7 +364,8 @@ const ChatWidget = () => {
                 <button
                   type="button"
                   onClick={() => setActiveMobileTab('chat')}
-                  className={`flex items-center gap-1 px-2.5 py-1 text-xs rounded-lg font-medium transition-all ${
+                  aria-pressed={activeMobileTab === 'chat'}
+                  className={`flex items-center gap-1 px-2.5 py-1 min-h-[44px] text-xs rounded-lg font-medium transition-all ${
                     activeMobileTab === 'chat'
                       ? 'bg-accent-teal text-white font-bold shadow-sm'
                       : 'text-ink-secondary hover:text-ink-primary'
@@ -326,7 +377,8 @@ const ChatWidget = () => {
                 <button
                   type="button"
                   onClick={() => setActiveMobileTab('voice')}
-                  className={`flex items-center gap-1 px-2.5 py-1 text-xs rounded-lg font-medium transition-all ${
+                  aria-pressed={activeMobileTab === 'voice'}
+                  className={`flex items-center gap-1 px-2.5 py-1 min-h-[44px] text-xs rounded-lg font-medium transition-all ${
                     activeMobileTab === 'voice'
                       ? 'bg-accent-teal text-white font-bold shadow-sm'
                       : 'text-ink-secondary hover:text-ink-primary'
@@ -344,11 +396,8 @@ const ChatWidget = () => {
               <div className="flex items-center gap-1 sm:gap-2">
                 <button
                   type="button"
-                  onClick={() => {
-                    if (!isMuted) voiceAgent.cancelSpeech();
-                    setIsMuted((prev) => !prev);
-                  }}
-                  className={`p-1.5 rounded-xl border text-xs transition-all hidden sm:flex items-center gap-1 ${
+                  onClick={handleToggleMute}
+                  className={`min-w-[44px] min-h-[44px] p-1.5 rounded-xl border text-xs transition-all hidden sm:flex items-center justify-center gap-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-teal ${
                     isMuted
                       ? 'bg-rose-50 border-rose-200 text-rose-600'
                       : 'bg-white/80 hover:bg-white border-slate-200/80 text-ink-secondary hover:text-ink-primary shadow-subtle'
@@ -362,7 +411,7 @@ const ChatWidget = () => {
                 <button
                   type="button"
                   onClick={handleClose}
-                  className="text-ink-muted hover:text-ink-primary p-1.5 rounded-xl hover:bg-slate-100 transition-colors focus:outline-none focus:ring-2 focus:ring-accent-teal"
+                  className="min-w-[44px] min-h-[44px] flex items-center justify-center text-ink-muted hover:text-ink-primary p-1.5 rounded-xl hover:bg-slate-100 transition-colors focus:outline-none focus:ring-2 focus:ring-accent-teal"
                   aria-label="Close assistant modal"
                 >
                   <X className="w-5 h-5" />
@@ -499,19 +548,17 @@ const ChatWidget = () => {
                   isSpeaking={voiceAgent.isSpeaking}
                   interimTranscript={voiceAgent.interimTranscript}
                   permissionError={voiceAgent.permissionError}
+                  speechNotice={voiceAgent.speechNotice}
                   status={status}
                   selectedLanguage={voiceAgent.selectedLanguage}
                   onSelectLanguage={voiceAgent.setSelectedLanguage}
                   isContinuousMode={voiceAgent.isContinuousMode}
-                  onToggleContinuousMode={() => voiceAgent.setIsContinuousMode((prev) => !prev)}
+                  onToggleContinuousMode={handleToggleContinuousMode}
                   onStartListening={voiceAgent.startListening}
-                  onStopListening={voiceAgent.stopListening}
-                  onCancelSpeech={voiceAgent.cancelSpeech}
+                  onStopListening={voiceAgent.isContinuousMode ? voiceAgent.endCall : voiceAgent.stopListening}
+                  onCancelSpeech={handleInterrupt}
                   isMuted={isMuted}
-                  onToggleMute={() => {
-                    if (!isMuted) voiceAgent.cancelSpeech();
-                    setIsMuted((prev) => !prev);
-                  }}
+                  onToggleMute={handleToggleMute}
                   bgClass="bg-white/15 backdrop-blur-2xl"
                 />
               </div>
