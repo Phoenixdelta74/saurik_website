@@ -50,4 +50,7 @@ const footerPath = path.join(root, 'src/components/Footer.jsx');
 const footerContent = fs.readFileSync(footerPath, 'utf8');
 assert.equal(footerContent.includes('to="/arthos/"') || footerContent.includes('to="/arthos"'), true, 'Footer.jsx must link to /arthos');
 
+const metaSource = fs.readFileSync(path.join(root, 'src/components/PageMetadata.jsx'), 'utf8');
+const arthosMeta = metaSource.slice(metaSource.indexOf("'/arthos'"), metaSource.indexOf("'/services/website-development'"));
+assert.equal(/100% offline|Desktop and Cloud editions|Offline & Cloud/i.test(arthosMeta), false, 'PageMetadata /arthos must not present Desktop EXE or Cloud as available');
 console.log('Arthos v2 structure, launch state, metadata, asset, React SPA parity, and claim checks passed.');

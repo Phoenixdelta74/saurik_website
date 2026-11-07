@@ -49,12 +49,12 @@ export const PAGE_METADATA = {
     "Know who's on shift, where visits happened, and what's left in the van. Saurik Track pairs GPS attendance with live inventory for field sales and service teams. Free 30-day trial."
   ],
   '/arthos': [
-    'Arthos Invoice Studio — Offline & Cloud Invoicing',
-    'GST-aware invoicing, collections tracking, price history, and Business Health analytics for small businesses. Standalone 100% offline Desktop and Cloud editions.'
+    'Arthos Invoice Studio — GST Invoicing & Business Health',
+    'GST-aware invoicing, collections tracking, price history, and Business Health analytics for small businesses. Runs in Chrome or Edge with your records kept on your own computer.'
   ],
   '/arthos/': [
-    'Arthos Invoice Studio — Offline & Cloud Invoicing',
-    'GST-aware invoicing, collections tracking, price history, and Business Health analytics for small businesses. Standalone 100% offline Desktop and Cloud editions.'
+    'Arthos Invoice Studio — GST Invoicing & Business Health',
+    'GST-aware invoicing, collections tracking, price history, and Business Health analytics for small businesses. Runs in Chrome or Edge with your records kept on your own computer.'
   ],
   '/services/website-development': [
     'Website Development & Design in Tripura',

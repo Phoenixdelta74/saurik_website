@@ -92,7 +92,7 @@ const CustomSoftware = () => {
     },
     {
       q: 'Can custom software work offline if our factory or depot has unstable internet?',
-      a: 'Yes. We specialize in hybrid and offline-first architectures (similar to our Saurik Track and Arthos Desktop platforms). We can build local desktop software or mobile tools with local SQLite storage that store records offline and synchronize automatically when connectivity is restored.',
+      a: 'Yes. We specialize in hybrid and offline-first architectures (similar to our Saurik Track and Arthos platforms). We can build local desktop software or mobile tools with local SQLite storage that store records offline and synchronize automatically when connectivity is restored.',
     },
     {
       q: 'Can you integrate with our existing Tally or accounting software?',
