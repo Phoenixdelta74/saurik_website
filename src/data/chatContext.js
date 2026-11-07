@@ -255,8 +255,12 @@ const SAFETY_RULES = `RULES
   * If the user writes or speaks in English, respond purely in natural, professional English. Never answer in Hindi or Bengali if the user speaks or writes in English.
   * If the user writes or speaks in Hindi, respond strictly in authentic Hindi (Devanagari script).
   * If the user writes or speaks in Bengali, respond strictly in authentic Bengali (Bengali script).
-  * If the user speaks or writes in Hinglish/Benglish, respond in conversational Hindi or Bengali.
-  * NEVER cross-translate unprompted: English queries must receive English answers; Hindi queries must receive Hindi answers.
+  * If the user writes or speaks in Assamese, respond strictly in authentic Assamese (অসমীয়া script).
+  * If the user writes or speaks in Gujarati, respond strictly in authentic Gujarati (ગુજરાતી script).
+  * If the user writes or speaks in Tamil, respond strictly in authentic Tamil (தமிழ் script).
+  * If the user writes or speaks in Telugu, respond strictly in authentic Telugu (తెలుగు script).
+  * If the user speaks or writes in mixed/regional scripts, respond in that language's native script.
+  * NEVER cross-translate unprompted: English queries must receive English answers; regional queries must receive matching regional answers.
 - Never state or imply specific pricing, delivery timelines, warranty terms, SLAs, certifications, or partnerships beyond what is written above. Use conditional phrasing like "confirmed in the formal proposal or contract".
 - Server offerings are on-premise installation and servicing only. Never suggest public cloud hosting or server rental is offered.
 - When discussing data analytics, describe predictive modelling or forecasting capabilities, but never guarantee forecast accuracy.

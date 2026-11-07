@@ -353,3 +353,47 @@ sequenceDiagram
    - Concentric animated waveform orb reacting dynamically to speaking, listening, and thinking states.
    - Live speech transcript display, language selector dropdown, hands-free call toggle, and one-tap speaker mute/unmute control.
 
+5. **Multi-Tier Resilient TTS Engine & Maya 2 Native Serverless Pipeline:**
+   - **Primary Engine (Tier 1):** Browser-native Web Speech API (`window.speechSynthesis`) remains the primary zero-cost engine for clients with native voices (e.g. English, Hindi).
+   - **Multi-Lingual Indic Expansion (7 Languages):** Supports **English (`en-IN`)**, **Bengali (`bn-IN`)**, **Assamese (`as-IN`)**, **Gujarati (`gu-IN`)**, **Tamil (`ta-IN`)**, **Telugu (`te-IN`)**, and **Hindi (`hi-IN`)**.
+   - **Regional Language Challenge:** Most Windows and Android visitor devices lack pre-installed Assamese, Bengali, Gujarati, Tamil, or Telugu voices, triggering the `/api/tts` proxy.
+   - **Maya 2 Native Serverless GPU (Tier 2, `deploy/modal_maya_app.py`):**
+     - Employs open-weight **Maya 2 Native** 2.5B parameter model (`maya-research/maya2-native`) on a serverless NVIDIA L4 (24GB VRAM) on Modal.com.
+     - Auto-scales to zero when idle (`scaledown_window=600`, 10 minutes warm keep-alive).
+     - Protected via Bearer token authentication (`AUTH_BEARER_TOKEN`).
+     - Emits authentic 24 kHz mono streaming audio in native conversational Indic cadences.
+   - **Fast-Fail Cascading Architecture:**
+     ```
+     [Client needs TTS]
+            │
+            ▼
+     Has native device voice? ──YES──► [Tier 1: window.speechSynthesis (Zero-Cost, 0ms)]
+            │
+            NO (e.g. Assamese / Bengali on Windows/Android)
+            ▼
+     [POST /api/tts]
+            │
+            ├─► MAYA_TTS_ENDPOINT configured?
+            │         │
+            │        YES ──► [Tier 2: Modal Serverless GPU (Maya 2 Native)]
+            │                     │
+            │                     ├── Warm (<5s) ──► Play 24kHz Maya Audio (X-TTS-Engine: maya2-native)
+            │                     │
+            │                     └── Cold (>7.5s timeout) or Error
+            │                               │ (Fast-Fail Instant Cascade)
+            │                               ▼
+            └───────────────────────► [Tier 3: OpenAI tts-1 Cloud Fallback]
+                                            │
+                                            ├── Success ──► Play MP3 Audio (X-TTS-Engine: openai-tts-1)
+                                            │
+                                            └── Error / No Key
+                                                    │
+                                                    ▼
+                                      [Tier 4: Graceful Degradation]
+                                      (Display response as text only,
+                                       inform client cleanly,
+                                       preserve hands-free call loop)
+     ```
+   - **Zero-Cost Principle & Low-Traffic Optimization:** For low-traffic websites, GPU containers spend most time scaled down to zero. The 7.5s fast-fail threshold guarantees visitors never experience a 45–90s freeze: first questions cascade to OpenAI in ~2.9s while Maya warms in the background; subsequent session queries achieve warm ~3.5s Maya Indic speech. Total server GPU expenses remain virtually $0 under Modal's free tier credits.
+
+

@@ -40,6 +40,9 @@ Routes are `/`, `/software`, `/hardware`, `/about`, `/contact`, and `/privacy`; 
 - Keep the AI assistant grounded in `src/data/chatContext.js`; update the shared data sources when published service information changes.
 - Keep animation brief and respect reduced-motion preferences.
 - **Zero-Cost Native Voice Engine Rule**: The website voice assistant must operate primarily via the client's browser-native Web Speech APIs (`SpeechRecognition` for STT and `SpeechSynthesis` for TTS). It must never mandate external paid TTS/STT API keys for standard client voice operation, ensuring zero recurring voice API expenses, instant client-side performance, multilingual capability (English, Hindi, Bengali), and an accessible continuous hands-free conversation loop.
+- **Dual-Engine Voice Pipeline**: The voice assistant separates text cognition from audio generation:
+  1. **Cognitive Layer (LLM)**: Grounded in `src/data/chatContext.js`, answers user enquiries via `api/chat.js` using configured LLM providers (OpenRouter/OpenAI/Anthropic/Ollama). Requires an active LLM key in `.env.local` to generate text.
+  2. **Audio Layer (Speech)**: Driven primarily by `window.speechSynthesis` (Zero-Cost Rule). When regional voices are absent on client devices (e.g. Bengali on Windows/Android), requests route to the Maya 2 Native Serverless GPU fallback endpoint on Modal (`api/tts.js`).
 
 ## Product and content constraints
 
