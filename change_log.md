@@ -4,6 +4,16 @@ All notable changes to the SAURIK IT Private Limited website codebase will be do
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.12.5] - 2026-11-07
+
+### Fixed
+- **Arthos claims match the app as built (`public/arthos/index.html`, `src/pages/Arthos.jsx`, `src/data/chatContext.js`, `src/components/ChatWidget.jsx`):** The page and the AI assistant no longer present a Windows EXE "Arthos Desktop" or a cloud-storage "Arthos Cloud" as available. Arthos is described as a web app for Chrome/Edge on Windows with records kept in the browser on the customer's computer; Arthos Cloud is marked as planned. Trial changed from 60 to 30 days with read-only access after it ends (Arthos decisions D-03, D-05). Business Health exports and Tally files are stated plainly instead of "only where verified".
+- **Social preview (`public/arthos/og-image.png`):** og:image and twitter:image now use a 1200x630 PNG; Facebook, LinkedIn, and X do not render SVG previews.
+- **Footer and sitemap:** Added a Terms link to the Arthos footer and updated the `/arthos/` sitemap `lastmod`.
+
+### Added
+- **Launch switch (`public/arthos/launch-config.js`):** A `live` state that points every CTA at `https://arthos.saurikit.in/`. The page stays on `prelaunch` until sign-up and purchase are verified on production.
+
 ## [1.12.4] - 2026-10-09
 
 ### Fixed
