@@ -2,8 +2,12 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 
 export const SUPPORTED_LANGUAGES = [
   { code: 'en-IN', label: 'English (India)', nativeLabel: 'English', recognitionLang: 'en-IN' },
-  { code: 'hi-IN', label: 'Hindi (हिंदी)', nativeLabel: 'हिन्दी', recognitionLang: 'hi-IN' },
   { code: 'bn-IN', label: 'Bengali (বাংলা)', nativeLabel: 'বাংলা', recognitionLang: 'bn-IN' },
+  { code: 'as-IN', label: 'Assamese (অসমীয়া)', nativeLabel: 'অসমীয়া', recognitionLang: 'as-IN' },
+  { code: 'hi-IN', label: 'Hindi (हिंदी)', nativeLabel: 'हिन्दी', recognitionLang: 'hi-IN' },
+  { code: 'gu-IN', label: 'Gujarati (ગુજરાતી)', nativeLabel: 'ગુજરાતી', recognitionLang: 'gu-IN' },
+  { code: 'ta-IN', label: 'Tamil (தமிழ்)', nativeLabel: 'தமிழ்', recognitionLang: 'ta-IN' },
+  { code: 'te-IN', label: 'Telugu (తెలుగు)', nativeLabel: 'తెలుగు', recognitionLang: 'te-IN' },
 ];
 
 // Browser-native speech stays primary (zero-cost rule). The server TTS route is only used
@@ -22,7 +26,15 @@ const END_OF_SPEECH_SILENCE_MS = 1800;
 const supportsContinuousRecognition = () =>
   typeof navigator !== 'undefined' && !/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-const LANGUAGE_NAMES = { 'en-IN': 'English', 'hi-IN': 'Hindi', 'bn-IN': 'Bengali' };
+const LANGUAGE_NAMES = {
+  'en-IN': 'English',
+  'bn-IN': 'Bengali',
+  'as-IN': 'Assamese',
+  'hi-IN': 'Hindi',
+  'gu-IN': 'Gujarati',
+  'ta-IN': 'Tamil',
+  'te-IN': 'Telugu',
+};
 
 const RECOGNITION_ERROR_MESSAGES = {
   'not-allowed': 'Microphone permission was denied. Please allow microphone access in your browser settings.',
@@ -51,8 +63,15 @@ export const cleanTextForSpeech = (text) => {
 
 // Pick the speech language from the script actually used in the reply
 const detectSpeechLang = (text, fallbackLang) => {
-  if (/[ঀ-৿]/.test(text)) return 'bn-IN';
-  if (/[ऀ-ॿ]/.test(text)) return 'hi-IN';
+  if (/[஀-௿]/.test(text)) return 'ta-IN'; // Tamil
+  if (/[ఀ-౿]/.test(text)) return 'te-IN'; // Telugu
+  if (/[઀-૿]/.test(text)) return 'gu-IN'; // Gujarati
+  if (/[ঀ-৿]/.test(text)) {
+    // Distinguish Assamese by characteristic characters (ৰ / ৱ) or active user selection
+    if (fallbackLang === 'as-IN' || /[ৰৱ]/.test(text)) return 'as-IN';
+    return 'bn-IN'; // Bengali
+  }
+  if (/[ऀ-ॿ]/.test(text)) return 'hi-IN'; // Hindi / Devanagari
   if (/[A-Za-z]/.test(text)) return 'en-IN';
   return fallbackLang || 'en-IN';
 };
@@ -394,9 +413,10 @@ export function useVoiceAgent({ onSpeechRecognized, isMuted = false }) {
       const response = await fetch('/api/tts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text }),
+        body: JSON.stringify({ text, lang }),
       });
       if (!response.ok) throw new Error(`TTS ${response.status}`);
+      const engine = response.headers.get('X-TTS-Engine') || 'cloud';
       const blob = await response.blob();
       if (session !== speechSessionRef.current) return false;
 
@@ -404,7 +424,7 @@ export function useVoiceAgent({ onSpeechRecognized, isMuted = false }) {
       audioRef.current = audio;
       const finish = () => {
         if (session !== speechSessionRef.current) return;
-        URL.revokeObjectURL(audio.src);
+        if (audio.src) URL.revokeObjectURL(audio.src);
         audioRef.current = null;
         setIsSpeaking(false);
         scheduleRelisten();
@@ -412,7 +432,12 @@ export function useVoiceAgent({ onSpeechRecognized, isMuted = false }) {
       audio.onended = finish;
       audio.onerror = finish;
       setIsSpeaking(true);
-      await audio.play();
+      try {
+        await audio.play();
+      } catch (playErr) {
+        finish();
+        return false;
+      }
       return true;
     } catch (err) {
       if (session === speechSessionRef.current) {

@@ -38,7 +38,7 @@ async function prerender() {
   const baseTemplate = fs.readFileSync(templatePath, 'utf8');
 
   const vite = await createServer({
-    server: { middlewareMode: true },
+    server: { middlewareMode: true, watch: null },
     appType: 'custom',
     root: rootDir,
   });

@@ -45,7 +45,14 @@ assert(widgetCode.includes('isContinuousMode'), 'ChatWidget must pass isContinuo
 assert(widgetCode.includes('.speak(data.reply'), 'ChatWidget must invoke voiceAgent speak on voice replies');
 console.log('✔ ChatWidget verified with side-by-side dual-panel, language selection, and continuous mode.');
 
-// 5. Verify Implementation Rules in AGENTS.md & masterdeveloper.md
+// 5. Verify Resilient Multi-Tier Fallback in api/tts.js
+const ttsCode = fs.readFileSync(path.resolve(__dirname, '../api/tts.js'), 'utf8');
+assert(ttsCode.includes('mayaTimeoutMs'), 'api/tts.js must enforce fast-fail timeout window');
+assert(ttsCode.includes('X-TTS-Engine') && ttsCode.includes('openai-tts-1'), 'api/tts.js must set X-TTS-Engine fallback header');
+assert(ttsCode.includes("fallback: 'text-only'"), 'api/tts.js must emit fallback: text-only on total failure');
+console.log('✔ api/tts.js verified with fast-fail timeout and multi-tier OpenAI fallback.');
+
+// 6. Verify Implementation Rules in AGENTS.md & masterdeveloper.md
 const agentsGuide = fs.readFileSync(path.resolve(__dirname, '../AGENTS.md'), 'utf8');
 assert(agentsGuide.includes('Zero-Cost Native Voice Engine Rule'), 'AGENTS.md must include Zero-Cost Native Voice Engine Rule');
 console.log('✔ AGENTS.md verified: Zero-Cost Native Voice Engine Rule is codified.');

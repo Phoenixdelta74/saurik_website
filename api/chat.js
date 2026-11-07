@@ -10,7 +10,7 @@ import { guardRequest } from './_lib/requestGuard.js';
 
 const MAX_HISTORY_MESSAGES = 20;
 const ALLOWED_SOURCES = ['text', 'voice'];
-const ALLOWED_LANGS = ['en-IN', 'hi-IN', 'bn-IN'];
+const ALLOWED_LANGS = ['en-IN', 'hi-IN', 'bn-IN', 'as-IN', 'gu-IN', 'ta-IN', 'te-IN'];
 
 const isValidMessage = (message) =>
   message &&

@@ -4,6 +4,48 @@ All notable changes to the SAURIK IT Private Limited website codebase will be do
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] - 2026-11-07
+
+### Added
+- **Multi-Tier Resilient TTS Fallback Engine (`api/tts.js`, `src/hooks/useVoiceAgent.js`, `deploy/modal_maya_app.py`):**
+  - **7.5s Fast-Fail Timeout Protection:** Replaced blocking 45s wait in `api/tts.js` with configurable `MAYA_TTS_TIMEOUT_MS = 7500` (7.5s). If Maya is cold or offline, the system aborts gracefully and immediately cascades to OpenAI `tts-1`, returning audio in ~2.9s rather than freezing the interface.
+  - **Engine Header Telemetry:** Injected `X-TTS-Engine: maya2-native` and `X-TTS-Engine: openai-tts-1` headers to trace exact audio synthesis sources.
+  - **Graceful Client-Side Degradation:** `src/hooks/useVoiceAgent.js` cleanly handles missing cloud keys or 502 responses by presenting a non-intrusive status notice while preserving the continuous hands-free call loop (`scheduleRelisten()`).
+  - **Modal Keep-Alive Extension:** Increased container `scaledown_window` from 180s (3m) to 600s (10m) in `deploy/modal_maya_app.py`, ensuring users in active voice conversations enjoy warm <4s latency.
+  - **Dedicated Automated Fallback Test Harness (`scripts/test_tts_fallback.cjs`):** Automated verification testing Maya offline cascading, graceful 502 payloads, and live synthesis.
+- **Expanded 7-Language Indic Voice Matrix (`src/hooks/useVoiceAgent.js`, `api/chat.js`, `api/tts.js`, `src/data/chatContext.js`):**
+  - Added full native and serverless voice support for **Assamese (`as-IN`)**, **Gujarati (`gu-IN`)**, **Tamil (`ta-IN`)**, and **Telugu (`te-IN`)**, complementing **English (`en-IN`)**, **Bengali (`bn-IN`)**, and **Hindi (`hi-IN`)**.
+  - Script auto-detection regex handles Unicode code point ranges for Tamil (`\u0B80-\u0BFF`), Telugu (`\u0C00-\u0C7F`), Gujarati (`\u0A80-\u0AFF`), Bengali/Assamese (`\u0980-\u09FF` with `ৰ`/`ৱ` differentiator), and Devanagari (`\u0900-\u097F`).
+  - Modal serverless function `deploy/modal_maya_app.py` redeployed with regex script-level language routing.
+- **7-Language Automated Benchmark Audit (7/7 Passed):**
+  - Ran automated validation against live Modal GPU endpoint (`scripts/test_maya_tts.cjs`).
+  - Warm inference latency averaged ~4.1 seconds across Indic languages:
+    - English (`en-IN`): PASS (401.3 KB, initial cold-start)
+    - Bengali (`bn-IN`): PASS (5.7s, 442.5 KB)
+    - Assamese (`as-IN`): PASS (3.7s, 397.5 KB)
+    - Gujarati (`gu-IN`): PASS (3.3s, 326.3 KB)
+    - Tamil (`ta-IN`): PASS (3.5s, 360.0 KB)
+    - Telugu (`te-IN`): PASS (4.6s, 371.3 KB)
+    - Hindi (`hi-IN`): PASS (4.1s, 408.8 KB)
+  - Audio artifacts saved to `test/output/maya_test_*.wav` in valid 24kHz mono PCM WAV format.
+- **Dual-Engine Voice Pipeline Rule (`AGENTS.md`):** Codified the separation of cognitive text generation (LLM layer) from audio speech synthesis (Zero-Cost Web Speech + Maya 2 on Modal fallback).
+- **Verified Maya 2 Native Serverless GPU Deployment (`deploy/modal_maya_app.py`):**
+  - Successfully deployed to Modal.com Serverless GPU (`https://phoenixdelta74--saurik-maya2-tts-mayattsservice-speech.us-east.modal.run`) powered by an NVIDIA L4 GPU (24GB VRAM).
+  - Model weights permanently cached on Modal Volume `maya2-weights`.
+  - Tri-lingual benchmark passed (3/3): English (en-IN), Bengali (bn-IN), and Hindi (hi-IN) generated 24kHz WAV audio files in `test/output/` with warm latency under 4.3 seconds.
+- **Skill Routing Matrix (`skill-routing.md`):** Master registry and routing engine detailing workspace and system skills, trigger conditions, input/output contracts, and execution prioritization.
+- **Dedicated Maya & Voice AI Skills (`.agents/skills/`):**
+  - `maya-serverless-deployer`: Runbook and packaging workflow for deploying Maya 2 Native 2.5B parameter Indic TTS model to Modal Serverless GPU (NVIDIA L4 24GB VRAM) with persistent volume caching and Bearer token authentication.
+  - `voice-audio-benchmark-tester`: Automated benchmark and validation harness for testing tri-lingual audio synthesis (English, Bengali, Hindi), auditing 24kHz sampling, verifying MIME types, and calculating warm vs cold latency.
+  - `website-voice-integration`: Workflow to connect the serverless Maya endpoint to the website's `api/tts.js` and `src/hooks/useVoiceAgent.js` while strictly respecting the **Zero-Cost Native Voice Engine Rule**.
+- **Serverless GPU Deployment Package (`deploy/modal_maya_app.py`):** Standalone Modal application serving Maya 2 Native via FastAPI web endpoint, with auto-scaling to zero and persistent model volume caching.
+- **Automated Tri-Lingual Benchmark Runner (`scripts/test_maya_tts.cjs`):** Automated test suite for testing English, Bengali, and Hindi synthesis with latency reporting and audio asset generation in `test/output/`.
+- **Living Change Witness (`change-log.md`):** Active change-tracking file for ongoing infrastructure modifications.
+
+### Changed
+- **Serverless TTS Fallback Proxy (`api/tts.js`):** Extended proxy with `MAYA_TTS_ENDPOINT` and `MAYA_TTS_KEY` support, cascading from Maya Serverless GPU to OpenAI `tts-1` with 10s timeout protection.
+- **Technical Architecture (`architecture.md`):** Extended Section 11 with Section 11.5 documenting the hybrid Serverless GPU pipeline, Bengali fallback flow, and zero-cost compliance guarantees.
+
 ## [1.12.5] - 2026-11-07
 
 ### Fixed

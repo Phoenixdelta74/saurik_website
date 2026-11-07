@@ -30,6 +30,7 @@ coverage/
 *.lcov
 playwright-report/
 test-results/
+test/output/
 blob-report/
 junit.xml
 
