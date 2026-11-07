@@ -11,13 +11,15 @@ const sectionIds = [...html.matchAll(/<section id="([^"]+)"/g)].map((match) => m
 assert.deepEqual(sectionIds, ['hero', 'editions', 'problems', 'features', 'workflow', 'data-and-backups', 'trial-and-pricing', 'faq', 'final-cta']);
 assert.equal((html.match(/aria-labelledby=/g) || []).length >= 9, true, 'sections should be labelled');
 assert.equal(html.includes('twitter:card" content="summary_large_image"'), true);
-assert.equal(html.includes('og-image.svg'), true);
+assert.equal(html.includes('og:image" content="https://www.saurikit.in/arthos/og-image.png"'), true, 'og:image must be a PNG; social platforms ignore SVG');
+assert.equal(fs.existsSync(path.join(root, 'public/arthos/og-image.png')), true);
 assert.equal(html.includes('og:image:width" content="1200"'), true);
 assert.equal(html.includes('og:image:height" content="630"'), true);
 assert.equal(config.includes("state: 'prelaunch'"), true);
 assert.equal(config.includes('Request early access'), true);
 assert.equal(html.includes('href="/contact?topic=arthos_early_access"'), true);
-assert.equal((html.match(/60-day/g) || []).length >= 5, true, 'trial duration must remain 60 days');
+assert.equal((html.match(/30-day/g) || []).length >= 5, true, 'trial duration must be 30 days (Arthos decision D-05)');
+assert.equal(html.includes('60-day'), false, 'no stale 60-day trial copy');
 assert.equal(html.includes('does not directly file GSTR-1, GSTR-3B'), true);
 assert.equal(html.includes('Automatic migration or synchronisation is not currently offered'), true);
 assert.equal(html.includes('complete P&L'), false);
@@ -28,6 +30,11 @@ const jsxPath = path.join(root, 'src/pages/Arthos.jsx');
 assert.equal(fs.existsSync(jsxPath), true, 'src/pages/Arthos.jsx must exist');
 const jsx = fs.readFileSync(jsxPath, 'utf8');
 const jsxSectionIds = [...jsx.matchAll(/<section id="([^"]+)"/g)].map((match) => match[1]);
+for (const [name, source] of [['index.html', html], ['Arthos.jsx', jsx]]) {
+  assert.equal(source.includes('60-day'), false, `${name}: no stale 60-day trial copy`);
+  assert.equal(/standalone Windows application|cloud-native web application/i.test(source), false, `${name}: must not present Desktop EXE or Cloud as available`);
+  assert.equal(source.includes('read-only'), true, `${name}: must state read-only access after the trial`);
+}
 assert.deepEqual(jsxSectionIds, ['hero', 'editions', 'problems', 'features', 'workflow', 'data-and-backups', 'trial-and-pricing', 'faq', 'final-cta'], 'Arthos.jsx must contain all 9 sections in exact order');
 
 const appPath = path.join(root, 'src/App.jsx');

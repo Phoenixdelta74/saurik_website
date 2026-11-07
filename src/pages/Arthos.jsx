@@ -34,7 +34,7 @@ const Arthos = () => {
         </a>
 
         <ul className="nav-product-links">
-          <li><a href="#editions">Editions</a></li>
+          <li><a href="#editions">How it runs</a></li>
           <li><a href="#features">Features</a></li>
           <li><a href="#workflow">How it works</a></li>
           <li><a href="#trial-and-pricing">Trial</a></li>
@@ -57,13 +57,13 @@ const Arthos = () => {
             <span className="eyebrow">Arthos Invoice Studio</span>
             <h1 id="hero-heading">GST-aware invoicing. Clear collections. A better view of your business.</h1>
             <p className="hero-subhead">Create invoices, track payments, preserve pricing history, and understand business performance with Arthos Invoice Studio—built for small Indian service and trading businesses.</p>
-            <p className="hero-edition-line">Choose Arthos Desktop for offline operation on your Windows computer, or Arthos Cloud for access from supported devices wherever you work.</p>
-            <p className="hero-trial-line">Try Arthos free for 60 days. Paid access is required after the trial.</p>
+            <p className="hero-edition-line">Arthos runs in Chrome or Edge on your Windows computer. Your invoices and business records stay in that browser on your computer, not on our servers.</p>
+            <p className="hero-trial-line">Try every feature free for 30 days. After the trial you can still view, print, and export your records; creating new ones needs a paid licence.</p>
             <div className="hero-cta-group">
               <Link to="/contact?topic=arthos_early_access" className="btn-primary" data-launch-cta data-conversion="early-access" data-placement="hero">Request early access</Link>
-              <a href="#editions" className="btn-secondary">View editions</a>
+              <a href="#editions" className="btn-secondary">How Arthos runs</a>
             </div>
-            <p className="micro-text mono-label">60-day free trial planned for launch</p>
+            <p className="micro-text mono-label">30-day free trial planned for launch</p>
           </div>
 
           <div className="hero-visual dashboard-card" aria-label="Business Health illustrative preview with sample figures">
@@ -104,34 +104,32 @@ const Arthos = () => {
     <section id="editions" aria-labelledby="editions-heading">
       <div className="container">
         <div className="section-intro">
-          <h2 id="editions-heading">Choose how you want to run Arthos</h2>
-          <p>The core business workflow stays familiar. The difference is where Arthos runs, where records are stored, and how you access them.</p>
+          <h2 id="editions-heading">How Arthos runs</h2>
+          <p>Arthos is a web app you open in your browser. Your sign-in and licence are handled online; your business records stay on your computer.</p>
         </div>
         <div className="editions-grid">
           <article className="edition-card desktop">
-            <span className="edition-tag">Arthos Desktop</span>
-            <h3>A standalone application on your computer</h3>
+            <span className="edition-tag">Arthos · at launch</span>
+            <h3>In your browser, on your computer</h3>
             <ul className="edition-list">
-              <li>Standalone Windows application</li>
-              <li>Works without an internet connection</li>
-              <li>Records stored on the local computer</li>
-              <li>Local backup and restore</li>
-              <li>Best for a controlled, single-computer workspace</li>
+              <li>Opens in current Chrome or Edge on Windows</li>
+              <li>Sign in with a one-time code sent to your email</li>
+              <li>Invoices and business records stay in that browser on your computer</li>
+              <li>Keeps working offline once signed in, until your licence end date</li>
+              <li>You export and restore your own backup files</li>
             </ul>
           </article>
           <article className="edition-card cloud">
-            <span className="edition-tag">Arthos Cloud</span>
-            <h3>A cloud-native web application</h3>
+            <span className="edition-tag">Arthos Cloud · planned</span>
+            <h3>Cloud storage and multi-device access</h3>
             <ul className="edition-list">
-              <li>Cloud-native web application</li>
-              <li>Access through an internet connection</li>
-              <li>Records and backups stored in the cloud</li>
-              <li>Access from supported devices and locations</li>
-              <li>Best for businesses that need remote access</li>
+              <li>Records stored on our servers instead of in one browser</li>
+              <li>Access from more than one device</li>
+              <li>Not available yet; we will announce it when it is ready</li>
             </ul>
           </article>
         </div>
-        <p className="edition-note">Desktop and Cloud do not synchronise automatically, and a licence for one edition does not include the other unless that is confirmed at a later date.</p>
+        <p className="edition-note">Records on different computers do not synchronise. To move your records to another computer, export a backup and restore it there.</p>
       </div>
     </section>
 
@@ -165,8 +163,8 @@ const Arthos = () => {
             </li>
             <li>
               <span className="problem-eyebrow">05</span>
-              <h3>Businesses need different access models</h3>
-              <p>Businesses have different preferences for offline control and remote access.</p>
+              <h3>Records need to stay under your control</h3>
+              <p>Business records should stay with the business, with backups the owner can make and restore.</p>
             </li>
           </ol>
         </div>
@@ -203,7 +201,7 @@ const Arthos = () => {
           <article className="feature-card">
             <span className="eyebrow">Insights</span>
             <h3>Business Health</h3>
-            <p>Review filtered sales, receivables, category contribution, product margins, and estimated profit based on the invoices, costs, payments, and expenses recorded in Arthos. Drill-through and supported CSV, Excel, PDF, or Tally-oriented exports will be available only where verified.</p>
+            <p>Review filtered sales, receivables, category contribution, product margins, and estimated profit based on the invoices, costs, payments, and expenses recorded in Arthos, with drill-through to the underlying invoices and PDF, Excel, and CSV exports.</p>
           </article>
         </div>
       </div>
@@ -237,7 +235,7 @@ const Arthos = () => {
           <li className="workflow-step">
             <span className="workflow-num">5</span>
             <h3>Export and protect records</h3>
-            <p>Prepare supported accountant exports and use the backup method provided by the selected edition.</p>
+            <p>Prepare accountant exports, including Tally import files, and export a backup of your records.</p>
           </li>
         </ol>
       </div>
@@ -246,18 +244,18 @@ const Arthos = () => {
     {/* Data and backups */}
     <section id="data-and-backups" aria-labelledby="data-heading">
       <div className="container">
-        <h2 id="data-heading">Your edition determines where your records live</h2>
+        <h2 id="data-heading">Where your records live</h2>
         <div className="data-grid">
           <div className="data-card">
-            <h3>Desktop</h3>
-            <p>Records are stored on the customer's computer. The customer is responsible for creating backups and storing copies safely. A backup does not restore activity created after that backup was made.</p>
+            <h3>On your computer</h3>
+            <p>Invoices, customers, products, payments, and expenses are stored in the browser on the computer where you use Arthos. You are responsible for exporting backups and storing copies safely. A backup does not restore activity created after it was made, and clearing the browser's site data removes the records on that computer.</p>
           </div>
           <div className="data-card">
-            <h3>Cloud</h3>
-            <p>Records and backups are stored in the cloud and are available through the customer's authenticated account. Backup frequency, retention period, geographic location, encryption control, recovery time, and uptime will be published once implemented and documented.</p>
+            <h3>With your Arthos account</h3>
+            <p>Your sign-in email, business name, optional GSTIN, and licence status are stored with SAURIK IT so you can sign in and keep your licence. Your invoices and business records are not uploaded.</p>
           </div>
         </div>
-        <p className="data-disclosure">Arthos stores records according to the edition you choose. When you export a file or send a document by email, the information you select is shared through that service.</p>
+        <p className="data-disclosure">Backup files contain your business records but not passwords or sign-in details. When you export a file or send a document by email, the information you select is shared through that service.</p>
       </div>
     </section>
 
@@ -265,9 +263,9 @@ const Arthos = () => {
     <section id="trial-and-pricing" aria-labelledby="trial-heading">
       <div className="container">
         <div className="trial-inner">
-          <span className="trial-status mono-label">60-day free trial planned for launch</span>
-          <h2 id="trial-heading">Try Arthos free for 60 days</h2>
-          <p>Explore the invoicing, collections, pricing, and Business Health workflow during your 60-day trial. Paid access is required to continue using Arthos after the trial ends.</p>
+          <span className="trial-status mono-label">30-day free trial planned for launch</span>
+          <h2 id="trial-heading">Try Arthos free for 30 days</h2>
+          <p>Every feature, including Business Health, is included during the 30-day trial. When the trial ends, Arthos becomes read-only: you can still open, print, and export your records and restore a backup, but creating or editing records needs a paid licence.</p>
           <p>Pricing is being finalised ahead of launch. For a live demo or to discuss current pricing and availability, contact our team directly and we'll get back to you.</p>
           <div className="trial-cta-group">
             <Link to="/contact?topic=arthos_early_access" className="btn-primary" data-launch-cta data-conversion="early-access" data-placement="trial">Request early access</Link>
@@ -283,32 +281,32 @@ const Arthos = () => {
         <h2 id="faq-heading">Common questions</h2>
         <div className="faq-list">
           <details className="faq-item">
-            <summary><span>What is the difference between Arthos Desktop and Arthos Cloud?</span><span className="toggle" aria-hidden="true"></span></summary>
-            <div className="faq-answer"><p>Arthos Desktop is a standalone Windows application that works without an internet connection, with records stored on your computer. Arthos Cloud is a cloud-native web application, with records and backups stored in the cloud and accessible from supported devices through an internet connection.</p></div>
+            <summary><span>Which edition of Arthos is available?</span><span className="toggle" aria-hidden="true"></span></summary>
+            <div className="faq-answer"><p>At launch, Arthos runs in current Chrome or Edge on Windows, with your records kept in that browser on your computer. A separate Arthos Cloud edition, with records stored on our servers and access from several devices, is planned but not available yet.</p></div>
           </details>
           <details className="faq-item">
-            <summary><span>Does Arthos Desktop require an internet connection?</span><span className="toggle" aria-hidden="true"></span></summary>
-            <div className="faq-answer"><p>No. Arthos Desktop is designed to work without an internet or cloud connection, on the Windows computer where it is installed.</p></div>
+            <summary><span>Does Arthos need an internet connection?</span><span className="toggle" aria-hidden="true"></span></summary>
+            <div className="faq-answer"><p>You need internet to sign in with the code sent to your email and to refresh your licence from time to time. Once signed in, Arthos keeps working offline until your licence end date. Sending invoices through Gmail also needs internet.</p></div>
           </details>
           <details className="faq-item">
-            <summary><span>Can I access Arthos Cloud from another location or device?</span><span className="toggle" aria-hidden="true"></span></summary>
-            <div className="faq-answer"><p>Yes. Arthos Cloud is accessed through an internet connection and is designed for access from supported devices and locations.</p></div>
+            <summary><span>Can I use Arthos on another computer?</span><span className="toggle" aria-hidden="true"></span></summary>
+            <div className="faq-answer"><p>Yes. Sign in on that computer and restore a backup there. Records do not synchronise between computers, so each computer keeps its own copy from the point of restore.</p></div>
           </details>
           <details className="faq-item">
             <summary><span>Where are my records and backups stored?</span><span className="toggle" aria-hidden="true"></span></summary>
-            <div className="faq-answer"><p>This depends on your edition. Desktop records are stored on your local computer, and you are responsible for creating backups. Cloud records and backups are stored in the cloud and available through your authenticated account.</p></div>
+            <div className="faq-answer"><p>Invoices and business records are stored in the browser on your computer, and you are responsible for exporting backups. Your sign-in email, business name, optional GSTIN, and licence status are stored with SAURIK IT. Backup files do not include passwords or sign-in details.</p></div>
           </details>
           <details className="faq-item">
-            <summary><span>What happens when the 60-day trial ends?</span><span className="toggle" aria-hidden="true"></span></summary>
-            <div className="faq-answer"><p>A paid licence or subscription is required to continue using Arthos after the 60-day trial ends. Pricing, billing, and the exact handling of records after expiry will be published once confirmed. In the meantime, <a href="mailto:contact@saurikit.in">contact us</a> for a live demo or to discuss current pricing and availability.</p></div>
+            <summary><span>What happens when the 30-day trial ends?</span><span className="toggle" aria-hidden="true"></span></summary>
+            <div className="faq-answer"><p>Arthos becomes read-only. You can still open every screen, print, export, and restore a backup, so your records stay available. Creating or editing invoices and other records needs a paid licence. Pricing will be published before launch. In the meantime, <a href="mailto:contact@saurikit.in">contact us</a> for a live demo or to discuss current pricing and availability.</p></div>
           </details>
           <details className="faq-item">
             <summary><span>Does Arthos file GST returns?</span><span className="toggle" aria-hidden="true"></span></summary>
             <div className="faq-answer"><p>Arthos supports GST-aware documents and selected accounting exports. It does not directly file GSTR-1, GSTR-3B, or other GST returns unless that capability is explicitly introduced and verified in the product.</p></div>
           </details>
           <details className="faq-item">
-            <summary><span>Can Desktop data be moved to Cloud?</span><span className="toggle" aria-hidden="true"></span></summary>
-            <div className="faq-answer"><p>Migration availability between Desktop and Cloud will be confirmed before launch. Automatic migration or synchronisation is not currently offered.</p></div>
+            <summary><span>Will I be able to move to Arthos Cloud later?</span><span className="toggle" aria-hidden="true"></span></summary>
+            <div className="faq-answer"><p>Arthos Cloud is planned but not available yet. Any move to it will be a migration from a backup that you review and confirm. Automatic migration or synchronisation is not currently offered.</p></div>
           </details>
         </div>
       </div>
@@ -319,7 +317,7 @@ const Arthos = () => {
       <div className="container cta-grid">
         <div className="cta-content">
           <h2 id="final-cta-heading">See how Arthos can fit the way your business works</h2>
-          <p>Choose offline control with Arthos Desktop or remote access with Arthos Cloud. A 60-day free trial will be available for both editions. Want a live demo or to discuss pricing first? Contact us — we're happy to walk you through it.</p>
+          <p>Arthos runs in the browser you already use and keeps your records on your own computer. A 30-day free trial with every feature will be available at launch. Want a live demo or to discuss pricing first? Contact us — we're happy to walk you through it.</p>
         </div>
         <div className="cta-action">
           <Link to="/contact?topic=arthos_early_access" className="btn-white" data-launch-cta data-conversion="early-access" data-placement="final-cta">Request early access</Link>
@@ -341,13 +339,14 @@ const Arthos = () => {
           <span className="footer-relationship">A Saurik IT product</span>
         </div>
         <ul className="footer-links">
-          <li><a href="#editions">Editions</a></li>
+          <li><a href="#editions">How it runs</a></li>
           <li><a href="#features">Features</a></li>
           <li><a href="#workflow">How it works</a></li>
           <li><a href="#trial-and-pricing">Trial</a></li>
           <li><a href="#faq">FAQ</a></li>
           <li><Link to="/">Visit SAURIK IT</Link></li>
           <li><Link to="/privacy">Privacy Policy</Link></li>
+          <li><Link to="/terms">Terms</Link></li>
         </ul>
         <div className="footer-contact-wrap">
           <a href="mailto:contact@saurikit.in" className="footer-contact">contact@saurikit.in</a>
