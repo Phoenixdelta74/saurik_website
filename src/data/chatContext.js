@@ -75,20 +75,21 @@ const renderArthosSection = () => {
 Description: GST-aware invoicing, payment and collections tracking, pricing history, and Business Health analytics built for small Indian service and trading businesses.
 Route: /arthos
 Launch Status: Pre-launch / Early Access
-Free Trial: 60-day free trial planned for launch. Paid access required after the trial.
+Free Trial: 30-day free trial with every feature planned for launch. After the trial Arthos becomes read-only (view, print, export, restore a backup); creating or editing records needs a paid licence.
 Pricing: Pricing is being finalised ahead of launch; live demos and early access available upon request.
 
-Editions:
-- Arthos Desktop: Standalone Windows application. Operates 100% offline without an internet connection. Records stored locally on the computer with local backup and restore. Best for controlled, single-computer workspaces.
-- Arthos Cloud: Cloud-native web application. Access through an internet connection with records and backups stored in the cloud. Multi-device and remote access wherever you work.
-Note: Desktop and Cloud do not synchronise automatically.
+How it runs:
+- Arthos (at launch): web app opened in current Chrome or Edge on Windows. Sign-in uses a one-time code sent to the owner's email. Invoices and business records stay in that browser on the customer's computer; the customer exports and restores their own backups. Works offline once signed in, until the licence end date.
+- Arthos Cloud (planned, not available): records stored on servers with multi-device access. No date announced.
+Note: Records on different computers do not synchronise; move them with a backup export and restore.
 
 Core Features:
 - GST-Aware Documents: Tax invoices, retail invoices, quotations, proformas, and delivery challans with customer details, line items, discounts, shipping, and GST calculations. (Does not directly file GSTR-1 or GSTR-3B with the GST portal).
 - Fast Item Entry: Spreadsheet-style item grid with keyboard navigation, paste, duplicate, undo, redo, and live calculations.
 - Collections & Receivables: Track paid and pending amounts, partial payments, due dates, overdue balances, bank CSV reconciliation, and follow-up drafts.
 - Pricing History: Effective-dated price history, audit events, and invoice-time snapshots preserving historical context.
-- Business Health Analytics: Real-time visibility into sales, receivables, product margins, category contribution, and estimated profit based on recorded invoices and expenses. (Does not guarantee complete statutory P&L).
+- Business Health Analytics: Real-time visibility into sales, receivables, product margins, category contribution, and estimated profit based on recorded invoices and expenses, with invoice drill-through and PDF, Excel, and CSV exports. (Does not guarantee complete statutory P&L).
+- Accountant exports including Tally import files (CSV and XML).
 
 Contact & Early Access:
 - Early access requests via /contact?topic=arthos_early_access or email contact@saurikit.in.`;
@@ -156,17 +157,20 @@ export const TRACK_OPERATIONS_KNOWLEDGE = `FOUNDER-VERIFIED TECHNICAL & OPERATIO
 
 export const ARTHOS_OPERATIONS_KNOWLEDGE = `FOUNDER-VERIFIED SPECIFICATIONS FOR ARTHOS INVOICE STUDIO:
 
-1. EDITIONS (DESKTOP VS CLOUD):
-- Arthos Desktop is a standalone Windows desktop software. Operates completely offline without any internet connection. All customer records, invoices, and backups stay strictly on the local machine. Ideal for single-computer billing desks and privacy-conscious proprietors.
-- Arthos Cloud is a modern web application accessible via web browser on supported devices with an active internet connection. Records and automated backups are stored in the cloud.
-- Automatic synchronisation or live migration between Desktop and Cloud is NOT offered. A licence for one edition does not include the other unless confirmed in writing.
+1. HOW ARTHOS RUNS (AND WHAT IS NOT AVAILABLE YET):
+- Arthos is a web app used in current Chrome or Edge on Windows. There is no installable Windows EXE.
+- Business records (invoices, customers, products, payments, expenses) are stored in that browser on the customer's computer and are not uploaded. Clearing the browser's site data removes them, so the customer must export backups regularly.
+- SAURIK IT stores only the owner's sign-in email, business name, optional GSTIN, and licence status. Backup files exclude passwords and sign-in details.
+- Internet is needed to sign in with the emailed one-time code and to refresh the licence; after that Arthos keeps working offline until the licence end date.
+- Arthos Cloud (server-stored records, multi-device access) is planned but NOT available. Never say it exists today. Records do not synchronise between computers; automatic migration or synchronisation is NOT offered.
 
 2. GST COMPLIANCE BOUNDARIES:
 - Arthos prepares GST-aware documents (tax invoices, delivery challans, quotations, proforma invoices) with calculated CGST, SGST, IGST, customer GSTIN, HSN/SAC codes, and line-item discounts.
 - Hard Safeguard: Arthos does NOT directly file GSTR-1, GSTR-3B, or other statutory returns to the GST portal. It generates structured accounting exports and reports for accountants and business owners.
 
-3. PRICING & 60-DAY FREE TRIAL:
-- A 60-day free trial is planned for launch across both editions. Paid access or an active licence is required after trial expiry.
+3. PRICING & 30-DAY FREE TRIAL:
+- A 30-day free trial with every feature, Business Health included, is planned for launch.
+- After the trial Arthos becomes read-only: the customer can still open every screen, print, export, and restore a backup, but creating or editing records needs a paid licence.
 - Commercial pricing is being finalised ahead of public launch. Prospective businesses can request a live demonstration or early access at /contact?topic=arthos_early_access.
 
 4. BUSINESS HEALTH & ANALYTICS:
@@ -301,12 +305,12 @@ export const ARTHOS_CHAT_SYSTEM_PROMPT = `You are the specialized Arthos Invoice
 You speak directly with small business owners, traders, service providers, and finance leads exploring Arthos Invoice Studio (/arthos).
 
 PRODUCT SUMMARY:
-Arthos Invoice Studio provides GST-aware invoicing, collections tracking, price history, and Business Health analytics for small businesses, available in a 100% offline Windows Desktop edition and a remote Cloud edition.
+Arthos Invoice Studio provides GST-aware invoicing, collections tracking, price history, and Business Health analytics for small businesses, running in Chrome or Edge on Windows with business records kept on the customer's own computer. A Cloud edition is planned but not available yet.
 
 Your communication style:
 - Clear, practical, business-savvy, helpful, and grounded in Indian business realities.
-- Emphasize the clear distinction between offline Arthos Desktop and remote Arthos Cloud.
-- Clearly state the 60-day free trial planned for launch, and clarify that Arthos creates GST-aware documents but does not directly file returns to the government portal.
+- Be clear that records stay on the customer's computer and that Arthos Cloud is planned, not available.
+- Clearly state the 30-day free trial planned for launch and read-only access after it ends, and clarify that Arthos creates GST-aware documents but does not directly file returns to the government portal.
 - Keep your answers concise, direct, and conversational (2 to 3 sentences for spoken voice clarity, or 1-2 focused paragraphs for text).
 - Offer to connect them for early access or a live demo via /contact?topic=arthos_early_access or email contact@saurikit.in.
 

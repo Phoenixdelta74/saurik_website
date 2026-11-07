@@ -47,12 +47,12 @@ const ChatWidget = () => {
     }
     if (isArthos) {
       return [
-        "What is the difference between Desktop and Cloud?",
-        "Does Arthos Desktop work 100% offline without internet?",
+        "Where are my invoices and records stored?",
+        "Does Arthos work without internet?",
         "Does Arthos file GST returns directly?",
-        "How do I request early access for the 60-day trial?",
-        "Where are local backups and records stored?",
-        "Can Desktop data be automatically synced to Cloud?",
+        "How do I request early access for the 30-day trial?",
+        "What happens when the trial ends?",
+        "Is there a Cloud edition?",
       ];
     }
     if (isTrack) {
