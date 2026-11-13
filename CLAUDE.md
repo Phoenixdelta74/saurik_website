@@ -46,13 +46,37 @@ Service CTAs link to `/contact?topic=<id>` (e.g. `custom_apps`, `data_analytics`
 
 The contact form does not submit to a backend. It only prepares a `mailto:` draft or an encoded WhatsApp message (`https://wa.me/919862087157?text=...`). Status text must say a draft was opened/prepared — never claim an enquiry was "sent" or "received" unless a server actually confirms it. Company name must stay optional for residential CCTV enquiries.
 
-## Multi-Agent Operating Model
+## Multi-Agent Operating Model & Always-On Shared Workflow
 
-When collaborating with other agents (Antigravity, Codex):
-- Read your role's persistent lessons in `agent-memory/<role>-lessons.md` and `agent-memory/shared-lessons.md` before starting.
-- Standardize all handoffs via Markdown files in `docs/` (`docs/product/`, `docs/design/`, `docs/architecture/`, `docs/tasks/`, `docs/qa/`, `docs/handoffs/`).
-- Adhere to the **Anti-Thrashing Circuit Breaker**: If a test or build fails, make at most **two focused correction attempts**. If unresolved after two attempts, stop and escalate.
-- **Human Gatekeeper Rule**: Never unilaterally edit `AGENTS.md` without explicit human stakeholder approval.
+**Every request in this project is handled through the shared agent workflow defined in `AGENTS.md` by default.**
+The user does not need to name roles, skills, or invoke workflows manually.
+
+### Always-On Execution Rules
+1. **Core Rule**: For every request, interpret intent and scope, inspect relevant context, select applicable responsibilities and skills, perform authorized work, verify proportionately, and report results.
+2. **Responsibilities**: Route through Product Owner, Solution Architect, UI/UX Designer, Developer, QA Reviewer, and Shared Learning as relevant to the task (these are responsibilities, not a requirement for 5 separate agents).
+3. **Scaled Workflow Tiers**:
+   - **Simple Request (Small, reversible)**: Briefly assess, apply change, run proportionate check (`npm.cmd test`), report result. Do NOT create unnecessary documents or throwaway test files.
+   - **Standard Feature / Bug Fix**: Apply relevant responsibilities, create or update handoffs in `docs/` where helpful.
+   - **Complex / High-Impact Feature**: Execute full workflow: testable acceptance criteria, ADRs (`docs/decisions.md`), design states, implementation plan, developer testing, independent review (or labeled self-review), and release-readiness report.
+   - **Question / Research / Review**: Analysis and verification only. **Do NOT modify code or project files** unless the user explicitly requests or authorizes changes.
+   - **Explicit User Override**: Follow explicit user instructions within safety constraints.
+4. **Skill Routing & Maintainable Code**:
+   - Automatically select relevant workspace skills from `.agents/skills/`.
+   - Apply `maintainable-code` principles (clean architecture, defensive typing, modular components); if a named skill is unavailable, perform equivalent work and report the limitation when material.
+   - Use `agent-handoff` and `team-learning` when applicable. Never invent skills or checks.
+5. **Collaboration & Independence**:
+   - Use native subagents/specialist tools when permitted; otherwise execute sequentially. Never claim separate agents collaborated if they did not.
+   - For substantial changes, prefer fresh review; if independent review is unavailable, clearly label as **self-review**.
+   - Use `docs/` for cross-tool handoffs (tools do not share live chat history).
+6. **Autonomy & Escalation**:
+   - Proceed autonomously through routine steps. Only escalate for blocked business decisions or missing authorizations.
+   - Adhere to the **Anti-Thrashing Circuit Breaker** (max 2 attempts on test/build failure).
+   - Never deploy, purchase services, send external messages, or mutate production systems without authorization.
+7. **Evidence & Learning**:
+   - **Step 0 Pre-Flight**: Read `agent-memory/<role>-lessons.md` and `agent-memory/shared-lessons.md` before work.
+   - Distinguish assumptions from verified facts. Report passed, failed, blocked, and untested outcomes accurately.
+   - Record empirical lessons in `agent-memory/` only when supported by evidence.
+   - **Human Gatekeeper Rule**: Never unilaterally edit `AGENTS.md` without explicit human stakeholder approval. Zero secrets or PII in lessons/handoffs.
 
 ## Implementation conventions
 

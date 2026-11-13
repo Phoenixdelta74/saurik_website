@@ -4,7 +4,13 @@ This document defines the operating guidelines, inputs, outputs, and handshakes 
 
 ---
 
-## The 6-Stage Development Lifecycle
+## The 6-Stage Development Lifecycle (Scaled by Request Tier)
+
+By default, every user request routes through these responsibilities automatically without manual invocation:
+- **Simple Requests**: Skip formal documents; apply developer change and proportionate test check.
+- **Standard Requests**: Apply relevant responsibilities and update `docs/` handoffs where helpful.
+- **Complex Requests**: Execute all 6 stages with complete PRD, ADR, design specs, code, and QA release report.
+- **Research / Review Requests**: Analysis and verification only; zero code changes.
 
 ```
 Stage 1: Inception & Strategy       [You] ──► Business Intent / Goals

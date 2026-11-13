@@ -17,6 +17,14 @@ Without structured handoffs, receiving agents must parse massive conversational 
 
 A structured handoff provides a self-contained, high-density package containing **only the necessary context, constraints, and actionable artifacts**.
 
+### 1.1. Handoff Scaling Across Request Tiers
+
+Handoff generation scales with the complexity of the request:
+- **Tier 1 (Simple Request)**: **No handoff documents are generated.** Small, reversible changes execute with proportionate checks directly, avoiding document overhead.
+- **Tier 2 (Standard Feature / Fix)**: A concise handoff packet in `docs/handoffs/` or updated task list in `docs/tasks/` to give receiving agents or subsequent sessions clear context.
+- **Tier 3 (Complex / High-Impact)**: Full structured handoff packages at each phase transition, mapped to [`docs/templates/handoff-template.md`](file:///c:/Saurik/saurik_website/docs/templates/handoff-template.md).
+- **Tier 4 (Research / Review)**: Analysis delivered directly in chat or a summary artifact without modifying project code or generating handover tickets.
+
 ---
 
 ## 2. Standard Handoff Matrix

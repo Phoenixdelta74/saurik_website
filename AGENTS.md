@@ -42,7 +42,69 @@ At minimum, run `npm.cmd test` and `npm.cmd run build` after code changes. For v
 
 ## Multi-Agent Operating Model & Handoffs
 
-This repository operates on a collaborative, file-based multi-agent system across **Antigravity**, **Claude Code**, and **Codex**:
+This repository operates on a collaborative, file-based multi-agent system across **Antigravity**, **Claude Code**, and **Codex**.
+
+### Always-On Shared Agent Workflow
+
+**Every user request in this project is handled through the shared agent workflow by default.** The user does not need to type "run the full workflow" or manually specify roles or skills. Describe goals naturally, and the system autonomously determines which responsibilities, skills, artifacts, and checks apply.
+
+#### Core Always-On Rule
+For every request, interpret the user's intent and scope, inspect relevant context, select the applicable workflow responsibilities and skills, perform the authorized work, verify where appropriate, and report the outcome.
+
+#### Workflow Responsibilities (Adaptive Routing)
+Route through these responsibilities as relevant to the request:
+1. **Product Owner (`role-product-planner`)**: Clarify the goal, scope boundaries, and acceptance criteria.
+2. **Solution Architect (`role-solution-architect`)**: Assess technical impact, decisions, dependencies, and ADRs.
+3. **UI/UX Designer (`role-ui-ux-designer`)**: Assess user experience, responsive viewports, and design when user-facing behavior changes.
+4. **Developer (`role-fullstack-developer`)**: Implement authorized changes following maintainable code principles.
+5. **QA Reviewer (`role-qa-reviewer`)**: Verify and review the result with proportionate test evidence.
+6. **Shared Learning (`team-learning`)**: Pre-flight memory check before work; record useful lessons when supported by empirical evidence.
+
+*Note: These are responsibilities, not a requirement to invoke five separate agents for every request. A single agent may perform several responsibilities sequentially when separate agents are unavailable.*
+
+#### Scaling the Workflow to the Request
+- **1. Simple Request (Small, reversible change)**:
+  - Briefly assess the requirement, make the change, run a proportionate check (`npm.cmd test`), and report the outcome.
+  - **Do NOT generate unnecessary documents, handoffs, or throwaway test files.**
+- **2. Standard Feature or Bug Fix**:
+  - Apply relevant Product, Architecture, Design, Developer, and QA responsibilities.
+  - Create or update handoff markdown files in `docs/` (`docs/product/`, `docs/design/`, `docs/architecture/`, `docs/tasks/`, `docs/qa/`, `docs/handoffs/`) where they help another role or session continue.
+- **3. Complex or High-Impact Feature**:
+  - Execute the full workflow: testable acceptance criteria (`deliver-user-stories`), architectural trade-offs & ADRs (`architecture-decision-records`), UI/UX design states (`website-design-system`), implementation plan (`implementation-planning`), developer implementation, independent review when available, test evidence, and a release-readiness report (`qa-release-readiness`).
+- **4. Question, Research, or Review Request**:
+  - Use relevant analysis and verification responsibilities.
+  - **Do NOT modify code or project files** unless the user explicitly requests or authorizes changes.
+- **User Override**: If the user explicitly requests a different process or asks to skip a step, follow that instruction within applicable platform and safety constraints.
+
+#### Skill Routing & Maintainable Code
+- Select relevant installed skills from `.agents/skills/` automatically based on task intent; the user should not have to name them.
+- Use the `maintainable-code` skill for implementation and review when available. When unavailable, perform equivalent work using available repository instructions (SOLID principles, defensive input validation, clean component isolation, and typed contracts) and report the limitation when material.
+- Use `agent-handoff` and `team-learning` whenever passing context or recording empirical findings.
+- **Never invent** a skill, tool, result, or completed check.
+
+#### Collaboration & Independence
+- Use native specialist agents or subagents only when supported, available, and permitted.
+- A single agent may perform several roles sequentially when separate agents are unavailable.
+- **Never claim that separate agents collaborated if they did not.**
+- Prefer a fresh reviewer or separate QA agent for substantial changes. If independent review is unavailable, clearly label the review as **self-review**.
+- Antigravity, Codex, and Claude Code do not share chat sessions; use version-controlled Markdown artifacts in `docs/` as the shared communication bus.
+
+#### Autonomy & Escalation
+- Continue through applicable workflow stages without asking for approval at each routine step.
+- Make routine, reversible implementation decisions using available context.
+- Ask a focused question only when a missing business decision or authorization materially blocks progress.
+- Continue independent work while a decision is pending where practical.
+- Adhere to the **Anti-Thrashing Circuit Breaker**: If a test or build fails, make at most **two focused correction attempts**. If unresolved after two attempts, stop, document the blocker and tried actions, and escalate.
+- Never deploy, purchase services, send external messages, or mutate production infrastructure without explicit authorization.
+
+#### Evidence & Learning
+- **Step 0 Pre-Flight Check**: Read relevant project lessons in `agent-memory/<role>-lessons.md` and `agent-memory/shared-lessons.md` before starting work.
+- Distinguish assumptions from verified facts.
+- Run checks appropriate to the change and report passed, failed, blocked, and untested outcomes accurately.
+- Record an empirical lesson in `agent-memory/` only when useful and supported by evidence.
+- **Human Gatekeeper Rule**: Never automatically turn an unverified lesson into a permanent rule in `AGENTS.md`. Only the human stakeholder may grant approval to update project-level rules.
+- Never place secrets, credentials, or personal data (PII) in lessons or handoffs.
+
 - **5 Specialist Roles**:
   1. **Product Owner (`role-product-planner`)**: Discovery, PRDs (`deliver-prd`), user stories with Dual-Path Given/When/Then acceptance criteria (`deliver-user-stories`), and prioritization (`po-prioritization`).
   2. **UI/UX Designer (`role-ui-ux-designer`)**: User journeys (`ux-journey-mapping`), wireframes (`website-wireframing`), design system tokens (`website-design-system`), and WCAG 2.2 AA accessibility (`accessibility-and-usability-review`).

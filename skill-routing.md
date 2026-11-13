@@ -164,4 +164,30 @@ The repository maintains an official multi-agent development team defined in `.a
 | **QA / Reviewer** | `qa_reviewer` | Verify against acceptance criteria, regression tests, negative constraints & WCAG audit | Test Execution Report, Actionable Defect Log |
 | **Human Decision Maker** | `You` | Strategic decisions, trade-offs, milestones review | Approval or Course-Correcting Feedback |
 
+---
+
+## 6. Always-On Shared Agent Workflow Routing
+
+Every user request is routed autonomously through the shared agent workflow by default without requiring manual workflow invocations or skill declarations.
+
+```mermaid
+flowchart TD
+    UserPrompt["Natural User Prompt"] --> Classifier{"Automatic Intent & Tier Classifier"}
+    
+    Classifier -->|Tier 1: Simple| T1["Simple Request<br/>- Brief assessment<br/>- Rapid reversible change<br/>- Proportionate check (npm.cmd test)<br/>- NO unnecessary docs or tests"]
+    Classifier -->|Tier 2: Standard| T2["Standard Feature / Bug Fix<br/>- Relevant PO/Arch/Dev/QA roles<br/>- docs/ task & test handoffs<br/>- Build & test validation"]
+    Classifier -->|Tier 3: Complex| T3["Complex / High-Impact<br/>- Full PRD & Dual-Path AC<br/>- ADR in docs/decisions.md<br/>- Design specs & states<br/>- Independent QA review<br/>- Release readiness report"]
+    Classifier -->|Tier 4: Research| T4["Question / Review / Research<br/>- Context analysis & inspection<br/>- Findings & recommendations<br/>- ZERO code modifications"]
+```
+
+### 6.1. Skill Routing & Maintainable Code
+- **Automatic Selection**: Workspace skills in `.agents/skills/` are triggered based on intent keywords and scope.
+- **Maintainable Code Rule**: When the `maintainable-code` skill is present, apply it for development and review. If unavailable, enforce repository clean-code invariants (single responsibility, typed contracts, fast-fail timeouts, modular styling) and note the limitation when material.
+- **Truthfulness**: Never fabricate skills, tools, execution steps, or test assertions.
+- **Cross-Platform Compatibility**:
+  - **Antigravity**: Discovers `.agents/skills/*/SKILL.md` directly.
+  - **Claude Code**: Discovers rules via `CLAUDE.md`, pointing to `AGENTS.md`.
+  - **Codex**: Discovers rules via root `AGENTS.md` and `.agents/skills/`.
+  - Handoffs across tools utilize Markdown files in `docs/` (`docs/product/`, `docs/design/`, `docs/architecture/`, `docs/tasks/`, `docs/qa/`, `docs/handoffs/`).
+
 

@@ -89,6 +89,20 @@ if (fs.existsSync(agentsPath)) {
   check(agents.includes('Anti-Thrashing Circuit Breaker'), 'AGENTS.md contains Anti-Thrashing Circuit Breaker (max 2 attempts)');
   check(agents.includes('Lesson graduation ladder'), 'AGENTS.md defines Lesson Graduation Ladder');
   check(agents.includes('Zero-Cost Native Voice Engine Rule'), 'AGENTS.md preserves Zero-Cost Native Voice Engine Rule');
+  check(agents.includes('Always-On Shared Agent Workflow'), 'AGENTS.md defines Always-On Shared Agent Workflow');
+  check(agents.includes('Core Always-On Rule'), 'AGENTS.md defines Core Always-On Rule');
+  check(agents.includes('Simple Request') && agents.includes('Complex or High-Impact Feature'), 'AGENTS.md codifies Scaled Workflow Tiers');
+}
+
+// 4b. Verify Cross-Platform Entry Point in CLAUDE.md
+console.log('\n4b. Verifying Cross-Platform Entry Point in CLAUDE.md...');
+const claudePath = path.resolve(__dirname, '../CLAUDE.md');
+check(fs.existsSync(claudePath), 'CLAUDE.md exists');
+if (fs.existsSync(claudePath)) {
+  const claudeContent = fs.readFileSync(claudePath, 'utf8');
+  check(claudeContent.includes('AGENTS.md'), 'CLAUDE.md links to shared instructions in AGENTS.md');
+  check(claudeContent.includes('shared agent workflow') || claudeContent.includes('Always-On Shared Workflow'), 'CLAUDE.md mandates Always-On Shared Workflow');
+  check(claudeContent.includes('Simple Request') && claudeContent.includes('Complex / High-Impact'), 'CLAUDE.md codifies Scaled Workflow Tiers');
 }
 
 // 5. Verify Team Spec Alignment (.agents/team/roles.md)
@@ -175,6 +189,7 @@ const modularSkills = [
   // Shared Cross-Role Skills
   { name: 'agent-handoff', keyPhrases: ['Agent Handoff', 'Standard Handoff Matrix', 'handoff-template.md'] },
   { name: 'team-learning', keyPhrases: ['Step 0: Pre-Flight Memory Check', 'Anti-Thrashing Circuit Breaker', 'Lesson Graduation Ladder'] },
+  { name: 'shared-agent-workflow', keyPhrases: ['Always-On Shared Agent Workflow', 'Scaled Workflow Tiers', 'Tier 1: Simple', 'Skill Routing & Maintainable Code'] },
 ];
 
 for (const modSkill of modularSkills) {
