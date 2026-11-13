@@ -29,7 +29,8 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed.' });
   }
 
-  if (!guardRequest(req, res, { name: 'tts', limit: 10 })) return undefined;
+  // 30 requests/minute to accommodate sentence-pipelined audio chunks (2-4 requests per voice turn)
+  if (!guardRequest(req, res, { name: 'tts', limit: 30 })) return undefined;
 
   const apiKey = process.env.OPENAI_API_KEY;
   const mayaEndpoint = process.env.MAYA_TTS_ENDPOINT;
