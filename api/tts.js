@@ -7,8 +7,25 @@ const MAX_TTS_CHARS = 1000;
 const ALLOWED_VOICES = ['nova', 'alloy', 'echo', 'fable', 'onyx', 'shimmer'];
 
 export default async function handler(req, res) {
+  // Support non-blocking container warmup ping on GET
+  if (req.method === 'GET') {
+    const mayaEndpoint = process.env.MAYA_TTS_ENDPOINT;
+    if (mayaEndpoint) {
+      // Fire-and-forget non-blocking keepalive to Modal GPU endpoint
+      fetch(mayaEndpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': process.env.MAYA_TTS_KEY ? `Bearer ${process.env.MAYA_TTS_KEY}` : 'Bearer saurik_maya_secret_2026',
+        },
+        body: JSON.stringify({ input: 'ping', voice: 'Ahana', lang: 'en' }),
+      }).catch(() => {});
+    }
+    return res.status(200).json({ status: 'warmup_triggered', target: mayaEndpoint ? 'modal_maya' : 'none' });
+  }
+
   if (req.method !== 'POST') {
-    res.setHeader('Allow', 'POST');
+    res.setHeader('Allow', 'GET, POST');
     return res.status(405).json({ error: 'Method not allowed.' });
   }
 

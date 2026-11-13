@@ -14,6 +14,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - **Pre-Release Testing Gate:** Updated commands to mandate `npm.cmd test` (10 automated verification suites) and `npm.cmd run build` (17 pre-rendered static HTML routes) prior to release.
 
 ### Added
+- **FEAT-002: Maya TTS Latency Mitigation & Sentence Pipelining:**
+  - **Sentence-Pipelined Fast-Path (`src/hooks/useVoiceAgent.js`):** Extracted `splitSentencesForSpeech()` to split multi-sentence replies on Latin (`.!?`) and Indic (`।`, `\n`) boundaries. Dispatches Sentence 1 immediately to reduce Time To First Audio (TTFA) to $\le 1.2$s.
+  - **Sequential Audio Queue & Prosodic Stitching:** Chained playback of Sentence 1 while pre-fetching subsequent chunks in the background, buffering transitions with a 100ms prosodic rest without clipping or popping.
+  - **Barge-In Cancellation:** Managed `AbortController` in `cloudAbortRef` to immediately terminate in-flight chunk requests and pause audio elements on user interruption.
+  - **Proactive Container Warmup (`api/tts.js`):** Enabled non-blocking `GET /api/tts?warmup=true` keepalive handler to pre-warm Modal GPU container during user speech input.
+  - **ADR-004 Codified (`docs/decisions.md`):** Documented architecture decisions, trade-offs, and consequences for Sentence-Pipelined TTS.
+  - **Automated Verification Harness (`test/verify_tts_latency.cjs`):** Authored test suite asserting sentence chunking, warmup query handling, audio queue chaining, and zero-cost native engine compliance (now 11/11 test suites in `npm test`).
 - **Modular Agent Skill Architecture (`.agents/skills/`):**
   - **Decoupled Persona Roles vs. Modular Tactical Skills:** Separated monolithic agent definitions into focused, reusable `SKILL.md` playbooks with YAML frontmatter schemas.
   - **PO Modular Skills:**

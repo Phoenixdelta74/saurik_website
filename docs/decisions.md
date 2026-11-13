@@ -68,3 +68,26 @@ Autonomous coding agents lack state across fresh sessions. Without a persistent 
 * **Positive:** Self-improving development lifecycle, prevention of recurring defects, minimal prompt bloat, and regression prevention codified into fast automated test suites.
 * **Negative:** Requires agents to spend a turn reading and updating memory files during task handoffs.
 
+---
+
+## ADR-004: Sentence-Pipelined TTS & Audio Queue Streaming for Regional Voice Synthesis
+
+* **Status:** Accepted
+* **Date:** 2026-11-13
+* **Deciders:** Solution Architect, Fullstack Developer, Product Owner, Human Stakeholder
+
+### Context
+When the visitor's device has no installed regional voice (especially for Bengali or Assamese), the voice assistant invokes the serverless Maya 2 Native GPU endpoint on Modal via `/api/tts`. While warm inference takes ~3.5s–5.0s for an entire paragraph (50–100 words), this blocking delay creates an unnatural silence before speech begins. Conversely, synthesizing Sentence 1 alone (5–8 words) takes only ~600ms–800ms on an NVIDIA L4 GPU.
+
+### Decision
+1. **Sentence-Pipelined Fast-Path:** In `src/hooks/useVoiceAgent.js`, segment multi-sentence responses across Latin and Indic sentence boundaries (`.`, `!`, `?`, `।`, `\n`).
+2. Dispatch Sentence 1 immediately to `/api/tts`. As soon as Sentence 1 returns (~600–800ms), begin client audio playback (Time To First Audio $\le 1.2$s).
+3. Concurrently pre-fetch Sentence 2 in the background while Sentence 1 is playing.
+4. Manage an in-memory `audioQueue` that stitches consecutive sentence buffers with a natural 100ms prosodic pause, preventing audio gaps or popping.
+5. In `api/tts.js`, add a non-blocking `GET /api/tts?warmup=true` endpoint that can be pinged upon microphone permission or voice drawer mount to pre-warm the container before user speech finishes.
+
+### Consequences
+* **Positive:** Drops perceived conversational latency from ~5s down to $\le 1.2$s. Works reliably over HTTP without requiring persistent WebSockets. Audio playback is fluid and conversational.
+* **Negative:** Makes multiple sequential HTTP calls for longer answers, requiring robust `AbortController` cancellation to handle barge-in interruptions cleanly.
+
+

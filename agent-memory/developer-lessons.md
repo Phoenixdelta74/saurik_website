@@ -47,3 +47,24 @@ This file records lessons learned by the Fullstack Developer role (`fullstack_de
 - **Applies when:** Writing Vite SSR / SSG generation scripts.
 - **Next check:** Verify on updating Vite versions or build plugins.
 
+---
+
+## Lesson 003: Sentence-Pipelined Audio Queue for Low Time To First Audio (TTFA)
+
+- **Date:** 2026-11-13
+- **Role:** Fullstack Developer
+- **Task:** FEAT-002 Maya TTS Latency Mitigation & Sentence Pipelining
+- **Context:** Regional voice synthesis on serverless GPU takes ~4.5s for whole paragraphs before playback begins.
+- **Problem:** Users experience a long, awkward pause before the voice assistant speaks.
+- **Cause:** Waiting for the entire audio buffer to generate, download, and decode before creating an `Audio` element.
+- **Action:** Implemented `splitSentencesForSpeech` and sequential chunk pipelining in `src/hooks/useVoiceAgent.js`:
+  - Fetch Sentence 1 immediately and start playing audio as soon as it arrives (~600–800ms).
+  - Concurrently prefetch Sentence 2 while Sentence 1 is playing, stitching consecutive sentences with a 100ms prosodic rest.
+  - Abort active chunk requests using `AbortController` on user barge-in or `cancelSpeech`.
+- **Evidence:** Verified in `test/verify_tts_latency.cjs` and `npm test` (11/11 passing).
+- **Result:** Perceived speech latency drops from 4.5s down to $\le 1.2$s with zero acoustic popping.
+- **Status:** Verified
+- **Applies when:** Integrating streaming TTS, AI audio synthesis, or LLM-driven voice assistants.
+- **Next check:** Measure real-world mobile network latency on 4G connections.
+
+

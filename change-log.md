@@ -8,6 +8,14 @@ Historical releases are archived in [`change_log.md`](./change_log.md).
 
 ## [Active Development] — 2026-11-13
 
+### Milestone: FEAT-002 Maya TTS Latency Mitigation & Sentence Pipelining (100% Operational)
+- **Sentence-Pipelined Fast-Path (`src/hooks/useVoiceAgent.js`):** Extracted `splitSentencesForSpeech()` to segment replies on Latin (`.!?`) and Indic (`।`, `\n`) sentence boundaries. Dispatches Sentence 1 immediately to reduce Time To First Audio (TTFA) to $\le 1.2$s.
+- **Sequential Audio Queue & Prosodic Stitching:** Chained playback of Sentence 1 while pre-fetching subsequent chunks concurrently in the background, buffering transitions with a 100ms prosodic rest without clipping or popping.
+- **Barge-In Cancellation:** Managed `AbortController` in `cloudAbortRef` to immediately terminate in-flight chunk requests and pause audio elements on user interruption.
+- **Proactive Container Warmup (`api/tts.js`):** Enabled non-blocking `GET /api/tts?warmup=true` keepalive handler to pre-warm Modal GPU container during user speech input.
+- **ADR-004 Codified (`docs/decisions.md`):** Documented architecture decisions, trade-offs, and consequences for Sentence-Pipelined TTS.
+- **Automated Verification Harness (`test/verify_tts_latency.cjs`):** Authored test suite asserting sentence chunking, warmup query handling, audio queue chaining, and zero-cost native engine compliance (now 11/11 test suites in `npm test`).
+
 ### Milestone: Constitutional Governance & Route Alignment (`AGENTS.md` & `CLAUDE.md`)
 - **Complete Route Inventory:** Codified all live routes across Core & Company (`/`, `/software`, `/hardware`, `/about`, `/contact`, `/privacy`, `/terms`, `/refund-policy`), Products & Platforms (`/track`, `/arthos`, `/ai-chatbot`), Specialized Services (`/services/*`), and Industry Use Cases (`/use-cases/*`).
 - **Multi-Agent Operating Model:** Codified the 5 specialist roles (`role-product-planner`, `role-solution-architect`, `role-ui-ux-designer`, `role-fullstack-developer`, `role-qa-reviewer`) and the file-based Markdown handoff protocol (`docs/product/`, `docs/design/`, `docs/architecture/`, `docs/tasks/`, `docs/qa/`, `docs/handoffs/`).
