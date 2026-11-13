@@ -74,3 +74,4 @@
 - **To Solution Architect**: Design the sentence delimiter boundary logic, audio queue state machine, and client-side AbortController architecture ([`docs/architecture/FEAT-002-maya-latency-architecture.md`](file:///c:/Saurik/saurik_website/docs/architecture/FEAT-002-maya-latency-architecture.md)).
 - **To UI/UX Designer**: Specify visual indicators for audio stream buffering and uninterrupted wave animation ([`docs/design/FEAT-002-maya-latency-design.md`](file:///c:/Saurik/saurik_website/docs/design/FEAT-002-maya-latency-design.md)).
 - **To QA Reviewer**: Formulate test harness measuring TTFA, chunk transitions, and barge-in interruption.
+

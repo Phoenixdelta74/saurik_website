@@ -101,3 +101,4 @@ This triggers Modal's fast health check, keeping the GPU container hot before th
 - No PII or visitor identifiers sent to Modal.
 - Audio payloads are cached in memory for session lifetime and released via `URL.revokeObjectURL()`.
 - Bearer token authentication between Vercel and Modal remains secure in server environment variables.
+

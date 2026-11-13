@@ -30,13 +30,13 @@ const requireEnv = (name) => {
   return value;
 };
 
-async function callAnthropic(systemPrompt, messages) {
+async function callAnthropic(systemPrompt, messages, options = {}) {
   const client = new Anthropic({ apiKey: requireEnv('ANTHROPIC_API_KEY') });
   const model = process.env.ANTHROPIC_MODEL || 'claude-haiku-4-5';
 
   const response = await client.messages.create({
     model,
-    max_tokens: 1024,
+    max_tokens: options.maxTokens || 1024,
     system: systemPrompt,
     messages,
   });
@@ -45,12 +45,12 @@ async function callAnthropic(systemPrompt, messages) {
   return textBlock?.text ?? null;
 }
 
-async function callOpenAICompatible({ apiKey, baseURL, model, defaultHeaders, extraBody, systemPrompt, messages }) {
+async function callOpenAICompatible({ apiKey, baseURL, model, defaultHeaders, extraBody, systemPrompt, messages, maxTokens = 1024 }) {
   const client = new OpenAI({ apiKey, baseURL, defaultHeaders });
 
   const response = await client.chat.completions.create({
     model,
-    max_tokens: 1024,
+    max_tokens: maxTokens,
     messages: [{ role: 'system', content: systemPrompt }, ...messages],
     ...extraBody,
   });
@@ -58,16 +58,17 @@ async function callOpenAICompatible({ apiKey, baseURL, model, defaultHeaders, ex
   return response.choices?.[0]?.message?.content ?? null;
 }
 
-function callOpenAI(systemPrompt, messages) {
+function callOpenAI(systemPrompt, messages, options = {}) {
   return callOpenAICompatible({
     apiKey: requireEnv('OPENAI_API_KEY'),
     model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
     systemPrompt,
     messages,
+    maxTokens: options.maxTokens || 1024,
   });
 }
 
-function callOpenRouter(systemPrompt, messages) {
+function callOpenRouter(systemPrompt, messages, options = {}) {
   return callOpenAICompatible({
     apiKey: requireEnv('OPENROUTER_API_KEY'),
     baseURL: 'https://openrouter.ai/api/v1',
@@ -81,10 +82,11 @@ function callOpenRouter(systemPrompt, messages) {
     extraBody: { reasoning: { effort: 'low', exclude: true } },
     systemPrompt,
     messages,
+    maxTokens: options.maxTokens || 1024,
   });
 }
 
-function callOllama(systemPrompt, messages) {
+function callOllama(systemPrompt, messages, options = {}) {
   const baseUrl = process.env.OLLAMA_BASE_URL || 'http://localhost:11434';
   return callOpenAICompatible({
     apiKey: 'ollama',
@@ -92,6 +94,7 @@ function callOllama(systemPrompt, messages) {
     model: process.env.OLLAMA_MODEL || 'llama3.1',
     systemPrompt,
     messages,
+    maxTokens: options.maxTokens || 1024,
   });
 }
 
@@ -134,5 +137,8 @@ export async function getChatReply(systemPrompt, messages, { source = 'text', la
       '\n\nVOICE ASSISTANT PACING DIRECTIVE: Keep your answer spoken-friendly, conversational, and strictly 2 to 3 sentences maximum so it sounds natural and clear when spoken aloud by the voice engine without getting cut off.';
   }
 
-  return call(enrichedSystemPrompt, messages);
+  // Voice turns use a tight token budget (180 tokens ≈ 70-90 words / 2-3 sentences)
+  // so LLM generation finishes in ~250-350ms instead of 1.5-2.5s.
+  const maxTokens = source === 'voice' ? 180 : 1024;
+  return call(enrichedSystemPrompt, messages, { maxTokens });
 }

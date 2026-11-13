@@ -38,3 +38,4 @@
 ## 4. Handoff to Developer
 - **Implementation Target**: `src/components/voice/VoiceVisualizer.jsx` and `src/hooks/useVoiceAgent.js`.
 - **Key Requirement**: Ensure `isSynthesizing` state smoothly transitions into `isSpeaking` on Sentence 1, while keeping `isSpeaking = true` during sentence-to-sentence stitching.
+
