@@ -67,4 +67,26 @@ This file records lessons learned by the Fullstack Developer role (`fullstack_de
 - **Applies when:** Integrating streaming TTS, AI audio synthesis, or LLM-driven voice assistants.
 - **Next check:** Measure real-world mobile network latency on 4G connections.
 
+---
+
+## Lesson 004: Token Starvation from LLM Reasoning on Tight Voice Budgets
+
+- **Date:** 2026-11-13
+- **Role:** Fullstack Developer
+- **Task:** Voice Chat Assistant Truncation & Token Exhaustion Remediation
+- **Context:** Deploying voice assistant to Vercel with OpenRouter (Gemini 2.5 Flash) and Maya TTS.
+- **Problem:** Chat assistant responses were truncated to 2–3 words ("Greetings! SA", "নমস্কার! SAUR", "I understand perfectly and I'm") appearing as if the chat crashed mid-sentence.
+- **Cause:** Two compounding factors:
+  1. Voice queries had an overly restrictive `max_tokens: 180`.
+  2. OpenRouter reasoning models (e.g., Gemini 2.5 Flash) count internal chain-of-thought tokens against `max_tokens`. Even with `reasoning: { effort: 'low', exclude: true }`, the model spent ~165 tokens reasoning, leaving only ~15 tokens for visible completion before hard-capping.
+- **Action:**
+  1. In `api/_lib/llmProviders.js`, explicitly pass `extraBody: { reasoning: { max_tokens: 0 } }` to completely disable thinking tokens on OpenRouter.
+  2. Increased voice `maxTokens` from 180 to 450 tokens to ensure ample headroom for multi-sentence Indic (Bengali/Hindi) and English replies.
+  3. Increased `guardRequest` rate limit in `api/tts.js` from 10 to 30 requests/min to accommodate multi-sentence chunk pipelining without 429 throttling.
+- **Evidence:** Tested locally and verified with `npm.cmd test` (11/11 passing) and `npm.cmd run build` (17/17 routes pre-rendered).
+- **Result:** Voice and text responses complete naturally without token starvation or premature cut-offs.
+- **Status:** Verified
+- **Applies when:** Using reasoning/thinking models (Gemini 2.5, DeepSeek R1, o-series) on OpenRouter or OpenAI with tight token budgets.
+- **Next check:** Verify response completeness on deployed Vercel instance.
+
 

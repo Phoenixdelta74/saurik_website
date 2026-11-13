@@ -77,9 +77,10 @@ function callOpenRouter(systemPrompt, messages, options = {}) {
       'HTTP-Referer': process.env.SITE_URL || 'https://www.saurikit.in',
       'X-Title': 'SAURIK IT Website Assistant',
     },
-    // Thinking models (e.g. Gemini 2.5) spend output tokens on reasoning first; keep it light so
-    // short chat answers are fast and are not starved into empty replies by max_tokens.
-    extraBody: { reasoning: { effort: 'low', exclude: true } },
+    // Setting reasoning max_tokens to 0 completely disables chain-of-thought tokens on OpenRouter
+    // (e.g. Gemini 2.5 Flash), preventing reasoning from consuming the output token budget
+    // and ensuring instantaneous, un-truncated replies.
+    extraBody: { reasoning: { max_tokens: 0 } },
     systemPrompt,
     messages,
     maxTokens: options.maxTokens || 1024,
@@ -137,8 +138,8 @@ export async function getChatReply(systemPrompt, messages, { source = 'text', la
       '\n\nVOICE ASSISTANT PACING DIRECTIVE: Keep your answer spoken-friendly, conversational, and strictly 2 to 3 sentences maximum so it sounds natural and clear when spoken aloud by the voice engine without getting cut off.';
   }
 
-  // Voice turns use a tight token budget (180 tokens ≈ 70-90 words / 2-3 sentences)
-  // so LLM generation finishes in ~250-350ms instead of 1.5-2.5s.
-  const maxTokens = source === 'voice' ? 180 : 1024;
+  // Voice turns allow a generous budget of 450 tokens (~150-200 words / 2-3 sentences across Indic scripts)
+  // preventing premature token starvation while keeping speech generation crisp and fast.
+  const maxTokens = source === 'voice' ? 450 : 1024;
   return call(enrichedSystemPrompt, messages, { maxTokens });
 }

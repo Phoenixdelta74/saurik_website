@@ -92,3 +92,4 @@ These are operational responsibilities, not a mandate to spawn 5 separate agents
 2. **Execution**: Apply only verified, relevant lessons. Distinguish assumptions from verified facts.
 3. **Post-Flight**: If an empirical, reusable lesson was discovered, append it to `agent-memory/<role>-lessons.md` using the standard 10-field schema.
 4. **Human Gatekeeper Rule**: Never unilaterally modify `AGENTS.md` to promote a lesson into a permanent rule. Only the human decision maker can approve rule promotions.
+
