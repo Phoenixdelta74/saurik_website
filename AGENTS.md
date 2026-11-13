@@ -10,10 +10,11 @@ The current design direction is a light, spacious interface using navy text, tea
 
 - Install dependencies: `npm.cmd install`
 - Start the development server: `npm.cmd run dev`
+- Run automated test suites: `npm.cmd test`
 - Create a production build: `npm.cmd run build`
 - Preview the production build: `npm.cmd run preview`
 
-There is currently no lint or test script. At minimum, run `npm.cmd run build` after code changes. For visual or interaction work, also check the affected pages in a browser at mobile and desktop widths.
+At minimum, run `npm.cmd test` and `npm.cmd run build` after code changes. For visual or interaction work, also check the affected pages in a browser at mobile and desktop widths.
 
 ## Application structure
 
@@ -22,6 +23,10 @@ There is currently no lint or test script. At minimum, run `npm.cmd run build` a
 - `src/components/` contains shared navigation, footer, calls to action, process and FAQ components, plus interactive software and hardware illustrations.
 - `src/data/` contains company details and service copy. Prefer updating these sources instead of duplicating content in components.
 - `api/` contains the Vercel serverless chat endpoint and server-side LLM provider adapters; never move provider credentials into client-side code.
+- `.agents/skills/` contains role personas and modular tactical skills (PO, Architect, Developer, UI/UX, QA).
+- `.agents/team/` contains the multi-agent operating system, handshakes, and team specs (`roles.md`).
+- `agent-memory/` contains persistent role-specific lesson logs and `shared-lessons.md`.
+- `docs/` contains living requirements (`requirements.md`), ADRs (`decisions.md`), templates (`docs/templates/`), and role-specific feature artifacts (`product/`, `design/`, `architecture/`, `tasks/`, `qa/`, `handoffs/`).
 - `src/index.css` contains Tailwind layers and shared component classes.
 - `tailwind.config.js` defines the design tokens.
 - `public/` contains the logo and favicon.
@@ -73,7 +78,35 @@ Routes are `/`, `/software`, `/hardware`, `/about`, `/contact`, and `/privacy`; 
   - Update `testing.md` and `masterdeveloper.md` whenever test suites or developer patterns are introduced or modified.
 - **Always verify builds and test suites**: Run `npm.cmd run build` and relevant verification scripts (`test/verify_track_spec.cjs`, `test/verify_track_e2e.cjs`, etc.) before concluding work.
 - **Spec reset and work isolation protocol**: When directed to scrap or pivot from an existing feature implementation, never permanently delete previous work without confirmation. Archive previous work to `archive/<feature-tag>/` to maintain a clean active workspace while preserving prior implementation history.
-- **Pre-release testing gate before commit & push**: Prior to committing and pushing to remote:
-  - Execute `web-release-tester` checks: production build (`npm.cmd run build`), all automated test suites (`npm.cmd test`, `test/verify_chatbot.cjs`), and verify zero-JS SSR crawlability.
-  - Audit for negative constraints: zero fabricated metrics, zero unsubstantiated compliance badges, and truthful contact feedback wording.
-  - Provide structured, descriptive commit messages documenting scope, test outcomes, and updated docs.
+## Pre-release testing gate before commit & push
+
+Prior to committing and pushing to remote:
+- Execute `web-release-tester` checks: production build (`npm.cmd run build`), all automated test suites (`npm.cmd test`, `test/verify_chatbot.cjs`), and verify zero-JS SSR crawlability.
+- Audit for negative constraints: zero fabricated metrics, zero unsubstantiated compliance badges, and truthful contact feedback wording.
+- Provide structured, descriptive commit messages documenting scope, test outcomes, and updated docs.
+
+## Recursive learning protocol
+
+All agents operating in this repository adhere to an evidence-based recursive learning loop:
+
+### 1. Before starting a task
+- Read the relevant requirements (`docs/requirements.md`) and existing architecture (`architecture.md`).
+- Read your role's lesson file (`agent-memory/<role>-lessons.md`) and `agent-memory/shared-lessons.md`.
+- Apply only lessons relevant to the active task; do not apply stale or superseded guidance.
+
+### 2. During the task
+- Work strictly toward the acceptance criteria defined by Product / Planner.
+- Record material architectural choices, trade-offs, and consequences in `docs/decisions.md` (ADRs).
+- Adhere to the **Anti-Thrashing Circuit Breaker**: If a test or build fails, make at most **two focused correction attempts**. If unresolved after two attempts, stop, document the blocker and tried actions, and escalate to the human stakeholder.
+
+### 3. After the task
+- Run all checks appropriate to the change (`npm.cmd test` and `npm.cmd run build`).
+- If an empirical, reusable lesson was learned, append it to your role's lesson file in `agent-memory/` using the structured format: `Date`, `Role`, `Task`, `Context`, `Problem`, `Cause`, `Action`, `Evidence`, `Result`, and `Status` (`Observed`, `Proposed`, `Verified`, `Superseded`).
+- Never record secrets, credentials, personal data, or unverified opinions. Mark unverified thoughts as `Status: Observed` or `Proposed`.
+
+### 4. Lesson graduation ladder & human gatekeeper
+- **Graduation Flow:**
+  `Observation ──► Verified Lesson (agent-memory/) ──► Automated Test (test/verify_*.cjs) ──► Project Rule (AGENTS.md)`
+- **Human Gatekeeper Rule:** Agents must **never** unilaterally edit `AGENTS.md` to promote a lesson into a permanent rule. Only **You (Human Decision Maker)** can grant approval to update project-level rules.
+- **Preference for Automated Tests:** Whenever a recurring defect or invariant is identified, prefer writing an automated assertion script in `test/verify_*.cjs` rather than expanding prose rules in prompts.
+

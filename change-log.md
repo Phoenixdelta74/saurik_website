@@ -6,6 +6,57 @@ Historical releases are archived in [`change_log.md`](./change_log.md).
 
 ---
 
+## [Active Development] — 2026-11-13
+
+### Milestone: Modular Skill Architecture & Recursive Learning System (100% Operational)
+- **Modular Tactical Skills (`.agents/skills/`):** Deconstructed monolithic agent instructions into dedicated, focused `SKILL.md` playbooks with YAML frontmatter schemas:
+  - `po-discovery`: Problem framing, audience profiling, and separating facts from assumptions.
+  - `deliver-prd`: Authoring structured PRDs with strict in/out-of-scope boundaries.
+  - `deliver-user-stories`: Authoring atomic user stories with Dual-Path Given/When/Then criteria (Happy Path + Failure/Recovery Path).
+  - `po-prioritization`: MoSCoW prioritization and dependency sequencing grounded in real business value.
+  - `po-decision-management`: Stakeholder clarifications and the 5-category Taxonomy of Truth.
+  - `architect-context-assessment`: Codebase inspection, runtime analysis, and architectural constraints verification.
+  - `solution-design`: Proportionate system topology, component composition, client/server boundaries, and failure paths.
+  - `architecture-tradeoff-analysis`: 7-step technology selection comparing build/run cost, complexity, performance, and vendor lock-in.
+  - `architecture-decision-records`: Authoring and maintaining ADRs in `docs/decisions.md` (Context, Drivers, Decision, Consequences, Validation).
+  - `api-and-integration-design`: Serverless API route schemas, HTTP status codes, fast-fail timeout ceilings, and telemetry headers.
+  - `website-security-architecture`: Defensive security, zero client credential leakage, input sanitization, anti-abuse, and log privacy.
+  - `implementation-planning`: Structured, ordered developer tasks with file paths, test assertions, dependencies, and rollback strategies.
+  - `developer-codebase-exploration`: Inspects existing components, styles, routes, and developer lessons before editing.
+  - `website-feature-implementation`: Implements user stories with idle, loading, success, and error states (preserving form input).
+  - `frontend-react-implementation`: Builds responsive (360px–1440px), accessible (WCAG 2.2 AA) React components with Tailwind design tokens.
+  - `website-api-implementation`: Implements Vercel serverless endpoints (`api/`) with input validation, fast-fail timeouts, and telemetry.
+  - `systematic-debugging`: Methodical 6-step root-cause debugging under the 2-attempt anti-thrashing circuit breaker.
+  - `developer-testing`: Authors automated assertion scripts (`test/verify_*.cjs`) and verifies `npm test` & SSG production builds.
+  - `secure-web-implementation`: Enforces zero client secrets, server-only secret retrieval, input sanitization, and PII-free logging.
+  - `verification-before-completion`: Audits deliverables before handoff: transparently states what was tested, results, and what is unverified.
+  - `ux-design-brief`: Evaluates requirements, user context, brand rules, and prior design lessons (`design.md`).
+  - `ux-journey-mapping`: Maps visitor journeys, sitemaps, entry points, and conversion flows, strictly labeling hypotheses.
+  - `website-wireframing`: Defines page structure, section sequence, and mobile-vs-desktop layout grids.
+  - `visual-design-and-art-direction`: Establishes visual mood, typography hierarchy, palette application, and Lucide icon discipline.
+  - `website-design-system`: Manages design tokens and the 8 mandatory component interaction states.
+  - `responsive-interaction-design`: Specifies viewport adaptations (360px–1440px), mobile menu drawers, and reduced motion.
+  - `accessibility-and-usability-review`: Conducts WCAG 2.2 AA audits, contrast checks ($\ge 4.5:1$), and visible focus verification.
+  - `qa-acceptance-review`: Deconstructs user stories into Happy Path, Failure Path, and Edge Case scenarios.
+  - `qa-risk-based-test-planning`: Evaluates change blast radius (Tier 1 to 4) to select proportionate testing depth.
+  - `qa-browser-testing`: Exercises end-to-end user journeys, forms, and error states from a visitor's perspective.
+  - `qa-code-review`: Audits code diffs for unhandled errors, secret leaks, missing tests, and shared component regressions.
+  - `qa-responsive-visual-review`: Audits rendering across 360px–1440px viewports, text overflow, and layout fidelity against design tokens.
+  - `qa-accessibility-testing`: Audits WCAG 2.2 AA: keyboard navigation, visible focus rings, form labels, and color contrast ($\ge 4.5:1$).
+  - `qa-api-integration-testing`: Validates serverless endpoints (`api/`), status codes, 7.5s fast-fail timeouts, and telemetry headers.
+  - `qa-defect-triage-and-retest`: Standardizes reproducible defect reports with severity ratings and verifies post-fix retests.
+  - `qa-release-readiness`: Synthesizes test runs into an evidence-based GO / NO-GO recommendation (Passed, Failed, Blocked, Untested).
+  - `agent-handoff`: High-density structured handoff package and contract reusable across all roles.
+  - `team-learning`: Standardized protocol for Step 0 Pre-Flight memory reading, Anti-Thrashing Circuit Breaker (max 2 attempts), post-flight empirical lesson logging, and the Lesson Graduation Ladder.
+- **Role Persona Orchestration (`role-product-planner`, `role-solution-architect`, `role-fullstack-developer`, `role-ui-ux-designer`, `role-qa-reviewer`):** Refactored personas to orchestrate modular skills while anchoring role memory and constitutional guardrails.
+- **Persistent Role Memory (`agent-memory/`):** Established dedicated lesson logs for all 5 specialist roles (`product`, `design`, `architect`, `developer`, `qa`) plus `shared-lessons.md`.
+- **Architecture Decision Records (`docs/decisions.md`):** Seeded with ADR-001 (Zero-Cost Voice), ADR-002 (Fast-Fail Cascading), and ADR-003 (Recursive Learning Protocol).
+- **Living Requirements (`docs/requirements.md`):** Documented core product offerings, target audience, and non-functional requirements.
+- **Constitutional Governance (`AGENTS.md`):** Codified pre-task lesson reading, post-task evidence recording, Anti-Thrashing Circuit Breaker (max 2 attempts), and the Human Gatekeeper Rule.
+- **Automated Verification Gate (`test/verify_recursive_learning.cjs`):** 10/10 test suites passed in `npm test`, validating schema conformance, modular skills, and constitutional integrity.
+
+---
+
 ## [Active Development] — 2026-11-07
 
 ### Milestone: Multi-Tier Resilient TTS Fallback Engine (100% Verified)
