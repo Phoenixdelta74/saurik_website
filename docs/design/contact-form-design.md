@@ -60,3 +60,4 @@
 - [x] Form inputs programmatically associated with visible `<label>` tags.
 - [x] Visible focus rings on all interactive elements during keyboard traversal.
 - [x] Form values strictly preserved during submission recovery path.
+

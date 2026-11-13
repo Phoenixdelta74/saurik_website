@@ -33,3 +33,4 @@
 - [x] **Task 4.1:** Verify static SSR crawlability in `scripts/prerender.js` for `/contact`.
 - [x] **Task 4.2:** Execute `npm test` and `npm run build` to verify 0 regressions.
 - [x] **Task 4.3:** Hand off to QA Reviewer via [`docs/handoffs/FEAT-001-contact-form.md`](file:///c:/Saurik/saurik_website/docs/handoffs/FEAT-001-contact-form.md).
+

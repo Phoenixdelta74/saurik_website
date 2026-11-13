@@ -8,6 +8,12 @@ Historical releases are archived in [`change_log.md`](./change_log.md).
 
 ## [Active Development] — 2026-11-13
 
+### Milestone: Constitutional Governance & Route Alignment (`AGENTS.md` & `CLAUDE.md`)
+- **Complete Route Inventory:** Codified all live routes across Core & Company (`/`, `/software`, `/hardware`, `/about`, `/contact`, `/privacy`, `/terms`, `/refund-policy`), Products & Platforms (`/track`, `/arthos`, `/ai-chatbot`), Specialized Services (`/services/*`), and Industry Use Cases (`/use-cases/*`).
+- **Multi-Agent Operating Model:** Codified the 5 specialist roles (`role-product-planner`, `role-solution-architect`, `role-ui-ux-designer`, `role-fullstack-developer`, `role-qa-reviewer`) and the file-based Markdown handoff protocol (`docs/product/`, `docs/design/`, `docs/architecture/`, `docs/tasks/`, `docs/qa/`, `docs/handoffs/`).
+- **Product Truth Boundaries:** Codified Arthos Invoice Studio's local-first Chrome/Edge architecture with local persistence & 30-day trial, and Saurik Track's operational telemetry with verified trial URL and zero privacy invasion.
+- **Pre-Release Testing Gate:** Updated commands to mandate `npm.cmd test` (10 automated verification suites) and `npm.cmd run build` (17 pre-rendered static HTML routes) prior to release.
+
 ### Milestone: Modular Skill Architecture & Recursive Learning System (100% Operational)
 - **Modular Tactical Skills (`.agents/skills/`):** Deconstructed monolithic agent instructions into dedicated, focused `SKILL.md` playbooks with YAML frontmatter schemas:
   - `po-discovery`: Problem framing, audience profiling, and separating facts from assumptions.

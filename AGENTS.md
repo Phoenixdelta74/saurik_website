@@ -18,20 +18,39 @@ At minimum, run `npm.cmd test` and `npm.cmd run build` after code changes. For v
 
 ## Application structure
 
-- `src/App.jsx` defines the shared shell and routes.
-- `src/pages/` contains the route-level pages: Home, Software, Hardware, About, Contact, Privacy, and NotFound.
+- `src/App.jsx` defines the shared shell, navigation, and route definitions.
+- `src/pages/` contains the route-level pages (Home, Software, Hardware, About, Contact, Privacy, Track, Arthos, UseCases, Services, AiChatbot, Terms, RefundPolicy, and NotFound).
 - `src/components/` contains shared navigation, footer, calls to action, process and FAQ components, plus interactive software and hardware illustrations.
-- `src/data/` contains company details and service copy. Prefer updating these sources instead of duplicating content in components.
-- `api/` contains the Vercel serverless chat endpoint and server-side LLM provider adapters; never move provider credentials into client-side code.
-- `.agents/skills/` contains role personas and modular tactical skills (PO, Architect, Developer, UI/UX, QA).
+- `src/data/` contains company details and service copy (`companyData.js`, `softwareData.js`, `hardwareData.js`, `chatContext.js`). Prefer updating these sources instead of duplicating content in components.
+- `api/` contains Vercel serverless endpoints (`api/chat.js` for LLM enquiries, `api/tts.js` for voice synthesis); never move provider credentials into client-side code.
+- `.agents/skills/` contains role personas (`role-*`) and modular tactical skills across PO, Architect, Developer, UI/UX, and QA.
 - `.agents/team/` contains the multi-agent operating system, handshakes, and team specs (`roles.md`).
-- `agent-memory/` contains persistent role-specific lesson logs and `shared-lessons.md`.
+- `agent-memory/` contains persistent role-specific lesson logs (`<role>-lessons.md`) and `shared-lessons.md`.
 - `docs/` contains living requirements (`requirements.md`), ADRs (`decisions.md`), templates (`docs/templates/`), and role-specific feature artifacts (`product/`, `design/`, `architecture/`, `tasks/`, `qa/`, `handoffs/`).
+- `web-release-tester/` contains cross-agent release testing skills and auditing matrices.
 - `src/index.css` contains Tailwind layers and shared component classes.
 - `tailwind.config.js` defines the design tokens.
-- `public/` contains the logo and favicon.
+- `public/` contains the logo, favicon, pre-rendered static artifacts, and public launch configurations.
 
-Routes are `/`, `/software`, `/hardware`, `/about`, `/contact`, and `/privacy`; all unmatched routes render the not-found page.
+### Route inventory
+
+- **Core & Company**: `/`, `/software`, `/hardware`, `/about`, `/contact`, `/privacy`, `/terms`, `/refund-policy`
+- **Products & Platforms**: `/track` (Saurik Track), `/arthos` (Arthos Invoice Studio), `/ai-chatbot` (Saurik AI Chatbot)
+- **Specialized Services**: `/services/website-development`, `/services/cctv-installation`, `/services/custom-software`
+- **Industry Use Cases**: `/use-cases`, `/use-cases/fmcg-demand-planning`, `/use-cases/manufacturing-demand-planning`, `/use-cases/apparel-demand-planning`
+- **Fallback**: All unmatched routes render the custom 404 page (`/404`).
+
+## Multi-Agent Operating Model & Handoffs
+
+This repository operates on a collaborative, file-based multi-agent system across **Antigravity**, **Claude Code**, and **Codex**:
+- **5 Specialist Roles**:
+  1. **Product Owner (`role-product-planner`)**: Discovery, PRDs (`deliver-prd`), user stories with Dual-Path Given/When/Then acceptance criteria (`deliver-user-stories`), and prioritization (`po-prioritization`).
+  2. **UI/UX Designer (`role-ui-ux-designer`)**: User journeys (`ux-journey-mapping`), wireframes (`website-wireframing`), design system tokens (`website-design-system`), and WCAG 2.2 AA accessibility (`accessibility-and-usability-review`).
+  3. **Solution Architect (`role-solution-architect`)**: System topology (`solution-design`), tech trade-offs (`architecture-tradeoff-analysis`), ADRs (`architecture-decision-records`), API schemas (`api-and-integration-design`), security architecture (`website-security-architecture`), and implementation plans (`implementation-planning`).
+  4. **Fullstack Developer (`role-fullstack-developer`)**: Codebase exploration (`developer-codebase-exploration`), React 18 & Tailwind implementation (`frontend-react-implementation`, `website-feature-implementation`), serverless functions (`website-api-implementation`), and automated unit/integration tests (`developer-testing`).
+  5. **QA Reviewer (`role-qa-reviewer`)**: Acceptance verification (`qa-acceptance-review`), risk-based test planning (`qa-risk-based-test-planning`), 5-viewport review (`qa-responsive-visual-review`), accessibility audits (`qa-accessibility-testing`), and release readiness (`qa-release-readiness`).
+- **Communication Bus**: Standardized Markdown handoff files in `docs/` (`docs/product/`, `docs/design/`, `docs/architecture/`, `docs/tasks/`, `docs/qa/`, `docs/handoffs/`). JSON is strictly reserved for runtime APIs and automated test assertions.
+- **Traceability Lineage**: Every capability tracks through an unbroken identifier chain: `FEAT-XXX` → `AC-XX` → `TC-XX` → `DEF-XX`.
 
 ## Implementation conventions
 
@@ -58,6 +77,8 @@ Routes are `/`, `/software`, `/hardware`, `/about`, `/contact`, and `/privacy`; 
 - Server offerings cover installation and service; do not imply public cloud hosting or server rental.
 - Data analytics copy may describe predictive modelling and forecasting but must not guarantee forecast accuracy.
 - Agentic AI copy must show scoped permissions and human review for consequential actions.
+- **Arthos Invoice Studio**: Grounded as a local-first Chrome/Edge desktop/web application with local SQLite/OPFS persistence on the customer's computer; 30-day trial with read-only access afterwards; Arthos Cloud marked as planned/in development.
+- **Saurik Track**: Grounded as an on-premise operational telemetry platform; no surveillance or tracking metrics that invade privacy; verified TRIAL_URL destination.
 
 ## Accessibility and responsive behavior
 
@@ -78,6 +99,7 @@ Routes are `/`, `/software`, `/hardware`, `/about`, `/contact`, and `/privacy`; 
   - Update `testing.md` and `masterdeveloper.md` whenever test suites or developer patterns are introduced or modified.
 - **Always verify builds and test suites**: Run `npm.cmd run build` and relevant verification scripts (`test/verify_track_spec.cjs`, `test/verify_track_e2e.cjs`, etc.) before concluding work.
 - **Spec reset and work isolation protocol**: When directed to scrap or pivot from an existing feature implementation, never permanently delete previous work without confirmation. Archive previous work to `archive/<feature-tag>/` to maintain a clean active workspace while preserving prior implementation history.
+
 ## Pre-release testing gate before commit & push
 
 Prior to committing and pushing to remote:
@@ -109,4 +131,3 @@ All agents operating in this repository adhere to an evidence-based recursive le
   `Observation ──► Verified Lesson (agent-memory/) ──► Automated Test (test/verify_*.cjs) ──► Project Rule (AGENTS.md)`
 - **Human Gatekeeper Rule:** Agents must **never** unilaterally edit `AGENTS.md` to promote a lesson into a permanent rule. Only **You (Human Decision Maker)** can grant approval to update project-level rules.
 - **Preference for Automated Tests:** Whenever a recurring defect or invariant is identified, prefer writing an automated assertion script in `test/verify_*.cjs` rather than expanding prose rules in prompts.
-
