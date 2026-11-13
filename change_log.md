@@ -4,7 +4,80 @@ All notable changes to the SAURIK IT Private Limited website codebase will be do
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] - 2026-11-07
+## [Unreleased] - 2026-11-13
+
+### Changed
+- **Constitutional Governance Alignment (`AGENTS.md` & `CLAUDE.md`):**
+  - **Complete Route Inventory:** Codified all live routes across Core & Company (`/`, `/software`, `/hardware`, `/about`, `/contact`, `/privacy`, `/terms`, `/refund-policy`), Products & Platforms (`/track`, `/arthos`, `/ai-chatbot`), Specialized Services (`/services/*`), and Industry Use Cases (`/use-cases/*`).
+  - **Multi-Agent Operating Model:** Codified the 5 specialist roles (`role-product-planner`, `role-solution-architect`, `role-ui-ux-designer`, `role-fullstack-developer`, `role-qa-reviewer`) and the file-based Markdown handoff protocol (`docs/product/`, `docs/design/`, `docs/architecture/`, `docs/tasks/`, `docs/qa/`, `docs/handoffs/`).
+  - **Product Truth Boundaries:** Codified Arthos Invoice Studio's local-first Chrome/Edge architecture with local persistence & 30-day trial, and Saurik Track's operational telemetry with verified trial URL and zero privacy invasion.
+  - **Pre-Release Testing Gate:** Updated commands to mandate `npm.cmd test` (10 automated verification suites) and `npm.cmd run build` (17 pre-rendered static HTML routes) prior to release.
+
+### Added
+- **FEAT-002: Maya TTS Latency Mitigation & Sentence Pipelining:**
+  - **Sentence-Pipelined Fast-Path (`src/hooks/useVoiceAgent.js`):** Extracted `splitSentencesForSpeech()` to split multi-sentence replies on Latin (`.!?`) and Indic (`।`, `\n`) boundaries. Dispatches Sentence 1 immediately to reduce Time To First Audio (TTFA) to $\le 1.2$s.
+  - **Sequential Audio Queue & Prosodic Stitching:** Chained playback of Sentence 1 while pre-fetching subsequent chunks in the background, buffering transitions with a 100ms prosodic rest without clipping or popping.
+  - **Barge-In Cancellation:** Managed `AbortController` in `cloudAbortRef` to immediately terminate in-flight chunk requests and pause audio elements on user interruption.
+  - **Proactive Container Warmup (`api/tts.js`):** Enabled non-blocking `GET /api/tts?warmup=true` keepalive handler to pre-warm Modal GPU container during user speech input.
+  - **ADR-004 Codified (`docs/decisions.md`):** Documented architecture decisions, trade-offs, and consequences for Sentence-Pipelined TTS.
+  - **Automated Verification Harness (`test/verify_tts_latency.cjs`):** Authored test suite asserting sentence chunking, warmup query handling, audio queue chaining, and zero-cost native engine compliance (now 11/11 test suites in `npm test`).
+- **Modular Agent Skill Architecture (`.agents/skills/`):**
+  - **Decoupled Persona Roles vs. Modular Tactical Skills:** Separated monolithic agent definitions into focused, reusable `SKILL.md` playbooks with YAML frontmatter schemas.
+  - **PO Modular Skills:**
+    - `po-discovery`: Problem framing, target audience profiling, and separating verified facts from assumptions.
+    - `deliver-prd`: Authoring structured Product Requirements Documents with strict scope boundaries.
+    - `deliver-user-stories`: Authoring atomic user stories with Dual-Path Given/When/Then acceptance criteria (Happy Path + Failure/Recovery Path).
+    - `po-prioritization`: MoSCoW prioritization and dependency sequencing grounded in real business value.
+    - `po-decision-management`: Stakeholder clarifications and the 5-category Taxonomy of Truth.
+  - **Solution Architect Modular Skills:**
+    - `architect-context-assessment`: Codebase inspection, runtime analysis, and architectural constraints verification.
+    - `solution-design`: Proportionate system topology, component composition, client/server boundaries, and failure paths (`architecture.md`).
+    - `architecture-tradeoff-analysis`: 7-step technology selection comparing build/run cost, complexity, performance, and vendor lock-in.
+    - `architecture-decision-records`: Authoring and maintaining ADRs in `docs/decisions.md` (Context, Drivers, Decision, Consequences, Validation).
+    - `api-and-integration-design`: Serverless API route schemas, HTTP status codes, fast-fail timeout ceilings, and telemetry headers.
+    - `website-security-architecture`: Defensive security, zero client credential leakage, input sanitization, anti-abuse, and log privacy.
+    - `implementation-planning`: Structured, ordered developer tasks with file paths, test assertions, dependencies, and rollback strategies.
+  - **Fullstack Developer Modular Skills:**
+    - `developer-codebase-exploration`: Inspects existing components, styles, routes, and developer lessons before editing.
+    - `website-feature-implementation`: Implements user stories with idle, loading, success, and error states (preserving form input).
+    - `frontend-react-implementation`: Builds responsive (360px–1440px), accessible (WCAG 2.2 AA) React components with Tailwind design tokens.
+    - `website-api-implementation`: Implements Vercel serverless endpoints (`api/`) with input validation, fast-fail timeouts, and telemetry.
+    - `systematic-debugging`: Methodical 6-step root-cause debugging under the 2-attempt anti-thrashing circuit breaker.
+    - `developer-testing`: Authors automated assertion scripts (`test/verify_*.cjs`) and verifies `npm test` & SSG production builds.
+    - `secure-web-implementation`: Enforces zero client secrets, server-only secret retrieval, input sanitization, and PII-free logging.
+    - `verification-before-completion`: Audits deliverables before handoff: transparently states what was tested, results, and what is unverified.
+  - **UI/UX Designer Modular Skills:**
+    - `ux-design-brief`: Evaluates requirements, user context, brand rules, and prior design lessons (`design.md`).
+    - `ux-journey-mapping`: Maps visitor journeys, sitemaps, entry points, and conversion flows, strictly labeling hypotheses.
+    - `website-wireframing`: Defines page structure, section sequence, and mobile-vs-desktop layout grids.
+    - `visual-design-and-art-direction`: Establishes visual mood, typography hierarchy, palette application, and Lucide icon discipline.
+    - `website-design-system`: Manages design tokens and the 8 mandatory component interaction states.
+    - `responsive-interaction-design`: Specifies viewport adaptations (360px–1440px), mobile menu drawers, and reduced motion.
+    - `accessibility-and-usability-review`: Conducts WCAG 2.2 AA audits, contrast checks ($\ge 4.5:1$), and visible focus verification.
+  - **QA Reviewer Modular Skills:**
+    - `qa-acceptance-review`: Deconstructs user stories into Happy Path, Failure Path, and Edge Case scenarios.
+    - `qa-risk-based-test-planning`: Evaluates change blast radius (Tier 1 to 4) to select proportionate testing depth.
+    - `qa-browser-testing`: Exercises end-to-end user journeys, forms, and error states from a visitor's perspective.
+    - `qa-code-review`: Audits code diffs for unhandled errors, secret leaks, missing tests, and shared component regressions.
+    - `qa-responsive-visual-review`: Audits rendering across 360px–1440px viewports, text overflow, and layout fidelity against design tokens.
+    - `qa-accessibility-testing`: Audits WCAG 2.2 AA: keyboard navigation, visible focus rings, form labels, and color contrast ($\ge 4.5:1$).
+    - `qa-api-integration-testing`: Validates serverless endpoints (`api/`), status codes, 7.5s fast-fail timeouts, and telemetry headers.
+    - `qa-defect-triage-and-retest`: Standardizes reproducible defect reports with severity ratings and verifies post-fix retests.
+    - `qa-release-readiness`: Synthesizes test runs into an evidence-based GO / NO-GO recommendation (Passed, Failed, Blocked, Untested).
+  - **Cross-Role Shared Skills:**
+    - `agent-handoff`: High-density structured handoff package and contract reusable across all roles (Product -> Architecture/UX -> Development -> QA).
+    - `team-learning`: Standardized protocol for Step 0 Pre-Flight memory reading, Anti-Thrashing Circuit Breaker (max 2 attempts), post-flight empirical lesson logging, and the Lesson Graduation Ladder.
+  - **Role Orchestrators (`role-product-planner`, `role-solution-architect`, `role-fullstack-developer`, `role-ui-ux-designer`, `role-qa-reviewer`):** Refactored personas to orchestrate modular skills while anchoring role memory and constitutional guardrails.
+  - **Test Suite Alignment (`test/verify_recursive_learning.cjs`):** Enhanced automated test harness to assert YAML frontmatter, tactical sections, and schemas for all 38 modular skills and 5 role personas (10/10 test suites passing).
+- **Recursive Learning and Project Memory System (`agent-memory/`, `docs/`, `AGENTS.md`):**
+  - **Persistent Role Memory (`agent-memory/`):** Created role-specific lesson logs (`product-lessons.md`, `design-lessons.md`, `architect-lessons.md`, `developer-lessons.md`, `qa-lessons.md`) and cross-cutting `shared-lessons.md`.
+  - **Structured Lesson Schema:** Enforced empirical fields (`Date`, `Role`, `Task`, `Context`, `Problem`, `Cause`, `Action`, `Evidence`, `Result`, `Status: Observed | Proposed | Verified | Superseded`).
+  - **Architecture Decision Records (`docs/decisions.md`):** Documented ADR-001 (Zero-Cost Voice), ADR-002 (Fast-Fail Timeout & Cloud Fallback), and ADR-003 (Recursive Agent Learning Protocol).
+  - **Living Requirements (`docs/requirements.md`):** Established living requirements repository covering product scopes, target users, and non-functional constraints.
+  - **Constitutional Learning Protocol (`AGENTS.md`):** Integrated pre-task memory reading, post-task outcome recording, **Anti-Thrashing Circuit Breaker** (max 2 focused attempts), and the **Human Gatekeeper Rule** (only Human Stakeholder can approve promoting lessons into `AGENTS.md`).
+  - **Automated Verification Harness (`test/verify_recursive_learning.cjs`):** Automated test suite verifying memory files, structured schemas, ADRs, requirements, and AGENTS.md protocols (now 10/10 test suites in `npm test`).
+
+## [1.13.0] - 2026-11-07
 
 ### Added
 - **Multi-Tier Resilient TTS Fallback Engine (`api/tts.js`, `src/hooks/useVoiceAgent.js`, `deploy/modal_maya_app.py`):**

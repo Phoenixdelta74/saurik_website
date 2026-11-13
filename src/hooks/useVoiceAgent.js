@@ -19,7 +19,8 @@ const RELISTEN_DELAY_MS = 450;
 // How many silent listening rounds hands-free mode tolerates before pausing the call
 const MAX_SILENT_RETRIES = 2;
 // Pause length that ends a spoken question in continuous recognition
-const END_OF_SPEECH_SILENCE_MS = 1800;
+// Tuned to 1400ms: prevents premature cut-off during natural breathing/thinking pauses while staying conversational
+const END_OF_SPEECH_SILENCE_MS = 1400;
 
 // Desktop browsers keep listening through short pauses so long questions are not cut off.
 // Mobile engines repeat or drop results in continuous mode, so they keep single-phrase mode.
@@ -93,6 +94,28 @@ const splitIntoChunks = (text, maxLength = 180) => {
   return chunks;
 };
 
+// Split multi-sentence replies into fast-path chunks (Sentence 1 synthesized immediately for <=1.2s TTFA)
+export const splitSentencesForSpeech = (text) => {
+  if (!text) return [];
+  const matches = text.match(/[^.!?।\n]+[.!?।\n]*/g) || [text];
+  const chunks = [];
+  let buffer = '';
+
+  for (const part of matches) {
+    const trimmed = part.trim();
+    if (!trimmed) continue;
+    // Group very short phrases (e.g. <= 3 words) with following sentence to avoid choppy audio
+    if (buffer && (buffer + ' ' + trimmed).split(/\s+/).length <= 4) {
+      buffer = `${buffer} ${trimmed}`;
+    } else {
+      if (buffer) chunks.push(buffer);
+      buffer = trimmed;
+    }
+  }
+  if (buffer) chunks.push(buffer);
+  return chunks.length > 0 ? chunks : [text];
+};
+
 // Find an installed voice that genuinely matches the language (never a different-language voice)
 const findVoice = (voices, langCode) => {
   if (!voices.length) return null;
@@ -135,6 +158,7 @@ export function useVoiceAgent({ onSpeechRecognized, isMuted = false }) {
   // Holds live utterances so Chrome does not garbage-collect them before onend fires
   const activeUtterancesRef = useRef([]);
   const audioRef = useRef(null);
+  const cloudAbortRef = useRef(null);
   // Final transcript collected during the current listening round; submitted when it ends
   const transcriptBufferRef = useRef('');
   // Set when listening is cancelled (close, end call) so the collected words are not submitted
@@ -197,17 +221,32 @@ export function useVoiceAgent({ onSpeechRecognized, isMuted = false }) {
   const cancelSpeech = useCallback(() => {
     speechSessionRef.current += 1;
     clearRestartTimer();
+    if (cloudAbortRef.current) {
+      try {
+        cloudAbortRef.current.abort();
+      } catch (e) {
+        // ignore
+      }
+      cloudAbortRef.current = null;
+    }
     if (typeof window !== 'undefined' && window.speechSynthesis) {
       window.speechSynthesis.cancel();
     }
     if (audioRef.current) {
       audioRef.current.pause();
-      URL.revokeObjectURL(audioRef.current.src);
+      if (audioRef.current.src) URL.revokeObjectURL(audioRef.current.src);
       audioRef.current = null;
     }
     activeUtterancesRef.current = [];
     setIsSpeaking(false);
   }, []);
+
+  // Proactive background keepalive to pre-warm the Modal container while user is speaking
+  const triggerContainerWarmup = () => {
+    if (typeof window !== 'undefined' && typeof fetch === 'function') {
+      fetch('/api/tts', { method: 'GET', keepalive: true }).catch(() => {});
+    }
+  };
 
   // iOS Safari only allows speech that starts inside a user gesture; unlock it on the first tap
   const primeSpeech = () => {
@@ -221,6 +260,7 @@ export function useVoiceAgent({ onSpeechRecognized, isMuted = false }) {
   const startListening = useCallback(() => {
     cancelSpeech();
     primeSpeech();
+    triggerContainerWarmup();
     setPermissionError(null);
     setSpeechNotice(null);
     setInterimTranscript('');
@@ -407,39 +447,103 @@ export function useVoiceAgent({ onSpeechRecognized, isMuted = false }) {
     };
   }, [cancelSpeech]);
 
-  // Last-resort server TTS for languages with no installed voice on this device
+  // Fast-Path Sentence-Pipelined TTS for regional voices lacking native OS voices
   const speakWithCloud = async (text, lang, session) => {
-    try {
+    const abortController = new AbortController();
+    cloudAbortRef.current = abortController;
+
+    const sentences = splitSentencesForSpeech(text);
+    if (!sentences.length) return false;
+
+    // Helper to fetch a single sentence chunk from /api/tts
+    const fetchChunk = async (sentence) => {
       const response = await fetch('/api/tts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, lang }),
+        body: JSON.stringify({ text: sentence, lang }),
+        signal: abortController.signal,
       });
       if (!response.ok) throw new Error(`TTS ${response.status}`);
-      const engine = response.headers.get('X-TTS-Engine') || 'cloud';
-      const blob = await response.blob();
+      return await response.blob();
+    };
+
+    try {
+      // 1. Fetch Sentence 1 immediately (Fast-Path TTFA <= 1.2s)
+      const firstBlob = await fetchChunk(sentences[0]);
       if (session !== speechSessionRef.current) return false;
 
-      const audio = new Audio(URL.createObjectURL(blob));
-      audioRef.current = audio;
-      const finish = () => {
-        if (session !== speechSessionRef.current) return;
-        if (audio.src) URL.revokeObjectURL(audio.src);
-        audioRef.current = null;
+      // Start prefetching Sentence 2 while Sentence 1 prepares to play
+      let nextBlobPromise = sentences.length > 1 ? fetchChunk(sentences[1]) : null;
+
+      const playChunkAudio = (blob) => {
+        if (session !== speechSessionRef.current) return Promise.resolve(false);
+        const audio = new Audio(URL.createObjectURL(blob));
+        audioRef.current = audio;
+
+        return new Promise((resolve) => {
+          const cleanup = () => {
+            if (audio.src) URL.revokeObjectURL(audio.src);
+            if (audioRef.current === audio) audioRef.current = null;
+          };
+          audio.onended = () => {
+            cleanup();
+            resolve(true);
+          };
+          audio.onerror = () => {
+            cleanup();
+            resolve(false);
+          };
+          setIsSpeaking(true);
+          audio.play().catch(() => {
+            cleanup();
+            resolve(false);
+          });
+        });
+      };
+
+      // Play Sentence 1
+      const playedFirst = await playChunkAudio(firstBlob);
+      if (!playedFirst || session !== speechSessionRef.current) {
+        if (session === speechSessionRef.current) {
+          setIsSpeaking(false);
+          scheduleRelisten();
+        }
+        return playedFirst;
+      }
+
+      // 2. Seamlessly play subsequent pre-fetched sentences
+      for (let i = 1; i < sentences.length; i++) {
+        if (session !== speechSessionRef.current) return false;
+
+        // Queue prefetch for sentence i + 1
+        const futurePromise = i + 1 < sentences.length ? fetchChunk(sentences[i + 1]) : null;
+
+        try {
+          const chunkBlob = await nextBlobPromise;
+          nextBlobPromise = futurePromise;
+          if (session !== speechSessionRef.current) return false;
+
+          // Natural prosodic rest (100ms) between sentences to prevent popping
+          await new Promise((r) => setTimeout(r, 100));
+          if (session !== speechSessionRef.current) return false;
+
+          const played = await playChunkAudio(chunkBlob);
+          if (!played) break;
+        } catch (chunkErr) {
+          console.warn(`Subsequent speech chunk ${i} failed or aborted:`, chunkErr.message || chunkErr);
+          break;
+        }
+      }
+
+      if (session === speechSessionRef.current) {
         setIsSpeaking(false);
         scheduleRelisten();
-      };
-      audio.onended = finish;
-      audio.onerror = finish;
-      setIsSpeaking(true);
-      try {
-        await audio.play();
-      } catch (playErr) {
-        finish();
-        return false;
       }
       return true;
     } catch (err) {
+      if (err.name === 'AbortError' || session !== speechSessionRef.current) {
+        return false;
+      }
       if (session === speechSessionRef.current) {
         setIsSpeaking(false);
         setSpeechNotice(
@@ -447,6 +551,10 @@ export function useVoiceAgent({ onSpeechRecognized, isMuted = false }) {
         );
       }
       return false;
+    } finally {
+      if (cloudAbortRef.current === abortController) {
+        cloudAbortRef.current = null;
+      }
     }
   };
 
