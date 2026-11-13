@@ -18,8 +18,9 @@ const ENABLE_CLOUD_TTS_FALLBACK = true;
 const RELISTEN_DELAY_MS = 450;
 // How many silent listening rounds hands-free mode tolerates before pausing the call
 const MAX_SILENT_RETRIES = 2;
-// Pause length that ends a spoken question in continuous recognition (optimized to 900ms for conversational snappiness)
-const END_OF_SPEECH_SILENCE_MS = 900;
+// Pause length that ends a spoken question in continuous recognition
+// Tuned to 1400ms: prevents premature cut-off during natural breathing/thinking pauses while staying conversational
+const END_OF_SPEECH_SILENCE_MS = 1400;
 
 // Desktop browsers keep listening through short pauses so long questions are not cut off.
 // Mobile engines repeat or drop results in continuous mode, so they keep single-phrase mode.
