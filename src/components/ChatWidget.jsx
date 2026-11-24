@@ -14,13 +14,19 @@ import {
 } from 'lucide-react';
 import { COMPANY_INFO } from '../data/companyData';
 import { useVoiceAgent } from '../hooks/useVoiceAgent';
+import CallbackForm from './CallbackForm';
 import VoiceAgentPanel from './voice/VoiceAgentPanel';
 
 const FALLBACK_MESSAGE =
   "I'm temporarily unable to connect to the knowledge base. Please reach us directly on WhatsApp or our contact page.";
 
-const WELCOME_MESSAGE =
-  "Hi! I'm your SAURIK IT AI advisor. You can chat with me here or click the microphone to talk with our voice agent. How can I help you today?";
+function welcome(path) {
+  const topic = path.startsWith('/services/cctv') ? 'What would you like to cover with your cameras?'
+    : path.startsWith('/arthos') ? 'Can I help with an invoice or getting started with Arthos?'
+    : path.startsWith('/track') ? 'What would you like to know about managing field visits?'
+    : 'What brings you here today? You can tell me in your own words.';
+  return `Welcome to SAURIK IT! I’m your AI assistant. ${topic}`;
+}
 
 const prefersReducedMotion = () =>
   typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -35,6 +41,7 @@ const ChatWidget = () => {
   const pageMode = isTrack ? 'track' : isArthos ? 'arthos' : isUseCases ? 'use-cases' : isAiChatbot ? 'ai-chatbot' : undefined;
 
   const currentQuestions = useMemo(() => {
+    if (location.pathname.startsWith('/services/cctv')) return ['Do you install CCTV at home?', 'Can you service an existing CCTV system?', 'What should I prepare for a CCTV quote?'];
     if (isAiChatbot) {
       return [
         "How does it avoid made-up answers?",
@@ -81,11 +88,15 @@ const ChatWidget = () => {
       "What custom software & AI agents do you build?",
       "Tell me about on-premise IT infrastructure",
     ];
-  }, [isTrack, isArthos, isUseCases, isAiChatbot]);
+  }, [location.pathname, isTrack, isArthos, isUseCases, isAiChatbot]);
 
   const [isOpen, setIsOpen] = useState(false);
   const [activeMobileTab, setActiveMobileTab] = useState('chat'); // 'chat' | 'voice'
-  const [messages, setMessages] = useState([{ role: 'assistant', content: WELCOME_MESSAGE }]);
+  const [messages, setMessages] = useState([{ role: 'assistant', content: welcome(location.pathname) }]);
+  const [showCallback, setShowCallback] = useState(false);
+  useEffect(() => {
+    setMessages(previous => previous.length === 1 ? [{ role: 'assistant', content: welcome(location.pathname) }] : previous);
+  }, [location.pathname]);
   const [input, setInput] = useState('');
   const [status, setStatus] = useState('idle'); // 'idle' | 'sending' | 'error'
   const [isMuted, setIsMuted] = useState(false);
@@ -109,6 +120,7 @@ const ChatWidget = () => {
   // Send message to LLM Brain. Only voice turns are spoken aloud and pinned to the selected
   // voice language; typed turns let the assistant mirror whatever language the visitor writes in.
   const sendToAssistant = useCallback(async (userInput, source = 'text', lang = null) => {
+    if (!messagesRef.current.some(m => m.role === 'user')) window.siteMetrics?.record('first_question_sent');
     const shouldSpeak = source === 'voice';
     const nextMessages = [...messagesRef.current, { role: 'user', content: userInput }];
     messagesRef.current = nextMessages;
@@ -137,6 +149,7 @@ const ChatWidget = () => {
       }
 
       setMessages((prev) => [...prev, { role: 'assistant', content: data.reply }]);
+      window.siteMetrics?.record('answer_delivered');
       setStatus('idle');
 
       if (shouldSpeak) {
@@ -170,6 +183,8 @@ const ChatWidget = () => {
   useEffect(() => {
     voiceAgentRef.current = voiceAgent;
   }, [voiceAgent]);
+
+  useEffect(() => { if (isOpen) window.siteMetrics?.record('chat_opened'); }, [isOpen]);
 
   // Focus management
   useEffect(() => {
@@ -223,6 +238,7 @@ const ChatWidget = () => {
   const handleClose = () => {
     // End any hands-free call so the microphone can never reopen while the assistant is closed
     voiceAgent.endCall();
+    setShowCallback(false);
     setIsOpen(false);
     toggleButtonRef.current?.focus();
   };
@@ -427,6 +443,7 @@ const ChatWidget = () => {
                   activeMobileTab === 'chat' ? 'flex' : 'hidden md:flex'
                 }`}
               >
+                {showCallback ? <CallbackForm page={location.pathname} back={() => setShowCallback(false)} /> : <>
                 {/* Scrollable Chat Log */}
                 <div
                   ref={logRef}
@@ -487,7 +504,12 @@ const ChatWidget = () => {
                 {/* Help Note */}
                 <div className="px-4 py-2 text-[11px] text-ink-muted bg-white/30 border-t border-slate-200/50 flex items-center justify-between">
                   <span>
-                    Formal RFQ or urgent support?{' '}
+                    <button type="button" className="min-h-11 font-semibold text-accent-teal underline" onClick={() => {
+                      voiceAgent.endCall();
+                      setShowCallback(true);
+                      window.siteMetrics?.record('cta_clicked', { target: 'callback', placement: 'assistant' });
+                      window.siteMetrics?.record('lead_form_started');
+                    }}>Request follow-up</button>{' · '}
                     <Link
                       to="/contact"
                       className="text-accent-teal hover:underline font-semibold"
@@ -533,7 +555,7 @@ const ChatWidget = () => {
                   >
                     <Send className="w-4 h-4" />
                   </button>
-                </form>
+                </form></>}
               </div>
 
               {/* RIGHT SIDE: Voice Agent Studio */}
@@ -559,6 +581,7 @@ const ChatWidget = () => {
                   onCancelSpeech={handleInterrupt}
                   isMuted={isMuted}
                   onToggleMute={handleToggleMute}
+                  activeTtsEngine={voiceAgent.activeTtsEngine}
                   bgClass="bg-white/15 backdrop-blur-2xl"
                 />
               </div>

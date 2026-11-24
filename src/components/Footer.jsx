@@ -173,7 +173,7 @@ const Footer = () => {
           </div>
           <div className="flex flex-wrap items-center gap-4 sm:gap-6">
             <span>{COMPANY_INFO.availability}</span>
-            <Link to="/privacy" className="hover:text-ink-primary underline underline-offset-2">Privacy</Link>
+            <Link to="/privacy" className="hover:text-ink-primary underline underline-offset-2">Privacy and analytics choices</Link>
             <Link to="/terms" className="hover:text-ink-primary underline underline-offset-2">Terms</Link>
             <Link to="/refund-policy" className="hover:text-ink-primary underline underline-offset-2">Refunds</Link>
           </div>

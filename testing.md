@@ -116,11 +116,23 @@ node test/verify_seo_prerender.cjs
 - Validates the 4 SEO audit fixes: valid RFC-compliant `tel:+919862087157` URIs (no space), `og:locale` set to `en_IN` across pages, `twitter:url` matching page canonical on `/contact`, and trailing-slash consistency for `/track/` and `/arthos/` internal links.
 - **Client Hydration Integrity & Route Component Import Audit:** Inspects `src/App.jsx` ensuring every `<Route>` component is explicitly imported/declared, confirms `ErrorBoundary` is wired in `src/main.jsx`, and validates that the production JS bundle contains zero undeclared component identifiers.
 
-### 2.10. Full Automated Test Suite Execution
+### 2.10. TTS Runtime Security, Timeout & Cascading Suite (FEAT-002)
+```bash
+node test/verify_tts_runtime.cjs
+```
+**Pass criteria:**
+- **Guarded Warmup (GET /api/tts):** Bounded and rate-limited via `guardRequest`; verifies honest readiness report and target host identification.
+- **Bearer Token Authentication:** Asserts propagation of `Authorization: Bearer <token>` matching `MAYA_TTS_KEY` to the Maya endpoint; confirms 200 OK and 24kHz audio output.
+- **Fast-Fail Timeout Cascading:** Verifies that when Maya exceeds `MAYA_TTS_TIMEOUT_MS`, `AbortController` triggers cleanly and request cascades immediately to OpenAI `tts-1` fallback with `X-TTS-Engine: openai-tts-1` and `X-TTS-Fallback: true`.
+- **Maya 401 Rejection Recovery:** Traps unauthorized Maya responses and cascades seamlessly to OpenAI fallback without crashing.
+- **Complete Degradation & Client Sanitization:** When both Maya and OpenAI fail (e.g. expired key), returns HTTP 502 with `{ fallback: 'text-only' }` and strictly verifies zero credentials, tokens, or internal URLs leak to the client payload.
+- **Markdown Sanitization:** Confirms headings, bold/italics, code blocks, and markdown links are cleanly stripped before audio generation.
+
+### 2.11. Full Automated Test Suite Execution
 Run the complete automated gate:
 ```bash
 npm test
-# Runs: verify_track_spec_v3 && verify_track_e2e && verify_arthos_spec && verify_voice_assistant && verify_chatbot && verify_use_case_analytics && verify_seo_prerender && verify_backend_engine && verify_onboard_cli
+# Runs all 12 test suites: track_spec_v3, track_e2e, arthos_spec, voice_assistant, chatbot, use_case_analytics, seo_prerender, backend_engine, onboard_cli, recursive_learning, tts_latency, and tts_runtime
 ```
 
 ---
@@ -194,3 +206,11 @@ Test in developer tools responsive mode at:
   - Launch-state enforcement (State A: Pre-launch with "Request early access" pointing to `/contact?topic=arthos_early_access`).
   - 60-day trial claims, edition boundary disclaimers (Desktop offline local storage vs Cloud internet account storage), and zero unverified P&L/GST filing claims.
   - Social preview asset (`public/arthos/og-image.svg` at 1200×630).
+# Maya handler integration check
+
+Run `python test/verify_maya_handler.py` with FastAPI and httpx installed. It exercises the actual handler through FastAPI without Modal or a GPU, checking missing, incorrect, and valid Authorization headers. It does not verify deployed synthesis.
+
+
+### Website assistant verification
+
+Run `node --test test/visitor-assistant.test.js` for FAQ scope, callback validation and consent, configured storage writes, and the analytics property allowlist with mocked provider responses. Use the local site to check a CCTV suggestion, change analytics consent on Privacy, and open the optional follow-up form on mobile and desktop. Live PostHog delivery and an actual staff-visible database row require configured test projects.

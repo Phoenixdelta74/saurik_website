@@ -1,3 +1,4 @@
+import { publicAnswer } from './_lib/publicFaq.js';
 import { 
   CHAT_SYSTEM_PROMPT, 
   TRACK_CHAT_SYSTEM_PROMPT, 
@@ -41,6 +42,9 @@ export default async function handler(req, res) {
   }
 
   try {
+    const faq = publicAnswer(messages, mode, lang);
+    if (faq) return res.status(200).json({ reply: faq });
+
     let systemPrompt = CHAT_SYSTEM_PROMPT;
     if (mode === 'track') {
       systemPrompt = TRACK_CHAT_SYSTEM_PROMPT;

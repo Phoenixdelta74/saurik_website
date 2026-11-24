@@ -7,21 +7,44 @@ const MAX_TTS_CHARS = 1000;
 const ALLOWED_VOICES = ['nova', 'alloy', 'echo', 'fable', 'onyx', 'shimmer'];
 
 export default async function handler(req, res) {
-  // Support non-blocking container warmup ping on GET
+  // Support bounded, rate-limited container warmup check on GET
   if (req.method === 'GET') {
+    if (!guardRequest(req, res, { name: 'tts_warmup', limit: 20 })) return undefined;
+
     const mayaEndpoint = process.env.MAYA_TTS_ENDPOINT;
-    if (mayaEndpoint) {
-      // Fire-and-forget non-blocking keepalive to Modal GPU endpoint
-      fetch(mayaEndpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': process.env.MAYA_TTS_KEY ? `Bearer ${process.env.MAYA_TTS_KEY}` : 'Bearer saurik_maya_secret_2026',
-        },
-        body: JSON.stringify({ input: 'ping', voice: 'Ahana', lang: 'en' }),
-      }).catch(() => {});
+    const mayaKey = process.env.MAYA_TTS_KEY;
+
+    if (!mayaEndpoint) {
+      return res.status(200).json({ status: 'unconfigured', target: 'none' });
     }
-    return res.status(200).json({ status: 'warmup_triggered', target: mayaEndpoint ? 'modal_maya' : 'none' });
+
+    const startCheck = Date.now();
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 2000);
+
+      const headers = { 'Content-Type': 'application/json' };
+      if (mayaKey) {
+        headers['Authorization'] = `Bearer ${mayaKey}`;
+      }
+
+      const checkRes = await fetch(mayaEndpoint, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ input: 'ping', health: true }),
+        signal: controller.signal,
+      });
+      clearTimeout(timeout);
+
+      const elapsed = Date.now() - startCheck;
+      if (checkRes.ok) {
+        return res.status(200).json({ status: 'ready', warmup_triggered: true, target: 'modal_maya', latencyMs: elapsed });
+      }
+      return res.status(200).json({ status: 'unavailable', target: 'modal_maya', upstreamStatus: checkRes.status, latencyMs: elapsed });
+    } catch {
+      const elapsed = Date.now() - startCheck;
+      return res.status(200).json({ status: 'unavailable', target: 'modal_maya', latencyMs: elapsed });
+    }
   }
 
   if (req.method !== 'POST') {
@@ -32,12 +55,17 @@ export default async function handler(req, res) {
   // 30 requests/minute to accommodate sentence-pipelined audio chunks (2-4 requests per voice turn)
   if (!guardRequest(req, res, { name: 'tts', limit: 30 })) return undefined;
 
+  const startTime = Date.now();
   const apiKey = process.env.OPENAI_API_KEY;
   const mayaEndpoint = process.env.MAYA_TTS_ENDPOINT;
-  const mayaKey = process.env.MAYA_TTS_KEY || 'saurik_maya_secret_2026';
+  const mayaKey = process.env.MAYA_TTS_KEY;
 
   if (!apiKey && !mayaEndpoint) {
-    return res.status(503).json({ error: 'TTS service is not configured (missing Maya endpoint or OpenAI key).' });
+    return res.status(503).json({
+      error: 'Speech generation unavailable.',
+      fallback: 'text-only',
+      details: 'TTS service is not configured (missing Maya endpoint or OpenAI key).'
+    });
   }
 
   const { text, voice = 'nova', lang } = req.body || {};
@@ -61,7 +89,7 @@ export default async function handler(req, res) {
   }
 
   const chosenVoice = ALLOWED_VOICES.includes(voice) ? voice : 'nova';
-  const mayaTimeoutMs = parseInt(process.env.MAYA_TTS_TIMEOUT_MS || '7500', 10);
+  const mayaTimeoutMs = parseInt(process.env.MAYA_TTS_TIMEOUT_MS || '8500', 10);
 
   // 1. Check for custom Maya 2 Native Serverless GPU endpoint (Fast warm check)
   if (mayaEndpoint) {
@@ -69,37 +97,45 @@ export default async function handler(req, res) {
       const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), mayaTimeoutMs);
 
+      const headers = { 'Content-Type': 'application/json' };
+      if (mayaKey) {
+        headers['Authorization'] = `Bearer ${mayaKey}`;
+      }
+
       const mayaRes = await fetch(mayaEndpoint, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': mayaKey ? `Bearer ${mayaKey}` : '',
-        },
+        headers,
         body: JSON.stringify({ input: cleanedText, voice: chosenVoice, lang }),
         signal: controller.signal,
       });
       clearTimeout(timeout);
 
+      const elapsed = Date.now() - startTime;
       if (mayaRes.ok) {
         const buffer = Buffer.from(await mayaRes.arrayBuffer());
         res.setHeader('Content-Type', mayaRes.headers.get('content-type') || 'audio/wav');
         res.setHeader('Content-Length', buffer.length);
         res.setHeader('Cache-Control', 'public, max-age=86400, s-maxage=86400');
         res.setHeader('X-TTS-Engine', 'maya2-native');
+        res.setHeader('X-TTS-Latency-MS', elapsed.toString());
+        res.setHeader('X-TTS-Fallback', 'false');
+        res.setHeader('Access-Control-Expose-Headers', 'X-TTS-Engine, X-TTS-Latency-MS, X-TTS-Fallback');
         return res.status(200).send(buffer);
       }
-      console.warn(`Maya Serverless TTS returned status ${mayaRes.status}. Cascading immediately to OpenAI fallback...`);
+      console.warn(`Maya Serverless TTS returned status ${mayaRes.status} in ${elapsed}ms. Cascading immediately to OpenAI fallback...`);
     } catch (err) {
+      const elapsed = Date.now() - startTime;
       const isTimeout = err.name === 'AbortError' || err.message?.includes('aborted');
-      console.warn(`Maya Serverless TTS unavailable (${isTimeout ? `cold start timeout after ${mayaTimeoutMs}ms` : err.message}). Cascading immediately to OpenAI fallback...`);
+      console.warn(`Maya Serverless TTS unavailable (${isTimeout ? `cold start timeout after ${mayaTimeoutMs}ms` : 'connection error'}) in ${elapsed}ms. Cascading immediately to OpenAI fallback...`);
     }
   }
 
   // 2. Standard Cloud Fallback (OpenAI tts-1)
   if (!apiKey) {
     return res.status(502).json({
-      error: 'Maya Serverless TTS was unavailable and OpenAI fallback key is not configured.',
+      error: 'Speech generation unavailable.',
       fallback: 'text-only',
+      details: 'Primary TTS was unavailable and cloud fallback key is not configured.'
     });
   }
 
@@ -113,18 +149,23 @@ export default async function handler(req, res) {
     });
 
     const buffer = Buffer.from(await response.arrayBuffer());
+    const elapsed = Date.now() - startTime;
 
     res.setHeader('Content-Type', 'audio/mpeg');
     res.setHeader('Content-Length', buffer.length);
     res.setHeader('Cache-Control', 'public, max-age=86400, s-maxage=86400');
     res.setHeader('X-TTS-Engine', 'openai-tts-1');
+    res.setHeader('X-TTS-Latency-MS', elapsed.toString());
+    res.setHeader('X-TTS-Fallback', 'true');
+    res.setHeader('Access-Control-Expose-Headers', 'X-TTS-Engine, X-TTS-Latency-MS, X-TTS-Fallback');
     return res.status(200).send(buffer);
   } catch (error) {
-    console.error('OpenAI TTS Fallback Error:', error.message || error);
+    const elapsed = Date.now() - startTime;
+    console.error(`OpenAI TTS Fallback Error after ${elapsed}ms:`, error.message || error);
     return res.status(502).json({
       error: 'Speech generation unavailable.',
       fallback: 'text-only',
-      details: error.message || 'Provider failure',
+      details: 'All audio synthesis providers are currently unreachable.'
     });
   }
 }

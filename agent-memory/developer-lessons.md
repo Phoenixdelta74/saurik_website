@@ -89,4 +89,28 @@ This file records lessons learned by the Fullstack Developer role (`fullstack_de
 - **Applies when:** Using reasoning/thinking models (Gemini 2.5, DeepSeek R1, o-series) on OpenRouter or OpenAI with tight token budgets.
 - **Next check:** Verify response completeness on deployed Vercel instance.
 
+---
+
+## Lesson 005: Serverless GPU TTS Authentication & Response Sanitization
+
+- **Date:** 2026-11-13
+- **Role:** Fullstack Developer
+- **Task:** FEAT-002 Production Voice Remediation & Security Hardening
+- **Context:** Hardening Modal Serverless GPU endpoint and `/api/tts` proxy against unauthenticated abuse and credential leaks.
+- **Problem:**
+  1. Modal endpoint lacked Bearer token enforcement, exposing GPU synthesis to unauthorized callers, while default token literals existed in tracked files.
+  2. Serverless proxy `/api/tts` emitted raw error messages in HTTP 502 responses, risking upstream API key or internal hostname leakage to clients if upstream providers failed.
+  3. Proactive warmup was unawaited, unbounded, and invoked full 2.5B parameter GPU synthesis on `{ input: 'ping' }`.
+- **Action:**
+  1. Implemented FastAPI Bearer token validation in `deploy/modal_maya_app.py` against `MAYA_AUTH_TOKEN` secret; purged hardcoded fallback strings.
+  2. Added lightweight zero-inference health check in Maya container on `{ input: 'ping', health: true }`.
+  3. Rate-limited GET warmup in `api/tts.js` via `guardRequest` (20 req/min) and targeted it to clients lacking native voices in `src/hooks/useVoiceAgent.js`.
+  4. Sanitized HTTP 502 responses to return clean generic status messages without leaking credentials, URLs, or internal provider errors.
+  5. Authored `test/verify_tts_runtime.cjs` with in-memory fetch interception to deterministically assert auth propagation, fast-fail timeout cascading, and zero credential leakage.
+- **Evidence:** Verified with `test/verify_tts_runtime.cjs`, `npm test` (12/12 passing), and `npm run build` (17/17 routes).
+- **Result:** Secured GPU architecture, zero credential leaks, honest warmup reporting, and complete deterministic test coverage.
+- **Status:** Verified
+- **Applies when:** Securing serverless GPU inference endpoints, microservices, and audio proxy handlers.
+- **Next check:** Verify on live Modal deployment with `modal deploy deploy/modal_maya_app.py`.
+
 

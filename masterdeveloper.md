@@ -179,6 +179,15 @@ To guarantee HTTP 200 on direct visits/refreshes across Vercel and instant searc
 - Generates `dist/404.html` with real HTTP 404 status handling for genuinely non-existent URLs.
 - Client mounts via `ReactDOM.hydrateRoot` in `src/main.jsx` when pre-rendered DOM is detected.
 
+### Pattern 8: Secured Serverless GPU TTS Proxy & Multi-Tier Cascading
+When routing Indic regional speech through serverless GPU endpoints (`api/tts.js` -> Modal.com):
+- **Bearer Token Security**: Always pass `Authorization: Bearer <key>` from server-side environment variables. Never commit plaintext tokens in tracked files.
+- **Fail-Closed Container Validation**: The FastAPI container in `deploy/modal_maya_app.py` must validate the Bearer token before running inference and reject unauthorized requests with HTTP 401.
+- **Lightweight Health Check**: Support `{ input: 'ping', health: true }` returning instant JSON readiness in < 5ms without running the 2.5B parameter model on GPU.
+- **Guarded Warmup**: Rate-limit GET warmup via `guardRequest` (20 req/min) and only trigger pings when client devices lack native regional voices.
+- **Fast-Fail Timeout Cascading**: Bound GPU requests to `MAYA_TTS_TIMEOUT_MS` (default 7,500ms). If cold start or error occurs, cascade immediately to OpenAI `tts-1` fallback.
+- **Strict Response Sanitization**: Never leak upstream provider credentials, internal hostnames, or raw error messages in HTTP 502 responses; return clean sanitized status payloads.
+
 ---
 
 ## 4. Verification Checklist Before Committing
@@ -191,3 +200,9 @@ To guarantee HTTP 200 on direct visits/refreshes across Vercel and instant searc
 - [ ] Verified that internal navigation links use React Router `Link` or `NavLink`.
 - [ ] Verified responsive layout at 320px, 360px, 768px, and 1200px widths.
 - [ ] Updated `architecture.md` and `change_log.md` with a concise summary of the changes made.
+
+### Website assistant configuration
+
+For callback intake, apply `deploy/website_callbacks.sql` in the approved Supabase project and configure `CALLBACK_SUPABASE_URL` and server-only `CALLBACK_SUPABASE_KEY`. Staff with authorized database access can review new rows in `website_callbacks`; confirm the responsible staff member and deletion schedule before enabling collection. Retries reuse a UUID and duplicate inserts are ignored. The contact page is available if intake fails.
+
+For opt-in analytics, configure the PostHog project ingestion token in `POSTHOG_PROJECT_TOKEN` and `POSTHOG_REGION` (us or eu). Use a trend of unique users performing `page_view` to estimate consenting visitors and total events for page views. Break down `cta_clicked` by page, placement and target. Build a funnel from `chat_opened` through `first_question_sent` and `answer_delivered`. Use database records for confirmed enquiries. Staff must verify ingestion and access in the intended projects before release.

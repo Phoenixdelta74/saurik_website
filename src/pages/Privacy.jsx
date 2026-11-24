@@ -1,9 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, ExternalLink, ShieldCheck, UserCheck, Lock, Database, Mail } from 'lucide-react';
 import { COMPANY_INFO } from '../data/companyData';
 
 const Privacy = () => {
+  const [enabled, setEnabled] = useState(false);
+  const [available, setAvailable] = useState(false);
+  useEffect(() => {
+    function refresh() {
+      setEnabled(Boolean(window.siteMetrics?.enabled()));
+      setAvailable(Boolean(window.siteMetrics) && !navigator.globalPrivacyControl && navigator.doNotTrack !== '1');
+    }
+    refresh();
+    window.addEventListener('load', refresh);
+    window.addEventListener('storage', refresh);
+    return () => { window.removeEventListener('load', refresh); window.removeEventListener('storage', refresh); };
+  }, []);
   return (
     <div className="mx-auto max-w-4xl space-y-10 px-4 pb-20 pt-12 sm:px-6 lg:px-8">
       {/* Header */}
@@ -35,6 +47,16 @@ const Privacy = () => {
           </p>
         </section>
 
+        <section id="website-privacy" className="space-y-3">
+          <h2 className="font-heading text-xl font-bold text-ink-primary">Your choices on this website</h2>
+          <p>You can ask the website assistant questions without sharing contact details. The assistant uses published answers or sends recent conversation turns to the configured AI provider. Please keep personal details out of chat. If you request follow-up, the team receives your name, preferred contact method, enquiry topic and the page where you asked.</p>
+          <p>Optional analytics help us count visits and see which pages and links people use. If you allow this, we store a random browser identifier and send page names and selected actions to PostHog. Your answers and contact details stay out of these events. You can change this choice here.</p>
+          <label className="inline-flex min-h-11 items-center gap-2"><input type="checkbox" disabled={!available} checked={enabled} onChange={event => {
+            window.siteMetrics?.setConsent(event.target.checked);
+            setEnabled(Boolean(window.siteMetrics?.enabled()));
+          }} />Allow optional website analytics on this browser</label>
+        </section>
+
         {/* Section 1: DPDP Roles */}
         <section className="space-y-3">
           <h2 className="font-heading text-xl font-bold text-ink-primary">1. Our Roles Under the DPDP Act 2023 &amp; Rules 2025</h2>
@@ -54,7 +76,7 @@ const Privacy = () => {
           <h2 className="font-heading text-xl font-bold text-ink-primary">2. Personal Data We Collect &amp; Process</h2>
           <ul className="list-disc space-y-2 pl-5 text-sm">
             <li><strong>Direct Website Inquiries:</strong> Full name, email address, mobile phone number, company name (optional for residential CCTV), service topic, and requirement notes submitted via our contact forms.</li>
-            <li><strong>Saurik AI Chatbot Conversations:</strong> Visitor query transcripts, browser session tokens, device viewport metadata, and voluntary lead submissions (name, phone, specific requirement) with recorded consent timestamps.</li>
+            <li><strong>Client-hosted Saurik AI Chatbot conversations:</strong> Visitor query transcripts, browser session tokens, device viewport metadata, and voluntary lead submissions (name, phone, specific requirement) with recorded consent timestamps.</li>
             <li><strong>Client Account &amp; Billing Data:</strong> Registered business name, legal entity address, GSTIN, primary contact details, and payment transaction references generated via Razorpay. (SAURIK IT never stores credit card or debit card numbers on its servers).</li>
             <li><strong>Technical &amp; Telemetry Data:</strong> IP addresses (anonymized for rate-limiting), HTTP referrer origins (for embed authorization), and error telemetry.</li>
           </ul>
@@ -63,7 +85,7 @@ const Privacy = () => {
         {/* Section 3: Grounded AI & Sub-Processors */}
         <section className="space-y-3">
           <h2 className="font-heading text-xl font-bold text-ink-primary">3. AI Processing, Grounding &amp; Sub-Processors</h2>
-          <p>We maintain strict security safeguards regarding how artificial intelligence interacts with data:</p>
+          <p>The following describes the client chatbot platform. The website assistant uses the processing described under Your choices on this website.</p>
           <ul className="list-disc space-y-2 pl-5 text-sm">
             <li><strong>Zero Training on Customer Data:</strong> Customer documents, conversation transcripts, and lead details are <em>never</em> used to train or fine-tune public foundation models (OpenAI, Anthropic, or open-source weights). Queries are processed via commercial API endpoints with zero-retention commitments.</li>
             <li><strong>Strict Retrieval Bounds:</strong> The chatbot answers exclusively from client-approved documents, price lists, and web pages stored in tenant-isolated PostgreSQL <code className="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-slate-800">pgvector</code> tables.</li>
@@ -83,7 +105,7 @@ const Privacy = () => {
         <section className="space-y-3">
           <h2 className="font-heading text-xl font-bold text-ink-primary">5. Data Retention &amp; Erasure Schedules</h2>
           <ul className="list-disc space-y-2 pl-5 text-sm">
-            <li><strong>Chatbot Message Transcripts:</strong> Retained for a default period of ninety (90) days for quality assurance and debugging, after which automated purge jobs remove the records.</li>
+            <li><strong>Client platform message transcripts:</strong> Retained for a default period of ninety (90) days for quality assurance and debugging, after which automated purge jobs remove the records.</li>
             <li><strong>Captured Leads:</strong> Stored securely in the client&rsquo;s tenant account until the business exports or deletes them, or upon subscription termination.</li>
             <li><strong>Tax &amp; Accounting Records:</strong> Invoices, payment receipts, and GST ledgers are retained for the statutory period mandated by the Central Goods and Services Tax (CGST) Act.</li>
           </ul>

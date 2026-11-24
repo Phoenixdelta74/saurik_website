@@ -33,6 +33,7 @@ const VoiceAgentPanel = ({
   onCancelSpeech,
   isMuted,
   onToggleMute,
+  activeTtsEngine = null,
   bgClass = 'bg-white/25 backdrop-blur-2xl',
 }) => {
   const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
@@ -265,9 +266,29 @@ const VoiceAgentPanel = ({
               "{interimTranscript}"
             </div>
           ) : isSpeaking ? (
-            <div className="text-xs text-ink-secondary italic flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-accent-teal animate-ping" />
-              Speaking response in real time…
+            <div className="flex flex-col items-center gap-1.5">
+              <div className="text-xs text-ink-secondary italic flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-accent-teal animate-ping" />
+                Speaking response in real time…
+              </div>
+              {activeTtsEngine && (
+                <span
+                  className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full border text-[10px] font-mono tracking-tight animate-fadeIn ${
+                    activeTtsEngine.engine === 'maya2-native'
+                      ? 'bg-teal-50 border-teal-200 text-teal-800'
+                      : activeTtsEngine.engine === 'openai-tts-1'
+                      ? 'bg-amber-50 border-amber-200 text-amber-800'
+                      : 'bg-slate-50 border-slate-200 text-slate-600'
+                  }`}
+                >
+                  <Sparkles className="w-2.5 h-2.5 text-accent-teal" />
+                  {activeTtsEngine.engine === 'maya2-native'
+                    ? `Maya 2 Native (${activeTtsEngine.latencyMs ? `${activeTtsEngine.latencyMs}ms` : 'GPU 24kHz'})`
+                    : activeTtsEngine.engine === 'openai-tts-1'
+                    ? `OpenAI tts-1 (${activeTtsEngine.latencyMs}ms cloud fallback)`
+                    : 'Device Native Voice'}
+                </span>
+              )}
             </div>
           ) : isListening ? (
             <div className="text-xs text-amber-600 font-semibold animate-pulse">
