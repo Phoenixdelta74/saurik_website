@@ -10,9 +10,13 @@ function apiDevPlugin(env) {
 
       server.middlewares.use(async (req, res, next) => {
         // 1. Handle Chatbot API (/api/chat)
-        if (req.url?.startsWith('/api/chat')) {
-          const chatModule = await import('./api/chat.js');
-          const chatHandler = chatModule.default;
+        if (['/api/chat', '/api/metrics', '/api/callback'].includes(req.url?.split('?')[0])) {
+          const handlers = {
+            '/api/chat': () => import('./api/chat.js'),
+            '/api/metrics': () => import('./api/metrics.js'),
+            '/api/callback': () => import('./api/callback.js'),
+          };
+          const { default: handler } = await handlers[req.url.split('?')[0]]();
 
           let body = '';
           req.on('data', (chunk) => { body += chunk; });
@@ -35,7 +39,7 @@ function apiDevPlugin(env) {
             };
 
             try {
-              await chatHandler(req, res);
+              await handler(req, res);
             } catch (err) {
               res.statusCode = 500;
               res.end(JSON.stringify({ error: err.message }));

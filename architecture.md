@@ -360,8 +360,13 @@ sequenceDiagram
    - **Maya 2 Native Serverless GPU (Tier 2, `deploy/modal_maya_app.py`):**
      - Employs open-weight **Maya 2 Native** 2.5B parameter model (`maya-research/maya2-native`) on a serverless NVIDIA L4 (24GB VRAM) on Modal.com.
      - Auto-scales to zero when idle (`scaledown_window=600`, 10 minutes warm keep-alive).
-     - Protected via Bearer token authentication (`AUTH_BEARER_TOKEN`).
+     - Protected via strict Bearer token authentication validated via FastAPI before model invocation against `MAYA_AUTH_TOKEN` secret; fails closed on missing/invalid token.
+     - Supports zero-inference lightweight health probe on `{ input: 'ping', health: true }`, returning instant JSON readiness without running GPU model synthesis.
      - Emits authentic 24 kHz mono streaming audio in native conversational Indic cadences.
+   - **Guarded Warmup & Client Telemetry:**
+     - `GET /api/tts` is rate-limited via `guardRequest` (20 req/min) and triggers targeted health checks only when regional voice is lacking.
+     - Successful audio responses emit telemetry headers: `X-TTS-Engine: maya2-native | openai-tts-1`, `X-TTS-Latency-MS: <ms>`, and `X-TTS-Fallback: false | true`.
+     - Provider errors and internal URLs are strictly masked on the server; client responses receive generic sanitized status payloads with zero leaked credentials.
    - **Fast-Fail Cascading Architecture:**
      ```
      [Client needs TTS]
@@ -379,7 +384,7 @@ sequenceDiagram
             │                     │
             │                     ├── Warm (<5s) ──► Play 24kHz Maya Audio (X-TTS-Engine: maya2-native)
             │                     │
-            │                     └── Cold (>7.5s timeout) or Error
+            │                     └── Cold (>7.5s timeout) or 401/500 Error
             │                               │ (Fast-Fail Instant Cascade)
             │                               ▼
             └───────────────────────► [Tier 3: OpenAI tts-1 Cloud Fallback]
@@ -391,9 +396,15 @@ sequenceDiagram
                                                     ▼
                                       [Tier 4: Graceful Degradation]
                                       (Display response as text only,
-                                       inform client cleanly,
+                                       inform client cleanly with masked error,
                                        preserve hands-free call loop)
      ```
-   - **Zero-Cost Principle & Low-Traffic Optimization:** For low-traffic websites, GPU containers spend most time scaled down to zero. The 7.5s fast-fail threshold guarantees visitors never experience a 45–90s freeze: first questions cascade to OpenAI in ~2.9s while Maya warms in the background; subsequent session queries achieve warm ~3.5s Maya Indic speech. Total server GPU expenses remain virtually $0 under Modal's free tier credits.
+   - **Zero-Cost Principle & Low-Traffic Optimization:** For low-traffic websites, GPU containers spend most time scaled down to zero. The 7.5s fast-fail threshold guarantees visitors never experience a 45–90s freeze: first questions cascade to OpenAI while Maya warms in the background; subsequent session queries achieve warm ~3.5s Maya Indic speech. Total server GPU expenses remain virtually $0 under Modal's free tier credits.
 
 
+
+### Website assistant, callback intake and analytics
+
+The chat handler answers matching introductory public FAQs before contacting an LLM. English FAQ text stays in source control. Regional voice selections and context-dependent questions use the existing model path. The optional callback form sends contact details directly to the guarded callback endpoint. A successful database write confirms receipt. The contact page continues to prepare email and WhatsApp drafts.
+
+The opt-in metrics script runs on the React site and standalone product pages. It sends allowlisted page and action data through the metrics endpoint to PostHog. The random browser ID estimates distinct consenting browsers. The tab ID groups events in a browser tab. Browser storage restrictions, tracking choices and multiple devices affect counts.

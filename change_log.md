@@ -6,6 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased] - 2026-11-13
 
+### Added
+- Added FastAPI handler authentication integration coverage and warmup failure and throttling checks. Modal logs on 2026-11-17 report an L4 GPU capacity wait; live synthesis remains unverified.
+
+### Fixed
+- Bound Maya authentication to the HTTP Authorization header and made unsuccessful warmup checks report unavailable.
+
+### Added
+- **FEAT-002 Production Voice Remediation Implementation:**
+  - **FastAPI Bearer Token Authentication (`deploy/modal_maya_app.py`):** Enforced strict Bearer token header verification against `MAYA_AUTH_TOKEN` secret in the Modal container. Removed hardcoded plaintext tokens from all tracked codebase files.
+  - **Lightweight Zero-Inference Health Check (`deploy/modal_maya_app.py`):** Added instant JSON health probe (`{ input: 'ping', health: true }`) returning 200 OK and model readiness without consuming GPU compute or invoking 2.5B parameter inference.
+  - **Guarded & Rate-Limited Warmup (`api/tts.js`):** Applied `guardRequest` (20 req/min) to GET requests and targeted warmup to clients lacking native regional voices, awaiting health checks with a 2,000ms deadline.
+  - **Serverless Response Sanitization & Telemetry (`api/tts.js`):** Added telemetry headers (`X-TTS-Engine`, `X-TTS-Latency-MS`, `X-TTS-Fallback`). Sanitized HTTP 502 responses to strictly mask upstream provider credentials, internal URLs, and raw error messages from client inspection.
+  - **Targeted Client Warmup (`src/hooks/useVoiceAgent.js`):** Optimized `triggerContainerWarmup()` to only trigger background GET pings when the visitor's device actually lacks native voice support for the active language.
+  - **Automated Runtime Verification Suite (`test/verify_tts_runtime.cjs`):** Authored in-memory socket-free test suite asserting warmup rate-limiting, Bearer token propagation, fast-fail timeout cascading, Maya 401 recovery, and zero-leak response degradation. Integrated as the 12th test suite in `npm test` (12/12 passing).
+- **FEAT-002 production voice remediation plan (`docs/tasks/FEAT-002-production-voice-remediation-2026-11-13.md`):** Documented the live Bengali/Assamese audio failure, separate Maya and OpenAI recovery work, endpoint protection, warmup correction, runtime tests, and production release gate.
+
 ### Changed
 - **Constitutional Governance Alignment (`AGENTS.md` & `CLAUDE.md`):**
   - **Complete Route Inventory:** Codified all live routes across Core & Company (`/`, `/software`, `/hardware`, `/about`, `/contact`, `/privacy`, `/terms`, `/refund-policy`), Products & Platforms (`/track`, `/arthos`, `/ai-chatbot`), Specialized Services (`/services/*`), and Industry Use Cases (`/use-cases/*`).
@@ -627,3 +643,9 @@ When committing changes, prepend an entry under `## [Unreleased]` or a new versi
 ### Fixed
 
 - Added automated regression coverage for the Arthos v2 acceptance criteria.
+
+## Website assistant and visitor enquiries — 2026-11-21
+
+- Added context-specific welcomes, direct public FAQ answers, a voluntary phone or email follow-up form and a private database schema.
+- Added opt-in page and action measurement, including standalone product pages, with controls on the privacy page.
+- Changed the assistant prompt to ask follow-up questions when they help the visitor resolve an enquiry.

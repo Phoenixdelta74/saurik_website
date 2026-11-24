@@ -145,6 +145,7 @@ export function useVoiceAgent({ onSpeechRecognized, isMuted = false }) {
   const [speechNotice, setSpeechNotice] = useState(null);
   const [selectedLanguage, setSelectedLanguage] = useState('en-IN');
   const [isContinuousMode, setIsContinuousMode] = useState(false); // Hands-free back-and-forth mode
+  const [activeTtsEngine, setActiveTtsEngine] = useState(null); // Telemetry for browser observability
 
   const recognitionRef = useRef(null);
   const onSpeechRecognizedRef = useRef(onSpeechRecognized);
@@ -221,6 +222,7 @@ export function useVoiceAgent({ onSpeechRecognized, isMuted = false }) {
   const cancelSpeech = useCallback(() => {
     speechSessionRef.current += 1;
     clearRestartTimer();
+    setActiveTtsEngine(null);
     if (cloudAbortRef.current) {
       try {
         cloudAbortRef.current.abort();
@@ -241,10 +243,16 @@ export function useVoiceAgent({ onSpeechRecognized, isMuted = false }) {
     setIsSpeaking(false);
   }, []);
 
-  // Proactive background keepalive to pre-warm the Modal container while user is speaking
+  // Proactive background keepalive to pre-warm the Modal container while user is speaking in a regional language
   const triggerContainerWarmup = () => {
-    if (typeof window !== 'undefined' && typeof fetch === 'function') {
-      fetch('/api/tts', { method: 'GET', keepalive: true }).catch(() => {});
+    if (typeof window !== 'undefined' && typeof fetch === 'function' && ENABLE_CLOUD_TTS_FALLBACK) {
+      const currentLang = selectedLangRef.current;
+      const synth = window.speechSynthesis;
+      const hasNativeVoice = synth ? !!findVoice(voicesRef.current.length ? voicesRef.current : synth.getVoices(), currentLang) : false;
+      // Only ping warmup if native voice is absent for this language (e.g. Bengali on Windows)
+      if (!hasNativeVoice) {
+        fetch('/api/tts', { method: 'GET', keepalive: true }).catch(() => {});
+      }
     }
   };
 
@@ -464,6 +472,17 @@ export function useVoiceAgent({ onSpeechRecognized, isMuted = false }) {
         signal: abortController.signal,
       });
       if (!response.ok) throw new Error(`TTS ${response.status}`);
+      const engine = response.headers.get('x-tts-engine') || 'unknown';
+      const latencyMs = parseInt(response.headers.get('x-tts-latency-ms') || '0', 10);
+      const isFallback = response.headers.get('x-tts-fallback') === 'true';
+      setActiveTtsEngine({ engine, latencyMs, isFallback });
+      if (typeof window !== 'undefined' && window.console) {
+        console.info(
+          `%c[SAURIK Voice Engine]%c Synthesized via ${engine} (${latencyMs}ms, fallback: ${isFallback})`,
+          'color: #0d9488; font-weight: bold;',
+          'color: #0f172a;'
+        );
+      }
       return await response.blob();
     };
 
@@ -594,6 +613,15 @@ export function useVoiceAgent({ onSpeechRecognized, isMuted = false }) {
         return;
       }
 
+      setActiveTtsEngine({ engine: 'browser-native', latencyMs: 0, isFallback: false, voiceName: voice?.name || lang });
+      if (typeof window !== 'undefined' && window.console) {
+        console.info(
+          `%c[SAURIK Voice Engine]%c Synthesized via Device Web Speech API (${voice?.name || lang})`,
+          'color: #0d9488; font-weight: bold;',
+          'color: #0f172a;'
+        );
+      }
+
       const chunks = splitIntoChunks(cleaned);
       const utterances = chunks.map((chunk, index) => {
         const utterance = new SpeechSynthesisUtterance(chunk);
@@ -645,6 +673,7 @@ export function useVoiceAgent({ onSpeechRecognized, isMuted = false }) {
     setSelectedLanguage,
     isContinuousMode,
     setIsContinuousMode,
+    activeTtsEngine,
     startListening,
     stopListening,
     speak,

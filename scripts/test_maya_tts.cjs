@@ -23,7 +23,7 @@ function getArg(flag, fallback = '') {
 
 const isMockMode = args.includes('--mock');
 const targetUrl = getArg('--url', process.env.MAYA_TTS_ENDPOINT || '');
-const authToken = getArg('--key', process.env.MAYA_TTS_KEY || 'saurik_maya_secret_2026');
+const authToken = getArg('--key', process.env.MAYA_TTS_KEY || '');
 
 const OUTPUT_DIR = path.join(__dirname, '..', 'test', 'output');
 if (!fs.existsSync(OUTPUT_DIR)) {
@@ -177,8 +177,10 @@ async function runBenchmark() {
   console.log(`Target Endpoint : ${isMockMode ? '[MOCK SIMULATOR]' : targetUrl}`);
   console.log(`Output Directory: ${OUTPUT_DIR}\n`);
 
-  for (const item of TEST_SUITE) {
-    process.stdout.write(`Testing [${item.lang}] ... `);
+  for (let i = 0; i < TEST_SUITE.length; i++) {
+    const item = TEST_SUITE[i];
+    const isColdTurn = i === 0;
+    process.stdout.write(`Testing [${item.lang}] ${isColdTurn ? '(Turn 1 - Cold / Snapshot)' : '(Warm Turn)'} ... `);
     const startTime = process.hrtime.bigint();
 
     try {
@@ -194,6 +196,7 @@ async function runBenchmark() {
         console.log(`SUCCESS (${latencyMs}ms, ${sizeKb} KB)`);
         results.push({
           Language: item.lang,
+          Phase: isColdTurn ? 'Cold/Snapshot' : 'Warm',
           Status: 'PASS',
           Latency: `${latencyMs}ms`,
           Size: `${sizeKb} KB`,
@@ -204,6 +207,7 @@ async function runBenchmark() {
         console.log(`FAILED (HTTP ${res.status}, ${res.buffer.length} bytes)`);
         results.push({
           Language: item.lang,
+          Phase: isColdTurn ? 'Cold/Snapshot' : 'Warm',
           Status: `FAIL (HTTP ${res.status})`,
           Latency: `${latencyMs}ms`,
           Size: '0 KB',
@@ -215,6 +219,7 @@ async function runBenchmark() {
       console.log(`ERROR: ${err.message}`);
       results.push({
         Language: item.lang,
+        Phase: isColdTurn ? 'Cold/Snapshot' : 'Warm',
         Status: 'ERROR',
         Latency: '-',
         Size: '0 KB',

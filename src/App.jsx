@@ -28,6 +28,7 @@ const ScrollToTop = () => {
   const { pathname, hash } = useLocation();
 
   useEffect(() => {
+    window.siteMetrics?.view();
     if (hash) {
       const element = document.getElementById(hash.replace('#', ''));
       if (element) {
